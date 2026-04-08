@@ -40,7 +40,7 @@ dependencies:
   bip39:
   cryptography:
 
-  # Models 
+  # Models
   freezed_annotation:
   json_annotation:
 
