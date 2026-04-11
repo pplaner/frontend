@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
+import 'package:frontend/app/database/database.dart';
 import 'package:frontend/core/crypto/crypto.dart';
-import 'package:frontend/core/storage/database.dart';
 import 'package:frontend/core/utils/logger.dart';
 import 'package:frontend/features/vault/data/vault_repository_impl.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';

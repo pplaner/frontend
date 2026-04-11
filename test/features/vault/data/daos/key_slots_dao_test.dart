@@ -1,6 +1,6 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:frontend/core/storage/database.dart';
+import 'package:frontend/app/database/database.dart';
 import 'package:frontend/features/vault/data/daos/key_slots_dao.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';
 
