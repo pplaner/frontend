@@ -1,0 +1,25 @@
+import 'package:drift/drift.dart';
+import 'package:frontend/core/storage/database.dart';
+import 'package:frontend/features/vault/data/tables/key_slots.dart';
+import 'package:frontend/features/vault/domain/key_types.dart';
+
+part 'key_slots_dao.g.dart';
+
+@DriftAccessor(tables: [KeySlots])
+class KeySlotsDao extends DatabaseAccessor<AppDatabase>
+    with _$KeySlotsDaoMixin {
+  KeySlotsDao(super.attachedDatabase);
+
+  Future<void> saveKeySlot(KeySlot keySlot) =>
+      into(keySlots).insert(keySlot, mode: InsertMode.insertOrReplace);
+
+  Future<List<KeySlot>> getAllKeySlots() => select(keySlots).get();
+
+  Future<KeySlot?> getKeySlotByType(KeyType type) => (select(
+    keySlots,
+  )..where((tbl) => tbl.type.equals(type.index))).getSingleOrNull();
+
+  Future<void> deleteKeySlot(KeyType type) => (delete(
+    keySlots,
+  )..where((tbl) => tbl.type.equals(type.index))).go();
+}
