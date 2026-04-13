@@ -1,15 +1,14 @@
 import 'package:dio/dio.dart';
-import 'package:frontend/core/storage/access_token.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:frontend/core/session/auth_session.dart';
 
 class AuthInterceptor extends Interceptor {
-  AuthInterceptor(this.ref);
+  AuthInterceptor(this._authSession);
 
-  final Ref ref;
+  final AuthSession _authSession;
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final token = ref.read(accessTokenProvider);
+    final token = _authSession.accessToken;
 
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
