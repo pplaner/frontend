@@ -15,10 +15,10 @@ class SessionManager implements AuthSession, CryptoSession, SessionController {
   String? get accessToken => _accessToken;
 
   @override
-  Uint8List? get masterKey {
+  Uint8List get masterKey {
     if (_masterKey == null) throw const SessionLockedException();
 
-    return _masterKey;
+    return _masterKey!;
   }
 
   @override
