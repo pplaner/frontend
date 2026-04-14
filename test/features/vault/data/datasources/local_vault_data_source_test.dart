@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/features/vault/data/daos/key_slots_dao.dart';
-import 'package:frontend/features/vault/data/data_sources/vault_local_data_source.dart';
+import 'package:frontend/features/vault/data/sources/vault_local_data_source.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../fixtures/vault_fixtures.dart';

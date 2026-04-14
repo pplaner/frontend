@@ -1,5 +1,5 @@
 import 'package:frontend/app/database/database.dart';
-import 'package:frontend/features/vault/data/data_sources/vault_local_data_source.dart';
+import 'package:frontend/features/vault/data/sources/vault_local_data_source.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';
 import 'package:frontend/features/vault/domain/vault_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

@@ -1,5 +1,5 @@
-import 'package:frontend/features/notes/data/data_sources/notes_local_data_source.dart';
 import 'package:frontend/features/notes/data/mappers/encrypted_note_local_mapper.dart';
+import 'package:frontend/features/notes/data/sources/notes_local_data_source.dart';
 import 'package:frontend/features/notes/domain/encrypted_note.dart';
 import 'package:frontend/features/notes/domain/notes_repository.dart';
 
