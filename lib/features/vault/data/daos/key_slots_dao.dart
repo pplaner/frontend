@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:frontend/core/storage/database.dart';
+import 'package:frontend/app/database/database.dart';
 import 'package:frontend/features/vault/data/tables/key_slots.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';
 

@@ -1,5 +1,5 @@
-import 'package:frontend/core/storage/database.dart';
-import 'package:frontend/core/storage/storage_providers.dart';
+import 'package:frontend/app/database/database.dart';
+import 'package:frontend/app/database/database_provider.dart';
 import 'package:frontend/features/vault/data/daos/key_slots_dao.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

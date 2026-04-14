@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-// Only tables and daos are allowed to be imported from features
 import 'package:frontend/features/vault/data/daos/key_slots_dao.dart';
 import 'package:frontend/features/vault/data/tables/key_slots.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';

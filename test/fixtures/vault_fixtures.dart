@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:frontend/core/storage/database.dart';
+import 'package:frontend/app/database/database.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';
 
 class VaultFixtures {

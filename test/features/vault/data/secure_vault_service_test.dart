@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/core/crypto/crypto.dart';
-import 'package:frontend/core/storage/database.dart';
 import 'package:frontend/features/vault/data/secure_vault_service.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';
 import 'package:frontend/features/vault/domain/vault_failure.dart';
