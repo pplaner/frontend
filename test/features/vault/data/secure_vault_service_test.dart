@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/core/crypto/crypto.dart';
+import 'package:frontend/core/domain/result.dart';
 import 'package:frontend/core/session/session_controller.dart';
 import 'package:frontend/features/vault/data/secure_vault_service.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';
@@ -67,12 +68,14 @@ void main() {
           () => mockEncryption.encrypt(any(), any()),
         ).thenAnswer((_) async => masterKey);
         when(() => mockSessionController.setMasterKey(any())).thenReturn(null);
-        when(() => mockRepo.saveKeySlot(any())).thenAnswer((_) async {});
+        when(() => mockRepo.saveKeySlots(any())).thenAnswer((_) async {
+          return const Success(null);
+        });
 
         const secrets = {KeyType.pin: '1234', KeyType.graph: '4321'};
         await service.intializeNewVault(secrets);
 
-        verify(() => mockRepo.saveKeySlot(any())).called(2);
+        verify(() => mockRepo.saveKeySlots(any())).called(1);
         verify(() => mockSessionController.setMasterKey(masterKey)).called(1);
       },
     );
@@ -80,15 +83,17 @@ void main() {
 
   group('SecureVaultService - unlock', () {
     test(
-      'throws VaultNotInitializedException if given slot is not found',
+      'returns Failure(VaultFailure.vaultNotInitialized()) if given slot is not found',
       () async {
         when(
           () => mockRepo.getKeySlotByType(KeyType.pin),
-        ).thenAnswer((_) async => null);
+        ).thenAnswer((_) async => const Success(null));
+
+        final result = await service.unlock(KeyType.pin, '1234');
 
         expect(
-          () => service.unlock(KeyType.pin, '1234'),
-          throwsA(isA<VaultNotInitializedException>()),
+          result,
+          const Failure<void, VaultFailure>(VaultFailure.vaultNotInitialized()),
         );
 
         verifyNever(() => mockSessionController.setMasterKey(any()));
@@ -96,11 +101,11 @@ void main() {
     );
 
     test(
-      'sets decrypted master key in session when secret is correct',
+      'sets decrypted master key in session and returns Success when secret is correct',
       () async {
         when(
           () => mockRepo.getKeySlotByType(KeyType.pin),
-        ).thenAnswer((_) async => pinSlot);
+        ).thenAnswer((_) async => Success(pinSlot));
         when(
           () => mockDerivation.derive(any(), any()),
         ).thenAnswer((_) async => masterKey);
@@ -108,28 +113,33 @@ void main() {
           () => mockEncryption.decrypt(any(), any()),
         ).thenAnswer((_) async => masterKey);
 
-        await service.unlock(KeyType.pin, '1234');
+        final result = await service.unlock(KeyType.pin, '1234');
+
+        expect(result, isA<Success<void, VaultFailure>>());
 
         verify(() => mockSessionController.setMasterKey(masterKey)).called(1);
       },
     );
 
     test(
-      'throws InvalidPinException if decryption (MAC check) fails',
+      'returns Failure(VaultFailure.invalidSecret()) if decryption fails',
       () async {
         when(
           () => mockRepo.getKeySlotByType(KeyType.pin),
-        ).thenAnswer((_) async => pinSlot);
+        ).thenAnswer((_) async => Success(pinSlot));
         when(
           () => mockDerivation.derive(any(), any()),
         ).thenAnswer((_) async => masterKey);
+
         when(
           () => mockEncryption.decrypt(any(), any()),
-        ).thenThrow(Exception('MAC check failed'));
+        ).thenThrow(CryptoDecryptionException());
+
+        final result = await service.unlock(KeyType.pin, 'bad_pin');
 
         expect(
-          () => service.unlock(KeyType.pin, 'bad_pin'),
-          throwsA(isA<InvalidPinException>()),
+          result,
+          const Failure<Never, VaultFailure>(VaultFailure.invalidSecret()),
         );
 
         verifyNever(() => mockSessionController.setMasterKey(any()));

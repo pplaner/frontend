@@ -1,5 +1,7 @@
 import 'package:frontend/app/database/database.dart';
 import 'package:frontend/core/crypto/crypto.dart';
+import 'package:frontend/core/domain/core_failure.dart';
+import 'package:frontend/core/domain/result.dart';
 import 'package:frontend/core/session/session_controller.dart';
 import 'package:frontend/core/session/session_manager.dart';
 import 'package:frontend/core/utils/logger.dart';
@@ -30,36 +32,52 @@ class SecureVaultService implements VaultService {
   final VaultRepository _repository;
 
   @override
-  Future<void> intializeNewVault(Map<KeyType, String> initialSecrets) async {
-    final masterKey = _random.generateBytes(32);
+  Future<Result<void, VaultFailure>> intializeNewVault(
+    Map<KeyType, String> initialSecrets,
+  ) async {
+    return _guard(() async {
+      final masterKey = _random.generateBytes(32);
 
-    for (final entry in initialSecrets.entries) {
-      final type = entry.key;
-      final secret = entry.value;
+      final slotsToSave = <KeySlot>[];
 
-      final salt = _random.generateBytes(16);
-      final kek = await _derivation.deriveFromString(secret, salt);
-      final wmk = await _encryption.encrypt(masterKey, kek);
+      for (final entry in initialSecrets.entries) {
+        final type = entry.key;
+        final secret = entry.value;
 
-      await _repository.saveKeySlot(
-        KeySlot(
-          type: type,
-          salt: salt,
-          wrappedMasterKey: wmk,
-        ),
-      );
-    }
+        final salt = _random.generateBytes(16);
+        final kek = await _derivation.deriveFromString(secret, salt);
+        final wmk = await _encryption.encrypt(masterKey, kek);
 
-    _sessionController.setMasterKey(masterKey);
+        slotsToSave.add(
+          KeySlot(
+            type: type,
+            salt: salt,
+            wrappedMasterKey: wmk,
+          ),
+        );
+      }
+
+      final saveResult = await _repository.saveKeySlots(slotsToSave);
+      if (saveResult case Failure(error: final e)) return Failure(e);
+
+      _sessionController.setMasterKey(masterKey);
+
+      return const Success(null);
+    });
   }
 
   @override
-  Future<void> unlock(KeyType type, String secret) async {
-    final keySlot = await _repository.getKeySlotByType(type);
+  Future<Result<void, VaultFailure>> unlock(KeyType type, String secret) async {
+    return _guard(() async {
+      final keySlotResult = await _repository.getKeySlotByType(type);
+      if (keySlotResult case Failure(error: final e)) return Failure(e);
 
-    if (keySlot == null) throw const VaultNotInitializedException();
+      final keySlot = keySlotResult.unwrap;
 
-    try {
+      if (keySlot == null) {
+        return const Failure(VaultFailure.vaultNotInitialized());
+      }
+
       final kek = await _derivation.deriveFromString(secret, keySlot.salt);
       final masterKey = await _encryption.decrypt(
         keySlot.wrappedMasterKey,
@@ -67,17 +85,23 @@ class SecureVaultService implements VaultService {
       );
 
       _sessionController.setMasterKey(masterKey);
-    }
-    // Catch both exceptions and errors
-    // ignore: avoid_catches_without_on_clauses
-    catch (e, st) {
-      log.e(
-        'Decryption in SecureVaultService failed',
-        error: e,
-        stackTrace: st,
-      );
 
-      throw const InvalidPinException();
+      return const Success(null);
+    });
+  }
+
+  Future<Result<T, VaultFailure>> _guard<T>(
+    Future<Result<T, VaultFailure>> Function() action,
+  ) async {
+    try {
+      return await action();
+    } on CryptoDecryptionException catch (_) {
+      return const Failure(VaultFailure.invalidSecret());
+    } on CryptoException catch (e) {
+      return Failure(VaultFailure.core(CoreFailure.crypto(e.message)));
+    } on Exception catch (e, st) {
+      logger.e('SecureVaultService operation failed', error: e, stackTrace: st);
+      return Failure(VaultFailure.core(CoreFailure.unexpected(e)));
     }
   }
 }

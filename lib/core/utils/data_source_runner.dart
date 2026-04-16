@@ -1,0 +1,39 @@
+import 'package:dio/dio.dart';
+import 'package:drift/native.dart';
+import 'package:frontend/core/domain/core_failure.dart';
+import 'package:frontend/core/domain/result.dart';
+import 'package:frontend/core/utils/logger.dart';
+
+mixin DataSourceRunner {
+  Future<Result<T, F>> remoteRunner<T, F>({
+    required Future<T> Function() call,
+    required F Function(CoreFailure core) mapCore,
+  }) async {
+    try {
+      final result = await call();
+      return Success(result);
+    } on DioException catch (e, st) {
+      logger.e('Call failed in remoteRunner', error: e, stackTrace: st);
+      return Failure(mapCore(const CoreFailure.network()));
+    } on Exception catch (e, st) {
+      logger.e('Unhandled exception in remoteRunner', error: e, stackTrace: st);
+      return Failure(mapCore(CoreFailure.unexpected(e)));
+    }
+  }
+
+  Future<Result<T, F>> localRunner<T, F>({
+    required Future<T> Function() call,
+    required F Function(CoreFailure core) mapCore,
+  }) async {
+    try {
+      final result = await call();
+      return Success(result);
+    } on SqliteException catch (e, st) {
+      logger.e('Call failed in localRunner', error: e, stackTrace: st);
+      return Failure(mapCore(CoreFailure.storage(e.message)));
+    } on Exception catch (e, st) {
+      logger.e('Unhandled exception in localRunner', error: e, stackTrace: st);
+      return Failure(mapCore(CoreFailure.unexpected(e)));
+    }
+  }
+}
