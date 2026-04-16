@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:cryptography/cryptography.dart';
+import 'package:frontend/core/crypto/crypto_exceptions.dart';
+import 'package:frontend/core/utils/logger.dart';
 
 abstract class EncryptionService {
   Future<Uint8List> encrypt(Uint8List data, Uint8List key);
@@ -25,30 +27,55 @@ class AesGcmService implements EncryptionService {
 
   @override
   Future<Uint8List> encrypt(Uint8List data, Uint8List key) async {
-    final secretKey = SecretKey(key);
+    try {
+      final secretKey = SecretKey(key);
+      final secretBox = await _algorithm.encrypt(data, secretKey: secretKey);
 
-    final secretBox = await _algorithm.encrypt(data, secretKey: secretKey);
+      return secretBox.concatenation();
+    } catch (e, st) {
+      logger.e(
+        'Unhandled exception in AesGcmService.encrypt',
+        error: e,
+        stackTrace: st,
+      );
 
-    final encryptedData = secretBox.concatenation();
-
-    return encryptedData;
+      throw CryptoUnknownException(e.toString());
+    }
   }
 
   @override
   Future<Uint8List> decrypt(Uint8List data, Uint8List key) async {
-    final secretKey = SecretKey(key);
+    try {
+      final secretKey = SecretKey(key);
 
-    final secretBox = SecretBox.fromConcatenation(
-      data,
-      nonceLength: 12,
-      macLength: 16,
-    );
+      final secretBox = SecretBox.fromConcatenation(
+        data,
+        nonceLength: 12,
+        macLength: 16,
+      );
 
-    final decryptedData = await _algorithm.decrypt(
-      secretBox,
-      secretKey: secretKey,
-    );
+      final decryptedData = await _algorithm.decrypt(
+        secretBox,
+        secretKey: secretKey,
+      );
 
-    return Uint8List.fromList(decryptedData);
+      return Uint8List.fromList(decryptedData);
+    } on SecretBoxAuthenticationError catch (e, st) {
+      logger.e(
+        'Decryption failed in AesGcmService.decrypt',
+        error: e,
+        stackTrace: st,
+      );
+
+      throw CryptoDecryptionException();
+    } on Exception catch (e, st) {
+      logger.e(
+        'Unhandled exception in AesGcmService.decrypt',
+        error: e,
+        stackTrace: st,
+      );
+
+      throw CryptoUnknownException(e.toString());
+    }
   }
 }
