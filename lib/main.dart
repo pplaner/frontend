@@ -1,5 +1,8 @@
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/features/auth/presentation/screens/auth_screen.dart';
+import 'package:frontend/features/notes/presentation/screens/home_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/storage/cookie_jar.dart';
 import 'package:frontend/core/storage/shared_prefs.dart';
@@ -32,6 +35,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'PPlaner',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.light,
+      home: const AuthScreen(),
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
