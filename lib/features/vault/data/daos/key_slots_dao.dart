@@ -10,16 +10,16 @@ class KeySlotsDao extends DatabaseAccessor<AppDatabase>
     with _$KeySlotsDaoMixin {
   KeySlotsDao(super.attachedDatabase);
 
-  Future<void> saveKeySlot(KeySlot slot) =>
+  Future<void> saveKeySlot(KeySlotsCompanion slot) =>
       into(keySlots).insert(slot, mode: InsertMode.insertOrReplace);
 
-  Future<void> saveKeySlots(List<KeySlot> slots) => batch((batch) {
+  Future<void> saveKeySlots(List<KeySlotsCompanion> slots) => batch((batch) {
     batch.insertAll(keySlots, slots);
   });
 
-  Future<List<KeySlot>> getAllKeySlots() => select(keySlots).get();
+  Future<List<KeySlotModel>> getAllKeySlots() => select(keySlots).get();
 
-  Future<KeySlot?> getKeySlotByType(KeyType type) => (select(
+  Future<KeySlotModel?> getKeySlotByType(KeyType type) => (select(
     keySlots,
   )..where((tbl) => tbl.type.equals(type.index))).getSingleOrNull();
 

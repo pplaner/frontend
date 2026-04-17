@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:frontend/app/database/database.dart';
+import 'package:frontend/features/vault/data/mappers/key_slot_local_mapper.dart';
 import 'package:frontend/features/vault/data/sources/vault_local_data_source.dart';
 import 'package:frontend/features/vault/data/vault_repository_impl.dart';
 import 'package:frontend/features/vault/domain/vault_repository.dart';
@@ -28,13 +30,19 @@ void main() {
 
       await repository.saveKeySlot(slot);
 
-      verify(() => mockLocal.saveKeySlot(slot)).called(1);
+      verify(() => mockLocal.saveKeySlot(slot.toCompanion())).called(1);
     });
 
     test('getKeySlotByType calls correct data sources', () async {
       final slot = VaultFixtures.emptyPinSlot;
+      final model = KeySlotModel(
+        type: slot.type,
+        salt: slot.salt,
+        wrappedMasterKey: slot.wrappedMasterKey,
+      );
+
       when(() => mockLocal.getKeySlotByType(any())).thenAnswer((_) async {
-        return slot;
+        return model;
       });
 
       await repository.getKeySlotByType(slot.type);

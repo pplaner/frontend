@@ -3,7 +3,8 @@
 part of 'database.dart';
 
 // ignore_for_file: type=lint
-class $KeySlotsTable extends KeySlots with TableInfo<$KeySlotsTable, KeySlot> {
+class $KeySlotsTable extends KeySlots
+    with TableInfo<$KeySlotsTable, KeySlotModel> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -47,7 +48,7 @@ class $KeySlotsTable extends KeySlots with TableInfo<$KeySlotsTable, KeySlot> {
   static const String $name = 'key_slots';
   @override
   VerificationContext validateIntegrity(
-    Insertable<KeySlot> instance, {
+    Insertable<KeySlotModel> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -77,9 +78,9 @@ class $KeySlotsTable extends KeySlots with TableInfo<$KeySlotsTable, KeySlot> {
   @override
   Set<GeneratedColumn> get $primaryKey => {type};
   @override
-  KeySlot map(Map<String, dynamic> data, {String? tablePrefix}) {
+  KeySlotModel map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return KeySlot(
+    return KeySlotModel(
       type: $KeySlotsTable.$convertertype.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.int,
@@ -106,11 +107,11 @@ class $KeySlotsTable extends KeySlots with TableInfo<$KeySlotsTable, KeySlot> {
       const EnumIndexConverter<KeyType>(KeyType.values);
 }
 
-class KeySlot extends DataClass implements Insertable<KeySlot> {
+class KeySlotModel extends DataClass implements Insertable<KeySlotModel> {
   final KeyType type;
   final Uint8List salt;
   final Uint8List wrappedMasterKey;
-  const KeySlot({
+  const KeySlotModel({
     required this.type,
     required this.salt,
     required this.wrappedMasterKey,
@@ -134,12 +135,12 @@ class KeySlot extends DataClass implements Insertable<KeySlot> {
     );
   }
 
-  factory KeySlot.fromJson(
+  factory KeySlotModel.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return KeySlot(
+    return KeySlotModel(
       type: $KeySlotsTable.$convertertype.fromJson(
         serializer.fromJson<int>(json['type']),
       ),
@@ -161,17 +162,17 @@ class KeySlot extends DataClass implements Insertable<KeySlot> {
     };
   }
 
-  KeySlot copyWith({
+  KeySlotModel copyWith({
     KeyType? type,
     Uint8List? salt,
     Uint8List? wrappedMasterKey,
-  }) => KeySlot(
+  }) => KeySlotModel(
     type: type ?? this.type,
     salt: salt ?? this.salt,
     wrappedMasterKey: wrappedMasterKey ?? this.wrappedMasterKey,
   );
-  KeySlot copyWithCompanion(KeySlotsCompanion data) {
-    return KeySlot(
+  KeySlotModel copyWithCompanion(KeySlotsCompanion data) {
+    return KeySlotModel(
       type: data.type.present ? data.type.value : this.type,
       salt: data.salt.present ? data.salt.value : this.salt,
       wrappedMasterKey: data.wrappedMasterKey.present
@@ -182,7 +183,7 @@ class KeySlot extends DataClass implements Insertable<KeySlot> {
 
   @override
   String toString() {
-    return (StringBuffer('KeySlot(')
+    return (StringBuffer('KeySlotModel(')
           ..write('type: $type, ')
           ..write('salt: $salt, ')
           ..write('wrappedMasterKey: $wrappedMasterKey')
@@ -199,7 +200,7 @@ class KeySlot extends DataClass implements Insertable<KeySlot> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is KeySlot &&
+      (other is KeySlotModel &&
           other.type == this.type &&
           $driftBlobEquality.equals(other.salt, this.salt) &&
           $driftBlobEquality.equals(
@@ -208,7 +209,7 @@ class KeySlot extends DataClass implements Insertable<KeySlot> {
           ));
 }
 
-class KeySlotsCompanion extends UpdateCompanion<KeySlot> {
+class KeySlotsCompanion extends UpdateCompanion<KeySlotModel> {
   final Value<KeyType> type;
   final Value<Uint8List> salt;
   final Value<Uint8List> wrappedMasterKey;
@@ -223,7 +224,7 @@ class KeySlotsCompanion extends UpdateCompanion<KeySlot> {
     required Uint8List wrappedMasterKey,
   }) : salt = Value(salt),
        wrappedMasterKey = Value(wrappedMasterKey);
-  static Insertable<KeySlot> custom({
+  static Insertable<KeySlotModel> custom({
     Expression<int>? type,
     Expression<Uint8List>? salt,
     Expression<Uint8List>? wrappedMasterKey,
@@ -1522,14 +1523,17 @@ class $$KeySlotsTableTableManager
         RootTableManager<
           _$AppDatabase,
           $KeySlotsTable,
-          KeySlot,
+          KeySlotModel,
           $$KeySlotsTableFilterComposer,
           $$KeySlotsTableOrderingComposer,
           $$KeySlotsTableAnnotationComposer,
           $$KeySlotsTableCreateCompanionBuilder,
           $$KeySlotsTableUpdateCompanionBuilder,
-          (KeySlot, BaseReferences<_$AppDatabase, $KeySlotsTable, KeySlot>),
-          KeySlot,
+          (
+            KeySlotModel,
+            BaseReferences<_$AppDatabase, $KeySlotsTable, KeySlotModel>,
+          ),
+          KeySlotModel,
           PrefetchHooks Function()
         > {
   $$KeySlotsTableTableManager(_$AppDatabase db, $KeySlotsTable table)
@@ -1575,14 +1579,17 @@ typedef $$KeySlotsTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
       $KeySlotsTable,
-      KeySlot,
+      KeySlotModel,
       $$KeySlotsTableFilterComposer,
       $$KeySlotsTableOrderingComposer,
       $$KeySlotsTableAnnotationComposer,
       $$KeySlotsTableCreateCompanionBuilder,
       $$KeySlotsTableUpdateCompanionBuilder,
-      (KeySlot, BaseReferences<_$AppDatabase, $KeySlotsTable, KeySlot>),
-      KeySlot,
+      (
+        KeySlotModel,
+        BaseReferences<_$AppDatabase, $KeySlotsTable, KeySlotModel>,
+      ),
+      KeySlotModel,
       PrefetchHooks Function()
     >;
 typedef $$FoldersTableCreateCompanionBuilder =

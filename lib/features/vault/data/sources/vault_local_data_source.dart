@@ -12,15 +12,15 @@ class VaultLocalDataSource {
 
   final KeySlotsDao _keySlotsDao;
 
-  Future<void> saveKeySlot(KeySlot slot) async {
+  Future<void> saveKeySlot(KeySlotsCompanion slot) async {
     await _keySlotsDao.saveKeySlot(slot);
   }
 
-  Future<void> saveKeySlots(List<KeySlot> slots) async {
+  Future<void> saveKeySlots(List<KeySlotsCompanion> slots) async {
     await _keySlotsDao.saveKeySlots(slots);
   }
 
-  Future<KeySlot?> getKeySlotByType(KeyType type) {
+  Future<KeySlotModel?> getKeySlotByType(KeyType type) {
     return _keySlotsDao.getKeySlotByType(type);
   }
 }

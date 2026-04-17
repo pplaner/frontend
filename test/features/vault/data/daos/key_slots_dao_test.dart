@@ -2,6 +2,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/app/database/database.dart';
 import 'package:frontend/features/vault/data/daos/key_slots_dao.dart';
+import 'package:frontend/features/vault/data/mappers/key_slot_local_mapper.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';
 
 import '../../../../fixtures/vault_fixtures.dart';
@@ -20,7 +21,9 @@ void main() {
   });
 
   group('KeySlotsDao', () {
-    final testSlot = VaultFixtures.validPinSlot;
+    final pinSlot = VaultFixtures.emptyPinSlot;
+    final graphSlot = VaultFixtures.emptyGraphSlot;
+    final newPinSlot = VaultFixtures.validPinSlot;
 
     test('getKeySlotByType return null when db is empty', () async {
       final result = await dao.getKeySlotByType(KeyType.pin);
@@ -28,25 +31,38 @@ void main() {
     });
 
     test('saveKeySlot saves the slot which can be retrieved', () async {
-      await dao.saveKeySlot(testSlot);
-      final result = await dao.getKeySlotByType(testSlot.type);
+      await dao.saveKeySlot(pinSlot.toCompanion());
+      final result = await dao.getKeySlotByType(pinSlot.type);
 
       expect(result, isNotNull);
-      expect(result!.type, equals(testSlot.type));
-      expect(result.salt, equals(testSlot.salt));
+      expect(result!.type, equals(pinSlot.type));
+      expect(result.salt, equals(pinSlot.salt));
     });
 
-    test('saveKeySlot replaces existing slot', () async {
-      await dao.saveKeySlot(testSlot);
+    test(
+      'saveKeySlots saves all slots correctly',
+      () async {
+        final slots = [pinSlot.toCompanion(), graphSlot.toCompanion()];
+        await dao.saveKeySlots(slots);
 
-      final updatedSlot = VaultFixtures.emptyPinSlot;
-      await dao.saveKeySlot(updatedSlot);
+        final savedSlots = await dao.getAllKeySlots();
+        expect(savedSlots.length, 2);
+
+        final types = savedSlots.map((slot) => slot.toDomain().type);
+        expect(types, containsAll([KeyType.pin, KeyType.graph]));
+      },
+    );
+
+    test('saveKeySlot replaces existing slot', () async {
+      await dao.saveKeySlot(pinSlot.toCompanion());
+      await dao.saveKeySlot(newPinSlot.toCompanion());
 
       final allSlots = await dao.getAllKeySlots();
       expect(allSlots.length, 1);
 
       final result = await dao.getKeySlotByType(KeyType.pin);
-      expect(result!.salt, equals(updatedSlot.salt));
+      expect(result!.salt, equals(newPinSlot.salt));
+      expect(result.wrappedMasterKey, equals(newPinSlot.wrappedMasterKey));
     });
   });
 }

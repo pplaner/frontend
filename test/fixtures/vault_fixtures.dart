@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:frontend/app/database/database.dart';
+import 'package:frontend/features/vault/domain/key_slot.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';
 
 class VaultFixtures {
@@ -26,5 +26,11 @@ class VaultFixtures {
     type: KeyType.pin,
     salt: validSalt,
     wrappedMasterKey: validWmk,
+  );
+
+  static KeySlot get emptyGraphSlot => KeySlot(
+    type: KeyType.graph,
+    salt: emptySalt,
+    wrappedMasterKey: emptyWmk,
   );
 }

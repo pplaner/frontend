@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/features/vault/data/daos/key_slots_dao.dart';
+import 'package:frontend/features/vault/data/mappers/key_slot_local_mapper.dart';
 import 'package:frontend/features/vault/data/sources/vault_local_data_source.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -23,9 +24,11 @@ void main() {
     test('saveKeySlot delegates to KeySlotsDao', () async {
       when(() => mockDao.saveKeySlot(any())).thenAnswer((_) async {});
 
-      await dataSource.saveKeySlot(VaultFixtures.emptyPinSlot);
+      final companion = VaultFixtures.emptyPinSlot.toCompanion();
 
-      verify(() => mockDao.saveKeySlot(VaultFixtures.emptyPinSlot)).called(1);
+      await dataSource.saveKeySlot(companion);
+
+      verify(() => mockDao.saveKeySlot(companion)).called(1);
     });
   });
 }
