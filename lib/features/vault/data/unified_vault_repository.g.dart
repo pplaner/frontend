@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'vault_repository_impl.dart';
+part of 'unified_vault_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -49,4 +49,4 @@ final class VaultRepositoryProvider
   }
 }
 
-String _$vaultRepositoryHash() => r'bd4425ae7fa4065e18e23fed903464cb3b2b03ba';
+String _$vaultRepositoryHash() => r'23c69bc8c0c9e60db308bcd24987bb9e8ed76710';
