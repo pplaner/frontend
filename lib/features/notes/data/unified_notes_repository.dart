@@ -1,25 +1,32 @@
+import 'package:frontend/core/domain/result.dart';
+import 'package:frontend/core/utils/data_source_runner.dart';
 import 'package:frontend/features/notes/data/mappers/encrypted_note_local_mapper.dart';
 import 'package:frontend/features/notes/data/sources/notes_local_data_source.dart';
 import 'package:frontend/features/notes/domain/encrypted_note.dart';
+import 'package:frontend/features/notes/domain/notes_failure.dart';
 import 'package:frontend/features/notes/domain/notes_repository.dart';
 
-class UnifiedNotesRepository implements NotesRepository {
+class UnifiedNotesRepository with DataSourceRunner implements NotesRepository {
   UnifiedNotesRepository({required NotesLocalDataSource local})
     : _local = local;
 
   final NotesLocalDataSource _local;
 
   @override
-  Future<void> saveNote(EncryptedNote note) async {
-    final companion = note.toCompanion();
-
-    await _local.saveNote(companion);
+  Future<Result<void, NotesFailure>> saveNote(EncryptedNote note) async {
+    return localRunner(
+      call: () => _local.saveNote(note.toCompanion()),
+      mapCore: NotesFailure.core,
+    );
   }
 
   @override
-  Future<EncryptedNote?> getNoteById(String id) async {
-    final model = await _local.getNoteById(id);
+  Future<Result<EncryptedNote?, NotesFailure>> getNoteById(String id) async {
+    final result = await localRunner(
+      call: () => _local.getNoteById(id),
+      mapCore: NotesFailure.core,
+    );
 
-    return model?.toDomain();
+    return result.map((model) => model?.toDomain());
   }
 }
