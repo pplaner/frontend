@@ -2,9 +2,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/storage/cookie_jar.dart';
-import 'package:frontend/core/storage/shared_prefs.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,14 +11,10 @@ void main() async {
   final cookiePath = '${appDocDir.path}/.cookies/';
 
   final cookieJar = PersistCookieJar(storage: FileStorage(cookiePath));
-  final sharedPrefs = await SharedPreferences.getInstance();
 
   runApp(
     ProviderScope(
-      overrides: [
-        cookieJarProvider.overrideWithValue(cookieJar),
-        sharedPreferencesProvider.overrideWithValue(sharedPrefs),
-      ],
+      overrides: [cookieJarProvider.overrideWithValue(cookieJar)],
       child: const MyApp(),
     ),
   );
