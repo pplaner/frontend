@@ -7,9 +7,9 @@ import 'package:frontend/core/domain/result.dart';
 import 'package:frontend/core/session/crypto_session.dart';
 import 'package:frontend/core/session/session_exceptions.dart';
 import 'package:frontend/core/utils/logger.dart';
+import 'package:frontend/features/notes/domain/entities/note.dart';
+import 'package:frontend/features/notes/domain/failures/notes_failure.dart';
 import 'package:frontend/features/notes/domain/mappers/notes_mapper.dart';
-import 'package:frontend/features/notes/domain/note.dart';
-import 'package:frontend/features/notes/domain/notes_failure.dart';
 import 'package:frontend/features/notes/domain/notes_repository.dart';
 import 'package:frontend/features/notes/domain/notes_service.dart';
 

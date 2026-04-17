@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:frontend/features/notes/data/tables/folders.dart';
-import 'package:frontend/features/notes/domain/sync_status.dart';
+import 'package:frontend/features/notes/domain/entities/sync_status.dart';
 
 @DataClassName('NoteModel')
 class Notes extends Table {

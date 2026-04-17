@@ -6,7 +6,7 @@ import 'package:frontend/features/notes/data/daos/folders_dao.dart';
 import 'package:frontend/features/notes/data/daos/notes_dao.dart';
 import 'package:frontend/features/notes/data/tables/folders.dart';
 import 'package:frontend/features/notes/data/tables/notes.dart';
-import 'package:frontend/features/notes/domain/sync_status.dart';
+import 'package:frontend/features/notes/domain/entities/sync_status.dart';
 import 'package:frontend/features/vault/data/daos/key_slots_dao.dart';
 import 'package:frontend/features/vault/data/tables/key_slots.dart';
 import 'package:frontend/features/vault/domain/entities/key_type.dart';

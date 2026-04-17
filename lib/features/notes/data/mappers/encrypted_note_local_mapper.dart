@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:frontend/app/database/database.dart';
-import 'package:frontend/features/notes/domain/encrypted_note.dart';
+import 'package:frontend/features/notes/domain/entities/encrypted_note.dart';
 
 extension NoteModelToEncrypted on NoteModel {
   EncryptedNote toDomain() => EncryptedNote(
