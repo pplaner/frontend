@@ -4,6 +4,5 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'cookie_jar.g.dart';
 
 @Riverpod(keepAlive: true)
-PersistCookieJar cookieJar(_) {
-  throw UnimplementedError('cookieStorage must be overridden in main');
-}
+PersistCookieJar cookieJar(_) =>
+    throw UnimplementedError('cookieJar must be overridden in main');
