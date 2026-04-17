@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/app/database/database.dart';
 import 'package:frontend/features/vault/data/daos/key_slots_dao.dart';
 import 'package:frontend/features/vault/data/mappers/key_slot_local_mapper.dart';
-import 'package:frontend/features/vault/domain/key_types.dart';
+import 'package:frontend/features/vault/domain/entities/key_type.dart';
 
 import '../../../../fixtures/vault_fixtures.dart';
 
