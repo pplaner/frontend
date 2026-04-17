@@ -1,4 +1,3 @@
-import 'package:frontend/app/database/database.dart';
 import 'package:frontend/core/crypto/crypto.dart';
 import 'package:frontend/core/domain/core_failure.dart';
 import 'package:frontend/core/domain/result.dart';
@@ -6,6 +5,7 @@ import 'package:frontend/core/session/session_controller.dart';
 import 'package:frontend/core/session/session_manager.dart';
 import 'package:frontend/core/utils/logger.dart';
 import 'package:frontend/features/vault/data/vault_repository_impl.dart';
+import 'package:frontend/features/vault/domain/key_slot.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';
 import 'package:frontend/features/vault/domain/vault_failure.dart';
 import 'package:frontend/features/vault/domain/vault_repository.dart';

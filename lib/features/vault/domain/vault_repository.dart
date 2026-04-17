@@ -1,5 +1,5 @@
-import 'package:frontend/app/database/database.dart';
 import 'package:frontend/core/domain/result.dart';
+import 'package:frontend/features/vault/domain/key_slot.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';
 import 'package:frontend/features/vault/domain/vault_failure.dart';
 

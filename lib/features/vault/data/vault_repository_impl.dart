@@ -1,7 +1,8 @@
-import 'package:frontend/app/database/database.dart';
 import 'package:frontend/core/domain/result.dart';
 import 'package:frontend/core/utils/data_source_runner.dart';
+import 'package:frontend/features/vault/data/mappers/key_slot_local_mapper.dart';
 import 'package:frontend/features/vault/data/sources/vault_local_data_source.dart';
+import 'package:frontend/features/vault/domain/key_slot.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';
 import 'package:frontend/features/vault/domain/vault_failure.dart';
 import 'package:frontend/features/vault/domain/vault_repository.dart';
@@ -19,25 +20,29 @@ class VaultRepositoryImpl with DataSourceRunner implements VaultRepository {
   @override
   Future<Result<void, VaultFailure>> saveKeySlot(KeySlot slot) async {
     return localRunner(
-      call: () => _local.saveKeySlot(slot),
+      call: () => _local.saveKeySlot(slot.toCompanion()),
       mapCore: VaultFailure.core,
     );
   }
 
   @override
-  Future<Result<void, VaultFailure>> saveKeySlots(List<KeySlot> slot) async {
+  Future<Result<void, VaultFailure>> saveKeySlots(List<KeySlot> slots) async {
+    final companions = slots.map((s) => s.toCompanion()).toList();
+
     return localRunner(
-      call: () => _local.saveKeySlots(slot),
+      call: () => _local.saveKeySlots(companions),
       mapCore: VaultFailure.core,
     );
   }
 
   @override
   Future<Result<KeySlot?, VaultFailure>> getKeySlotByType(KeyType type) async {
-    return localRunner(
+    final result = await localRunner(
       call: () => _local.getKeySlotByType(type),
       mapCore: VaultFailure.core,
     );
+
+    return result.map((model) => model?.toDomain());
   }
 }
 
