@@ -1,8 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:cryptography/cryptography.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:frontend/core/crypto/encryption.dart';
+import 'package:frontend/core/crypto/crypto.dart';
 
 void main() {
   final encryptionService = AesGcmService();
@@ -50,7 +49,7 @@ void main() {
 
       expect(
         () => encryptionService.decrypt(encryptedData, badKey),
-        throwsA(isA<SecretBoxAuthenticationError>()),
+        throwsA(isA<CryptoDecryptionException>()),
       );
     });
 
@@ -62,7 +61,7 @@ void main() {
 
       expect(
         () => encryptionService.decrypt(tampered, key),
-        throwsA(isA<SecretBoxAuthenticationError>()),
+        throwsA(isA<CryptoDecryptionException>()),
       );
     });
   });
