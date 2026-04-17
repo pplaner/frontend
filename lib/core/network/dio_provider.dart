@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/foundation.dart';
+import 'package:frontend/core/config/app_config_provider.dart';
+import 'package:frontend/core/constants/app_timeouts.dart';
 import 'package:frontend/core/network/interceptors/auth_interceptor.dart';
 import 'package:frontend/core/session/session_manager.dart';
 import 'package:frontend/core/storage/cookie_jar.dart';
@@ -12,11 +14,10 @@ part 'dio_provider.g.dart';
 Dio dio(Ref ref) {
   final dio = Dio(
     BaseOptions(
-      // TO-DO: change the baseUrl to env variable
-      baseUrl: 'localhost',
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
-      sendTimeout: const Duration(seconds: 10),
+      baseUrl: ref.read(appConfigProvider).apiUrl,
+      connectTimeout: AppTimeouts.networkRequest,
+      receiveTimeout: AppTimeouts.networkRequest,
+      sendTimeout: AppTimeouts.networkRequest,
       contentType: Headers.jsonContentType,
     ),
   );
