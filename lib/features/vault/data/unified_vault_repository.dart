@@ -8,10 +8,10 @@ import 'package:frontend/features/vault/domain/vault_failure.dart';
 import 'package:frontend/features/vault/domain/vault_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'vault_repository_impl.g.dart';
+part 'unified_vault_repository.g.dart';
 
-class VaultRepositoryImpl with DataSourceRunner implements VaultRepository {
-  VaultRepositoryImpl({
+class UnifiedVaultRepository with DataSourceRunner implements VaultRepository {
+  UnifiedVaultRepository({
     required VaultLocalDataSource local,
   }) : _local = local;
 
@@ -48,4 +48,4 @@ class VaultRepositoryImpl with DataSourceRunner implements VaultRepository {
 
 @riverpod
 VaultRepository vaultRepository(Ref ref) =>
-    VaultRepositoryImpl(local: ref.watch(vaultLocalDataSourceProvider));
+    UnifiedVaultRepository(local: ref.watch(vaultLocalDataSourceProvider));

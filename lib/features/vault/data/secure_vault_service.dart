@@ -4,7 +4,7 @@ import 'package:frontend/core/domain/result.dart';
 import 'package:frontend/core/session/session_controller.dart';
 import 'package:frontend/core/session/session_manager.dart';
 import 'package:frontend/core/utils/logger.dart';
-import 'package:frontend/features/vault/data/vault_repository_impl.dart';
+import 'package:frontend/features/vault/data/unified_vault_repository.dart';
 import 'package:frontend/features/vault/domain/key_slot.dart';
 import 'package:frontend/features/vault/domain/key_types.dart';
 import 'package:frontend/features/vault/domain/vault_failure.dart';

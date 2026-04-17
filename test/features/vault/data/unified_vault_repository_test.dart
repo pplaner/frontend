@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:frontend/app/database/database.dart';
 import 'package:frontend/features/vault/data/mappers/key_slot_local_mapper.dart';
 import 'package:frontend/features/vault/data/sources/vault_local_data_source.dart';
-import 'package:frontend/features/vault/data/vault_repository_impl.dart';
+import 'package:frontend/features/vault/data/unified_vault_repository.dart';
 import 'package:frontend/features/vault/domain/vault_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -19,7 +19,7 @@ void main() {
 
   setUp(() {
     mockLocal = MockVaultLocalDataSource();
-    repository = VaultRepositoryImpl(local: mockLocal);
+    repository = UnifiedVaultRepository(local: mockLocal);
   });
 
   group('VaultRepository', () {
