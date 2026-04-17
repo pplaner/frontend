@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:frontend/features/vault/domain/key_slot.dart';
-import 'package:frontend/features/vault/domain/key_types.dart';
+import 'package:frontend/features/vault/domain/entities/key_slot.dart';
+import 'package:frontend/features/vault/domain/entities/key_type.dart';
 
 class VaultFixtures {
   static Uint8List get emptyMasterKey => Uint8List(0);

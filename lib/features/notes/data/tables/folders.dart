@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:frontend/features/notes/domain/sync_status.dart';
+import 'package:frontend/features/notes/domain/entities/sync_status.dart';
 
 @DataClassName('FolderModel')
 class Folders extends Table {

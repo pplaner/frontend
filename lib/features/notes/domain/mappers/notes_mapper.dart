@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:frontend/features/notes/domain/encrypted_note.dart';
-import 'package:frontend/features/notes/domain/note.dart';
+import 'package:frontend/features/notes/domain/entities/encrypted_note.dart';
+import 'package:frontend/features/notes/domain/entities/note.dart';
 
 extension NoteToEncrypted on Note {
   EncryptedNote toEncryped({

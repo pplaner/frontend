@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:frontend/app/database/database.dart';
-import 'package:frontend/features/vault/domain/key_slot.dart';
+import 'package:frontend/features/vault/domain/entities/key_slot.dart';
 
 extension KeySlotModelToDomain on KeySlotModel {
   KeySlot toDomain() => KeySlot(

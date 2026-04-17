@@ -1,7 +1,7 @@
 import 'package:frontend/core/domain/result.dart';
-import 'package:frontend/features/vault/domain/key_slot.dart';
-import 'package:frontend/features/vault/domain/key_types.dart';
-import 'package:frontend/features/vault/domain/vault_failure.dart';
+import 'package:frontend/features/vault/domain/entities/key_slot.dart';
+import 'package:frontend/features/vault/domain/entities/key_type.dart';
+import 'package:frontend/features/vault/domain/failures/vault_failure.dart';
 
 abstract class VaultRepository {
   Future<Result<void, VaultFailure>> saveKeySlot(KeySlot slot);

@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:frontend/features/notes/domain/sync_status.dart';
+import 'package:frontend/features/notes/domain/entities/sync_status.dart';
 
 part 'encrypted_note.freezed.dart';
 
