@@ -7,58 +7,76 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? const Color(0xFF1A1A1A)
+          : const Color(0xFFEBEBEB),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 37),
+              const Spacer(flex: 3),
               Text(
                 'PPlaner',
                 style: textTheme.displayLarge,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
               Image.asset(
                 AppAssets.logo,
                 height: 159,
                 width: 168,
                 fit: BoxFit.contain,
               ),
-              const SizedBox(height: 50),
+              const Spacer(flex: 2),
               Text(
                 'Ваші плани під надійним захистом',
                 textAlign: TextAlign.center,
                 style: textTheme.bodyMedium,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               Text(
                 'Оберіть спосіб використання',
                 textAlign: TextAlign.center,
                 style: textTheme.bodyMedium,
               ),
-              const SizedBox(height: 66),
+              const Spacer(flex: 3),
               FilledButton(
-                onPressed: () {
-                },
+                onPressed: () {},
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(double.infinity, 51),
+                  backgroundColor: colorScheme.primary,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
-                child: const Text('Створити локальне сховище'),
+                child: Text(
+                  'Створити локальне сховище',
+                  style: textTheme.labelLarge?.copyWith(color: Colors.white),
+                ),
               ),
               const SizedBox(height: 40),
               OutlinedButton(
-                onPressed: () {
-                  // Логіка переходу до акаунту
-                },
-                style: FilledButton.styleFrom(
+                onPressed: () {},
+                style: OutlinedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 51),
+                  foregroundColor: colorScheme.primary,
+                  side: BorderSide(color: colorScheme.primary, width: 1),
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
-                child: const Text('У мене вже є акаунт'),
+                child: Text(
+                  'У мене вже є акаунт',
+                  style: textTheme.labelLarge?.copyWith(color: colorScheme.primary),
+                ),
               ),
-              const SizedBox(height: 262),
+              const Spacer(flex: 10),
             ],
           ),
         ),
