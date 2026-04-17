@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:frontend/features/vault/domain/key_types.dart';
+import 'package:frontend/features/vault/domain/entities/key_type.dart';
 
 part 'key_slot.freezed.dart';
 

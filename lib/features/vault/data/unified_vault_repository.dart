@@ -2,9 +2,9 @@ import 'package:frontend/core/domain/result.dart';
 import 'package:frontend/core/utils/data_source_runner.dart';
 import 'package:frontend/features/vault/data/mappers/key_slot_local_mapper.dart';
 import 'package:frontend/features/vault/data/sources/vault_local_data_source.dart';
-import 'package:frontend/features/vault/domain/key_slot.dart';
-import 'package:frontend/features/vault/domain/key_types.dart';
-import 'package:frontend/features/vault/domain/vault_failure.dart';
+import 'package:frontend/features/vault/domain/entities/key_slot.dart';
+import 'package:frontend/features/vault/domain/entities/key_type.dart';
+import 'package:frontend/features/vault/domain/failures/vault_failure.dart';
 import 'package:frontend/features/vault/domain/vault_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

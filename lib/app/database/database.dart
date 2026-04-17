@@ -9,7 +9,7 @@ import 'package:frontend/features/notes/data/tables/notes.dart';
 import 'package:frontend/features/notes/domain/sync_status.dart';
 import 'package:frontend/features/vault/data/daos/key_slots_dao.dart';
 import 'package:frontend/features/vault/data/tables/key_slots.dart';
-import 'package:frontend/features/vault/domain/key_types.dart';
+import 'package:frontend/features/vault/domain/entities/key_type.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 

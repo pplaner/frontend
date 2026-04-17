@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:frontend/app/database/database.dart';
 import 'package:frontend/features/vault/data/tables/key_slots.dart';
-import 'package:frontend/features/vault/domain/key_types.dart';
+import 'package:frontend/features/vault/domain/entities/key_type.dart';
 
 part 'key_slots_dao.g.dart';
 
