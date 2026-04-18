@@ -48,7 +48,6 @@ dependencies:
   json_annotation:
 
   # UI
-  flex_color_scheme:
   flutter_quill:
   slang_flutter:
 
