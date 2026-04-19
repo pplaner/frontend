@@ -11,7 +11,7 @@ import 'package:slang/generated.dart';
 import 'strings.g.dart';
 
 // Path: <root>
-class TranslationsUk with BaseTranslations<AppLocale, Translations> implements Translations {
+class TranslationsUk extends Translations with BaseTranslations<AppLocale, Translations> {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
 	TranslationsUk({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
@@ -21,7 +21,9 @@ class TranslationsUk with BaseTranslations<AppLocale, Translations> implements T
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
 		    ordinalResolver: ordinalResolver,
-		  ) {
+		  ),
+		  super(cardinalResolver: cardinalResolver, ordinalResolver: ordinalResolver) {
+		super.$meta.setFlatMapFunction($meta.getTranslation); // copy base translations to super.$meta
 		$meta.setFlatMapFunction(_flatMapFunction);
 	}
 
@@ -29,7 +31,7 @@ class TranslationsUk with BaseTranslations<AppLocale, Translations> implements T
 	@override final TranslationMetadata<AppLocale, Translations> $meta;
 
 	/// Access flat map
-	@override dynamic operator[](String key) => $meta.getTranslation(key);
+	@override dynamic operator[](String key) => $meta.getTranslation(key) ?? super.$meta.getTranslation(key);
 
 	late final TranslationsUk _root = this; // ignore: unused_field
 
@@ -42,8 +44,8 @@ class TranslationsUk with BaseTranslations<AppLocale, Translations> implements T
 }
 
 // Path: auth
-class _TranslationsAuthUk implements TranslationsAuthEn {
-	_TranslationsAuthUk._(this._root);
+class _TranslationsAuthUk extends TranslationsAuthEn {
+	_TranslationsAuthUk._(TranslationsUk root) : this._root = root, super.internal(root);
 
 	final TranslationsUk _root; // ignore: unused_field
 

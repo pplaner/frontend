@@ -44,12 +44,12 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// en: 'PPlaner'
 	String get appName => 'PPlaner';
 
-	late final TranslationsAuthEn auth = TranslationsAuthEn._(_root);
+	late final TranslationsAuthEn auth = TranslationsAuthEn.internal(_root);
 }
 
 // Path: auth
 class TranslationsAuthEn {
-	TranslationsAuthEn._(this._root);
+	TranslationsAuthEn.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 

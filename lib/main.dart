@@ -39,6 +39,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'PPlaner',
+      debugShowCheckedModeBanner: false,
+
       locale: TranslationProvider.of(context).flutterLocale,
       supportedLocales: AppLocaleUtils.supportedLocales,
       localizationsDelegates: const [
@@ -48,11 +51,10 @@ class MyApp extends StatelessWidget {
         FlutterQuillLocalizations.delegate,
       ],
 
-      title: 'PPlaner',
-      debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.light,
+
       home: const HomeScreen(),
     );
   }
