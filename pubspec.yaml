@@ -10,7 +10,7 @@ environment:
 dependencies:
   # --- WARNING ---
   # Run 'flutter pub outdated' and set ^versions before production release
-
+  
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -23,7 +23,7 @@ dependencies:
   # State
   flutter_riverpod:
   riverpod_annotation:
-
+  
   # Network & Auth
   connectivity_plus:
   dio:
@@ -83,10 +83,4 @@ dev_dependencies:
   very_good_analysis:
 
 flutter:
-  assets:
-    - assets/images/
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
