@@ -3,6 +3,7 @@ import 'package:frontend/core/crypto/crypto.dart';
 import 'package:frontend/core/domain/result.dart';
 import 'package:frontend/core/session/session_controller.dart';
 import 'package:frontend/features/vault/data/secure_vault_service.dart';
+import 'package:frontend/features/vault/domain/entities/key_slot.dart';
 import 'package:frontend/features/vault/domain/entities/key_type.dart';
 import 'package:frontend/features/vault/domain/failures/vault_failure.dart';
 import 'package:frontend/features/vault/domain/vault_repository.dart';
@@ -52,9 +53,9 @@ void main() {
     );
   });
 
-  final masterKey = VaultFixtures.validMasterKey;
+  final masterKey = VaultFixtures.defaultMasterKey;
 
-  final pinSlot = VaultFixtures.validPinSlot;
+  final pinSlot = VaultFixtures.buildKeySlot();
 
   group('SecureVaultService - intializeNewVault', () {
     test(
@@ -75,7 +76,15 @@ void main() {
         const secrets = {KeyType.pin: '1234', KeyType.graph: '4321'};
         await service.intializeNewVault(secrets);
 
-        verify(() => mockRepo.saveKeySlots(any())).called(1);
+        final captured = verify(
+          () => mockRepo.saveKeySlots(captureAny()),
+        ).captured;
+        final savedSlots = captured.first as List<KeySlot>;
+
+        expect(savedSlots.length, 2);
+        expect(savedSlots.any((slot) => slot.type == KeyType.pin), isTrue);
+        expect(savedSlots.any((slot) => slot.type == KeyType.graph), isTrue);
+
         verify(() => mockSessionController.setMasterKey(masterKey)).called(1);
       },
     );
