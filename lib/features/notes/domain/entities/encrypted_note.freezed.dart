@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EncryptedNote {
 
- String get id; Uint8List get encryptedTitle; Uint8List get encryptedContent; int get localVersion; int get lastSyncedVersion; SyncStatus get syncStatus; DateTime get createdAt; DateTime get updatedAt; String? get folderId;
+ String get id; Uint8List get encryptedTitle; Uint8List get encryptedContent; int get localVersion; int get lastSyncedVersion; SyncStatus get syncStatus; DateTime get createdAt; DateTime get updatedAt; DateTime? get deletedAt; String? get projectId;
 /// Create a copy of EncryptedNote
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $EncryptedNoteCopyWith<EncryptedNote> get copyWith => _$EncryptedNoteCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EncryptedNote&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other.encryptedTitle, encryptedTitle)&&const DeepCollectionEquality().equals(other.encryptedContent, encryptedContent)&&(identical(other.localVersion, localVersion) || other.localVersion == localVersion)&&(identical(other.lastSyncedVersion, lastSyncedVersion) || other.lastSyncedVersion == lastSyncedVersion)&&(identical(other.syncStatus, syncStatus) || other.syncStatus == syncStatus)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.folderId, folderId) || other.folderId == folderId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EncryptedNote&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other.encryptedTitle, encryptedTitle)&&const DeepCollectionEquality().equals(other.encryptedContent, encryptedContent)&&(identical(other.localVersion, localVersion) || other.localVersion == localVersion)&&(identical(other.lastSyncedVersion, lastSyncedVersion) || other.lastSyncedVersion == lastSyncedVersion)&&(identical(other.syncStatus, syncStatus) || other.syncStatus == syncStatus)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt)&&(identical(other.projectId, projectId) || other.projectId == projectId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,const DeepCollectionEquality().hash(encryptedTitle),const DeepCollectionEquality().hash(encryptedContent),localVersion,lastSyncedVersion,syncStatus,createdAt,updatedAt,folderId);
+int get hashCode => Object.hash(runtimeType,id,const DeepCollectionEquality().hash(encryptedTitle),const DeepCollectionEquality().hash(encryptedContent),localVersion,lastSyncedVersion,syncStatus,createdAt,updatedAt,deletedAt,projectId);
 
 @override
 String toString() {
-  return 'EncryptedNote(id: $id, encryptedTitle: $encryptedTitle, encryptedContent: $encryptedContent, localVersion: $localVersion, lastSyncedVersion: $lastSyncedVersion, syncStatus: $syncStatus, createdAt: $createdAt, updatedAt: $updatedAt, folderId: $folderId)';
+  return 'EncryptedNote(id: $id, encryptedTitle: $encryptedTitle, encryptedContent: $encryptedContent, localVersion: $localVersion, lastSyncedVersion: $lastSyncedVersion, syncStatus: $syncStatus, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, projectId: $projectId)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $EncryptedNoteCopyWith<$Res>  {
   factory $EncryptedNoteCopyWith(EncryptedNote value, $Res Function(EncryptedNote) _then) = _$EncryptedNoteCopyWithImpl;
 @useResult
 $Res call({
- String id, Uint8List encryptedTitle, Uint8List encryptedContent, int localVersion, int lastSyncedVersion, SyncStatus syncStatus, DateTime createdAt, DateTime updatedAt, String? folderId
+ String id, Uint8List encryptedTitle, Uint8List encryptedContent, int localVersion, int lastSyncedVersion, SyncStatus syncStatus, DateTime createdAt, DateTime updatedAt, DateTime? deletedAt, String? projectId
 });
 
 
@@ -62,7 +62,7 @@ class _$EncryptedNoteCopyWithImpl<$Res>
 
 /// Create a copy of EncryptedNote
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? encryptedTitle = null,Object? encryptedContent = null,Object? localVersion = null,Object? lastSyncedVersion = null,Object? syncStatus = null,Object? createdAt = null,Object? updatedAt = null,Object? folderId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? encryptedTitle = null,Object? encryptedContent = null,Object? localVersion = null,Object? lastSyncedVersion = null,Object? syncStatus = null,Object? createdAt = null,Object? updatedAt = null,Object? deletedAt = freezed,Object? projectId = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,encryptedTitle: null == encryptedTitle ? _self.encryptedTitle : encryptedTitle // ignore: cast_nullable_to_non_nullable
@@ -72,7 +72,8 @@ as int,lastSyncedVersion: null == lastSyncedVersion ? _self.lastSyncedVersion : 
 as int,syncStatus: null == syncStatus ? _self.syncStatus : syncStatus // ignore: cast_nullable_to_non_nullable
 as SyncStatus,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,folderId: freezed == folderId ? _self.folderId : folderId // ignore: cast_nullable_to_non_nullable
+as DateTime,deletedAt: freezed == deletedAt ? _self.deletedAt : deletedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,projectId: freezed == projectId ? _self.projectId : projectId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -155,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  Uint8List encryptedTitle,  Uint8List encryptedContent,  int localVersion,  int lastSyncedVersion,  SyncStatus syncStatus,  DateTime createdAt,  DateTime updatedAt,  String? folderId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  Uint8List encryptedTitle,  Uint8List encryptedContent,  int localVersion,  int lastSyncedVersion,  SyncStatus syncStatus,  DateTime createdAt,  DateTime updatedAt,  DateTime? deletedAt,  String? projectId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EncryptedNote() when $default != null:
-return $default(_that.id,_that.encryptedTitle,_that.encryptedContent,_that.localVersion,_that.lastSyncedVersion,_that.syncStatus,_that.createdAt,_that.updatedAt,_that.folderId);case _:
+return $default(_that.id,_that.encryptedTitle,_that.encryptedContent,_that.localVersion,_that.lastSyncedVersion,_that.syncStatus,_that.createdAt,_that.updatedAt,_that.deletedAt,_that.projectId);case _:
   return orElse();
 
 }
@@ -176,10 +177,10 @@ return $default(_that.id,_that.encryptedTitle,_that.encryptedContent,_that.local
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  Uint8List encryptedTitle,  Uint8List encryptedContent,  int localVersion,  int lastSyncedVersion,  SyncStatus syncStatus,  DateTime createdAt,  DateTime updatedAt,  String? folderId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  Uint8List encryptedTitle,  Uint8List encryptedContent,  int localVersion,  int lastSyncedVersion,  SyncStatus syncStatus,  DateTime createdAt,  DateTime updatedAt,  DateTime? deletedAt,  String? projectId)  $default,) {final _that = this;
 switch (_that) {
 case _EncryptedNote():
-return $default(_that.id,_that.encryptedTitle,_that.encryptedContent,_that.localVersion,_that.lastSyncedVersion,_that.syncStatus,_that.createdAt,_that.updatedAt,_that.folderId);}
+return $default(_that.id,_that.encryptedTitle,_that.encryptedContent,_that.localVersion,_that.lastSyncedVersion,_that.syncStatus,_that.createdAt,_that.updatedAt,_that.deletedAt,_that.projectId);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -193,10 +194,10 @@ return $default(_that.id,_that.encryptedTitle,_that.encryptedContent,_that.local
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  Uint8List encryptedTitle,  Uint8List encryptedContent,  int localVersion,  int lastSyncedVersion,  SyncStatus syncStatus,  DateTime createdAt,  DateTime updatedAt,  String? folderId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  Uint8List encryptedTitle,  Uint8List encryptedContent,  int localVersion,  int lastSyncedVersion,  SyncStatus syncStatus,  DateTime createdAt,  DateTime updatedAt,  DateTime? deletedAt,  String? projectId)?  $default,) {final _that = this;
 switch (_that) {
 case _EncryptedNote() when $default != null:
-return $default(_that.id,_that.encryptedTitle,_that.encryptedContent,_that.localVersion,_that.lastSyncedVersion,_that.syncStatus,_that.createdAt,_that.updatedAt,_that.folderId);case _:
+return $default(_that.id,_that.encryptedTitle,_that.encryptedContent,_that.localVersion,_that.lastSyncedVersion,_that.syncStatus,_that.createdAt,_that.updatedAt,_that.deletedAt,_that.projectId);case _:
   return null;
 
 }
@@ -208,7 +209,7 @@ return $default(_that.id,_that.encryptedTitle,_that.encryptedContent,_that.local
 
 
 class _EncryptedNote extends EncryptedNote {
-  const _EncryptedNote({required this.id, required this.encryptedTitle, required this.encryptedContent, required this.localVersion, required this.lastSyncedVersion, required this.syncStatus, required this.createdAt, required this.updatedAt, this.folderId}): super._();
+  const _EncryptedNote({required this.id, required this.encryptedTitle, required this.encryptedContent, required this.localVersion, required this.lastSyncedVersion, required this.syncStatus, required this.createdAt, required this.updatedAt, this.deletedAt, this.projectId}): super._();
   
 
 @override final  String id;
@@ -219,7 +220,8 @@ class _EncryptedNote extends EncryptedNote {
 @override final  SyncStatus syncStatus;
 @override final  DateTime createdAt;
 @override final  DateTime updatedAt;
-@override final  String? folderId;
+@override final  DateTime? deletedAt;
+@override final  String? projectId;
 
 /// Create a copy of EncryptedNote
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +233,16 @@ _$EncryptedNoteCopyWith<_EncryptedNote> get copyWith => __$EncryptedNoteCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EncryptedNote&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other.encryptedTitle, encryptedTitle)&&const DeepCollectionEquality().equals(other.encryptedContent, encryptedContent)&&(identical(other.localVersion, localVersion) || other.localVersion == localVersion)&&(identical(other.lastSyncedVersion, lastSyncedVersion) || other.lastSyncedVersion == lastSyncedVersion)&&(identical(other.syncStatus, syncStatus) || other.syncStatus == syncStatus)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.folderId, folderId) || other.folderId == folderId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EncryptedNote&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other.encryptedTitle, encryptedTitle)&&const DeepCollectionEquality().equals(other.encryptedContent, encryptedContent)&&(identical(other.localVersion, localVersion) || other.localVersion == localVersion)&&(identical(other.lastSyncedVersion, lastSyncedVersion) || other.lastSyncedVersion == lastSyncedVersion)&&(identical(other.syncStatus, syncStatus) || other.syncStatus == syncStatus)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.deletedAt, deletedAt) || other.deletedAt == deletedAt)&&(identical(other.projectId, projectId) || other.projectId == projectId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,const DeepCollectionEquality().hash(encryptedTitle),const DeepCollectionEquality().hash(encryptedContent),localVersion,lastSyncedVersion,syncStatus,createdAt,updatedAt,folderId);
+int get hashCode => Object.hash(runtimeType,id,const DeepCollectionEquality().hash(encryptedTitle),const DeepCollectionEquality().hash(encryptedContent),localVersion,lastSyncedVersion,syncStatus,createdAt,updatedAt,deletedAt,projectId);
 
 @override
 String toString() {
-  return 'EncryptedNote(id: $id, encryptedTitle: $encryptedTitle, encryptedContent: $encryptedContent, localVersion: $localVersion, lastSyncedVersion: $lastSyncedVersion, syncStatus: $syncStatus, createdAt: $createdAt, updatedAt: $updatedAt, folderId: $folderId)';
+  return 'EncryptedNote(id: $id, encryptedTitle: $encryptedTitle, encryptedContent: $encryptedContent, localVersion: $localVersion, lastSyncedVersion: $lastSyncedVersion, syncStatus: $syncStatus, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, projectId: $projectId)';
 }
 
 
@@ -251,7 +253,7 @@ abstract mixin class _$EncryptedNoteCopyWith<$Res> implements $EncryptedNoteCopy
   factory _$EncryptedNoteCopyWith(_EncryptedNote value, $Res Function(_EncryptedNote) _then) = __$EncryptedNoteCopyWithImpl;
 @override @useResult
 $Res call({
- String id, Uint8List encryptedTitle, Uint8List encryptedContent, int localVersion, int lastSyncedVersion, SyncStatus syncStatus, DateTime createdAt, DateTime updatedAt, String? folderId
+ String id, Uint8List encryptedTitle, Uint8List encryptedContent, int localVersion, int lastSyncedVersion, SyncStatus syncStatus, DateTime createdAt, DateTime updatedAt, DateTime? deletedAt, String? projectId
 });
 
 
@@ -268,7 +270,7 @@ class __$EncryptedNoteCopyWithImpl<$Res>
 
 /// Create a copy of EncryptedNote
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? encryptedTitle = null,Object? encryptedContent = null,Object? localVersion = null,Object? lastSyncedVersion = null,Object? syncStatus = null,Object? createdAt = null,Object? updatedAt = null,Object? folderId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? encryptedTitle = null,Object? encryptedContent = null,Object? localVersion = null,Object? lastSyncedVersion = null,Object? syncStatus = null,Object? createdAt = null,Object? updatedAt = null,Object? deletedAt = freezed,Object? projectId = freezed,}) {
   return _then(_EncryptedNote(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,encryptedTitle: null == encryptedTitle ? _self.encryptedTitle : encryptedTitle // ignore: cast_nullable_to_non_nullable
@@ -278,7 +280,8 @@ as int,lastSyncedVersion: null == lastSyncedVersion ? _self.lastSyncedVersion : 
 as int,syncStatus: null == syncStatus ? _self.syncStatus : syncStatus // ignore: cast_nullable_to_non_nullable
 as SyncStatus,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
-as DateTime,folderId: freezed == folderId ? _self.folderId : folderId // ignore: cast_nullable_to_non_nullable
+as DateTime,deletedAt: freezed == deletedAt ? _self.deletedAt : deletedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,projectId: freezed == projectId ? _self.projectId : projectId // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
