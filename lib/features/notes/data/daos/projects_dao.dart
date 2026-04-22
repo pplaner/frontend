@@ -1,0 +1,60 @@
+import 'package:drift/drift.dart';
+import 'package:frontend/app/database/database.dart';
+import 'package:frontend/features/notes/data/sync_types.dart';
+import 'package:frontend/features/notes/data/tables/projects.dart';
+import 'package:frontend/core/sync/sync_status.dart';
+
+part 'projects_dao.g.dart';
+
+@DriftAccessor(tables: [Projects])
+class ProjectsDao extends DatabaseAccessor<AppDatabase>
+    with _$ProjectsDaoMixin {
+  ProjectsDao(super.attachedDatabase);
+
+  Future<void> insertProject(ProjectsCompanion note) =>
+      into(projects).insert(note);
+
+  Future<void> updateProject(ProjectsCompanion note) =>
+      update(projects).replace(note);
+
+  Future<void> upsertFolder(ProjectsCompanion project) =>
+      into(projects).insert(project, mode: InsertMode.insertOrReplace);
+
+  Future<void> acknowledgePushed(
+    List<SyncAcknowledgement> acknowledgements,
+  ) => batch((batch) {
+    for (final ack in acknowledgements) {
+      if (ack.isDeleted) {
+        batch.deleteWhere(
+          projects,
+          (tbl) => tbl.id.equals(ack.id) & tbl.localVersion.equals(ack.version),
+        );
+      } else {
+        batch.update(
+          projects,
+          ProjectsCompanion(
+            syncStatus: const Value(SyncStatus.synced),
+            lastSyncedVersion: Value(ack.version),
+          ),
+          where: (tbl) =>
+              tbl.id.equals(ack.id) & tbl.localVersion.equals(ack.version),
+        );
+      }
+    }
+  });
+
+  Future<ProjectModel?> getProject(String id) =>
+      (select(projects)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+
+  Future<List<ProjectModel>> getPending() =>
+      (select(projects)..where(
+            (tbl) => tbl.syncStatus.isIn([
+              SyncStatus.modified.index,
+              SyncStatus.deleted.index,
+            ]),
+          ))
+          .get();
+
+  Future<void> deleteProject(String id) =>
+      (delete(projects)..where((tbl) => tbl.id.equals(id))).go();
+}
