@@ -1,6 +1,6 @@
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:frontend/features/notes/domain/entities/sync_status.dart';
+import 'package:frontend/core/sync/sync_status.dart';
 
 part 'note.freezed.dart';
 
@@ -18,8 +18,9 @@ sealed class Note with _$Note {
 
     required DateTime createdAt,
     required DateTime updatedAt,
+    DateTime? deletedAt,
 
-    String? folderId,
+    String? projectId,
   }) = _Note;
 
   const Note._();

@@ -5,7 +5,11 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/storage/cookie_jar.dart';
 import 'package:frontend/core/storage/shared_prefs.dart';
+import 'package:frontend/core/sync/sync_orchestrator.dart';
 import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/features/notes/data/delegates/notes_sync_delegate.dart';
+import 'package:frontend/features/notes/data/delegates/projects_sync_delegate.dart';
+import 'package:frontend/features/notes/data/unified_notes_repository.dart';
 import 'package:frontend/features/notes/presentation/screens/home_screen.dart';
 import 'package:frontend/i18n/strings.g.dart';
 import 'package:path_provider/path_provider.dart';
@@ -27,6 +31,14 @@ void main() async {
       overrides: [
         cookieJarProvider.overrideWithValue(cookieJar),
         sharedPreferencesProvider.overrideWithValue(sharedPrefs),
+        registeredSyncablesProvider.overrideWith((ref) {
+          final concreteNotesRepo = ref.read(unifiedNotesRepositoryProvider);
+
+          return [
+            ProjectsSyncDelegate(engine: concreteNotesRepo),
+            NotesSyncDelegate(engine: concreteNotesRepo),
+          ];
+        }),
       ],
       child: TranslationProvider(child: const MyApp()),
     ),

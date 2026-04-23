@@ -26,7 +26,7 @@ void main() {
     test('saveKeySlot calls all necessary data sources', () async {
       when(() => mockLocal.saveKeySlot(any())).thenAnswer((_) async {});
 
-      final slot = VaultFixtures.emptyPinSlot;
+      final slot = VaultFixtures.buildKeySlot();
 
       await repository.saveKeySlot(slot);
 
@@ -34,7 +34,8 @@ void main() {
     });
 
     test('getKeySlotByType calls correct data sources', () async {
-      final slot = VaultFixtures.emptyPinSlot;
+      final slot = VaultFixtures.buildKeySlot();
+
       final model = KeySlotModel(
         type: slot.type,
         salt: slot.salt,
