@@ -14,6 +14,14 @@ mixin DataSourceRunner {
       return Success(result);
     } on DioException catch (e, st) {
       logger.e('Call failed in remoteRunner', error: e, stackTrace: st);
+
+      if (e.response != null) {
+        final statusCode = e.response!.statusCode ?? 0;
+        final message = e.response!.data?.toString();
+
+        return Failure(mapCore(CoreFailure.api(statusCode, message)));
+      }
+
       return Failure(mapCore(const CoreFailure.network()));
     } on Exception catch (e, st) {
       logger.e('Unhandled exception in remoteRunner', error: e, stackTrace: st);
