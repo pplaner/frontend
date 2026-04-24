@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:frontend/features/notes/domain/entities/sync_status.dart';
+import 'package:frontend/core/sync/sync_status.dart';
 
 part 'encrypted_note.freezed.dart';
 
@@ -19,9 +19,12 @@ sealed class EncryptedNote with _$EncryptedNote {
 
     required DateTime createdAt,
     required DateTime updatedAt,
+    DateTime? deletedAt,
 
-    String? folderId,
+    String? projectId,
   }) = _EncryptedNote;
 
   const EncryptedNote._();
+
+  bool get isSynced => syncStatus == SyncStatus.synced;
 }

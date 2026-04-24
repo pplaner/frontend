@@ -5,6 +5,7 @@ import 'package:frontend/features/notes/domain/entities/encrypted_note.dart';
 extension NoteModelToEncrypted on NoteModel {
   EncryptedNote toDomain() => EncryptedNote(
     id: id,
+
     encryptedTitle: encryptedTitle,
     encryptedContent: encryptedContent,
 
@@ -14,14 +15,16 @@ extension NoteModelToEncrypted on NoteModel {
 
     createdAt: createdAt,
     updatedAt: updatedAt,
+    deletedAt: deletedAt,
 
-    folderId: folderId,
+    projectId: projectId,
   );
 }
 
-extension EncryptedToNotesCompanion on EncryptedNote {
+extension EncryptedNoteToCompanion on EncryptedNote {
   NotesCompanion toCompanion() => NotesCompanion.insert(
     id: id,
+
     encryptedTitle: encryptedTitle,
     encryptedContent: encryptedContent,
 
@@ -31,7 +34,23 @@ extension EncryptedToNotesCompanion on EncryptedNote {
 
     createdAt: Value(createdAt),
     updatedAt: Value(updatedAt),
+    deletedAt: Value(deletedAt),
 
-    folderId: Value(folderId),
+    projectId: Value(projectId),
+  );
+
+  NoteConflictsCompanion toConflictCompanion() => NoteConflictsCompanion.insert(
+    id: id,
+
+    encryptedTitle: encryptedTitle,
+    encryptedContent: encryptedContent,
+
+    version: localVersion,
+
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+    deletedAt: Value(deletedAt),
+
+    projectId: Value(projectId),
   );
 }
