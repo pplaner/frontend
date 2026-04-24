@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/app_colors.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 /// Bottom Sheet для додавання нового завдання (Головна 6).
@@ -66,7 +67,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
     return Container(
       decoration: const BoxDecoration(
-        color: Color(0xFFEBEBEB),
+        color: AppColors.background,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: EdgeInsets.fromLTRB(16, 0, 16, keyboardHeight + 16),
@@ -81,7 +82,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: const Color(0xFFD9D9D9),
+                color: AppColors.divider,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -94,7 +95,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   onTap: _onCancel,
                   child: const Icon(
                     Icons.cancel_outlined,
-                    color: Color(0xFF828282),
+                    color: AppColors.textSecondary,
                     size: 24,
                   ),
                 ),
@@ -109,7 +110,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   onTap: _onConfirm,
                   child: const Icon(
                     Icons.check,
-                    color: Color(0xFF8BA88E),
+                    color: AppColors.primary,
                     size: 24,
                   ),
                 ),
@@ -122,7 +123,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             Container(
               height: 51,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(20),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
@@ -133,11 +134,11 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 decoration: InputDecoration(
                   hintText: 'Що потрібно зробити?',
                   hintStyle: textTheme.bodyLarge?.copyWith(
-                    color: const Color(0xFF828282),
+                    color: AppColors.textSecondary,
                   ),
 
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: AppColors.surface,
 
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
@@ -155,7 +156,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             // Поле "Додати деталі..." + іконки метаданих
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(20),
               ),
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
@@ -168,44 +169,50 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                       minHeight: 60,
                       maxHeight: 120,
                     ),
-                    child: QuillEditor.basic(
-                      controller: _quillController,
-                      config: const QuillEditorConfig(
-                        placeholder: 'Додати деталі...',
-                        padding: EdgeInsets.zero,
-                        customStyles: DefaultStyles(
-                          placeHolder: DefaultTextBlockStyle(
-                            TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Color(0xFF828282),
-                              height: 1.5,
+                    child: Builder(
+                      builder: (context) {
+                        final fontFamily =
+                            Theme.of(context).textTheme.bodyLarge?.fontFamily;
+                        return QuillEditor.basic(
+                          controller: _quillController,
+                          config: QuillEditorConfig(
+                            placeholder: 'Додати деталі...',
+                            padding: EdgeInsets.zero,
+                            customStyles: DefaultStyles(
+                              placeHolder: DefaultTextBlockStyle(
+                                TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.textSecondary,
+                                  height: 1.5,
+                                ),
+                                HorizontalSpacing.zero,
+                                VerticalSpacing.zero,
+                                VerticalSpacing.zero,
+                                null,
+                              ),
+                              paragraph: DefaultTextBlockStyle(
+                                TextStyle(
+                                  fontFamily: fontFamily,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.textPrimary,
+                                  height: 1.5,
+                                ),
+                                HorizontalSpacing.zero,
+                                VerticalSpacing.zero,
+                                VerticalSpacing.zero,
+                                null,
+                              ),
                             ),
-                            HorizontalSpacing.zero,
-                            VerticalSpacing.zero,
-                            VerticalSpacing.zero,
-                            null,
                           ),
-                          paragraph: DefaultTextBlockStyle(
-                            TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Color(0xFF2D2D2D),
-                              height: 1.5,
-                            ),
-                            HorizontalSpacing.zero,
-                            VerticalSpacing.zero,
-                            VerticalSpacing.zero,
-                            null,
-                          ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
                   ),
 
-                  const Divider(height: 16, color: Color(0xFFF0F0F0)),
+                  const Divider(height: 16, color: AppColors.secondaryContainer),
 
                   // Іконки метаданих
                   Row(
@@ -249,7 +256,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             // Quill Toolbar
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.surface,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: QuillSimpleToolbar(
@@ -301,7 +308,7 @@ class _MetaIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Icon(icon, size: 20, color: const Color(0xFF8BA88E)),
+      child: Icon(icon, size: 20, color: AppColors.primary),
     );
   }
 }

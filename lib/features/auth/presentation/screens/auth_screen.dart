@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/utils/app_assets.dart';
+import 'package:frontend/core/theme/app_colors.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
@@ -11,8 +12,8 @@ class AuthScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? const Color(0xFF1A1A1A)
-          : const Color(0xFFEBEBEB),
+          ? AppColors.darkBackground
+          : AppColors.background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -49,14 +50,14 @@ class AuthScreen extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(double.infinity, 51),
                   backgroundColor: colorScheme.primary,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.surface,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
                 child: Text(
                   'Створити локальне сховище',
-                  style: textTheme.labelLarge?.copyWith(color: Colors.white),
+                  style: textTheme.labelLarge?.copyWith(color: AppColors.surface),
                 ),
               ),
               const SizedBox(height: 40),
@@ -66,7 +67,7 @@ class AuthScreen extends StatelessWidget {
                   minimumSize: const Size(double.infinity, 51),
                   foregroundColor: colorScheme.primary,
                   side: BorderSide(color: colorScheme.primary, width: 1),
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.surface,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
