@@ -1,0 +1,953 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:frontend/core/utils/app_assets.dart';
+import 'package:frontend/features/notes/presentation/screens/add_task_bottom_sheet.dart';
+import 'package:table_calendar/table_calendar.dart';
+
+// Моделі
+
+enum TaskCategory { all, work, personal, health, other }
+
+extension TaskCategoryLabel on TaskCategory {
+  String get label {
+    switch (this) {
+      case TaskCategory.all:      return 'Усі';
+      case TaskCategory.work:     return 'Робота';
+      case TaskCategory.personal: return 'Особисте';
+      case TaskCategory.health:   return 'Здоров\'я';
+      case TaskCategory.other:    return 'Інше';
+    }
+  }
+}
+
+enum CalendarViewMode { month, twoWeeks, week, day }
+
+extension CalendarViewModeExt on CalendarViewMode {
+  String get label {
+    switch (this) {
+      case CalendarViewMode.month:    return 'Місяць';
+      case CalendarViewMode.twoWeeks: return '2 тижні';
+      case CalendarViewMode.week:     return 'Тиждень';
+      case CalendarViewMode.day:      return 'День';
+    }
+  }
+
+  IconData get icon {
+    switch (this) {
+      case CalendarViewMode.month:    return Icons.calendar_view_month_outlined;
+      case CalendarViewMode.twoWeeks: return Icons.calendar_view_week_outlined;
+      case CalendarViewMode.week:     return Icons.calendar_view_week_outlined;
+      case CalendarViewMode.day:      return Icons.calendar_view_day_outlined;
+    }
+  }
+
+  CalendarFormat? get calendarFormat {
+    switch (this) {
+      case CalendarViewMode.month:    return CalendarFormat.month;
+      case CalendarViewMode.twoWeeks: return CalendarFormat.twoWeeks;
+      case CalendarViewMode.week:     return CalendarFormat.week;
+      case CalendarViewMode.day:      return null;
+    }
+  }
+}
+
+// Зробити: перенести в domain/entities/ після підключення Riverpod
+class CalendarTaskItem {
+  CalendarTaskItem({
+    required this.id,
+    required this.title,
+    required this.subtitle,
+    required this.date,
+    required this.category,
+    this.isCompleted = false,
+  });
+
+  final String id;
+  final String title;
+  final String subtitle;
+  final DateTime date;
+  final TaskCategory category;
+  bool isCompleted;
+}
+
+// CalendarScreen
+
+class CalendarScreen extends StatefulWidget {
+  const CalendarScreen({super.key});
+
+  @override
+  State<CalendarScreen> createState() => _CalendarScreenState();
+}
+
+class _CalendarScreenState extends State<CalendarScreen> {
+  // Зробити: замінити на Riverpod провайдер
+  final List<CalendarTaskItem> _tasks = [];
+
+  int _currentNavIndex = 1;
+  CalendarViewMode _viewMode = CalendarViewMode.month;
+  TaskCategory _selectedCategory = TaskCategory.all;
+  bool _completedExpanded = true;
+
+  DateTime _focusedDay = DateTime.now();
+  DateTime _selectedDay = DateTime.now();
+
+  // Геттери
+
+  List<CalendarTaskItem> get _filteredTasks {
+    return _tasks.where((task) {
+      final isSameDate = isSameDay(task.date, _selectedDay);
+      final matchesCategory = _selectedCategory == TaskCategory.all ||
+          task.category == _selectedCategory;
+      return isSameDate && matchesCategory;
+    }).toList();
+  }
+
+  List<CalendarTaskItem> get _activeTasks =>
+      _filteredTasks.where((t) => !t.isCompleted).toList();
+
+  List<CalendarTaskItem> get _completedTasks =>
+      _filteredTasks.where((t) => t.isCompleted).toList();
+
+  bool get _hasTasksForSelectedDay => _filteredTasks.isNotEmpty;
+
+  // Дії
+
+  void _toggleTask(CalendarTaskItem task) {
+    setState(() => task.isCompleted = !task.isCompleted);
+  }
+
+  void _deleteTask(CalendarTaskItem task) {
+    setState(() => _tasks.removeWhere((t) => t.id == task.id));
+  }
+
+  Future<void> _openViewModePicker() async {
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => _ViewModeSheet(
+        current: _viewMode,
+        onSelected: (mode) {
+          setState(() => _viewMode = mode);
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
+  Future<void> _openFilterSheet() async {
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => _FilterSheet(
+        current: _selectedCategory,
+        onSelected: (cat) {
+          setState(() => _selectedCategory = cat);
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
+  Future<void> _openAddTaskSheet() async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withValues(alpha: 0.1),
+      builder: (_) => AddTaskBottomSheet(
+        onTaskAdded: (title, subtitle) {
+          setState(() {
+            _tasks.add(CalendarTaskItem(
+              id: DateTime.now().millisecondsSinceEpoch.toString(),
+              title: title,
+              subtitle: subtitle,
+              date: _selectedDay,
+              category: _selectedCategory == TaskCategory.all
+                  ? TaskCategory.work
+                  : _selectedCategory,
+            ));
+          });
+        },
+      ),
+    );
+  }
+
+  String _formatDayTitle(DateTime date) {
+    const months = [
+      'січня', 'лютого', 'березня', 'квітня', 'травня', 'червня',
+      'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня',
+    ];
+    return '${date.day} ${months[date.month - 1]} ${date.year}';
+  }
+
+  // Build
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFEBEBEB),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // Розмитий логотип — тільки коли немає завдань на цей день
+            if (!_hasTasksForSelectedDay)
+              Positioned.fill(
+                bottom: 110,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                    child: Opacity(
+                      opacity: 0.25,
+                      child: Image.asset(
+                        AppAssets.logo,
+                        height: 159,
+                        width: 168,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+            Column(
+              children: [
+                // Верхній рядок
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          _viewMode.icon,
+                          color: const Color(0xFF2D2D2D),
+                          size: 24,
+                        ),
+                        tooltip: _viewMode.label,
+                        onPressed: _openViewModePicker,
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.filter_alt_outlined,
+                          color: _selectedCategory != TaskCategory.all
+                              ? const Color(0xFF8BA88E)
+                              : const Color(0xFF2D2D2D),
+                          size: 24,
+                        ),
+                        tooltip: 'Фільтр',
+                        onPressed: _openFilterSheet,
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Календар або заголовок дня
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: _viewMode == CalendarViewMode.day
+                      ? _DayHeader(
+                    date: _selectedDay,
+                    title: _formatDayTitle(_selectedDay),
+                    onPrev: () => setState(() {
+                      _selectedDay = _selectedDay
+                          .subtract(const Duration(days: 1));
+                      _focusedDay = _selectedDay;
+                    }),
+                    onNext: () => setState(() {
+                      _selectedDay =
+                          _selectedDay.add(const Duration(days: 1));
+                      _focusedDay = _selectedDay;
+                    }),
+                  )
+                      : _CalendarCard(
+                    focusedDay: _focusedDay,
+                    selectedDay: _selectedDay,
+                    viewMode: _viewMode,
+                    onDaySelected: (selected, focused) {
+                      setState(() {
+                        _selectedDay = selected;
+                        _focusedDay = focused;
+                      });
+                    },
+                    onPageChanged: (focused) {
+                      setState(() => _focusedDay = focused);
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                // Список завдань
+                Expanded(
+                  child: _hasTasksForSelectedDay
+                      ? _buildTaskContent()
+                      : const SizedBox.shrink(),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _openAddTaskSheet,
+        backgroundColor: const Color(0xFF8BA88E),
+        foregroundColor: Colors.white,
+        elevation: 4,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add, size: 28),
+      ),
+      bottomNavigationBar: _BottomNav(
+        currentIndex: _currentNavIndex,
+        onTap: (i) => setState(() => _currentNavIndex = i),
+      ),
+    );
+  }
+
+  // Будує список активних + секцію завершених
+  Widget _buildTaskContent() {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+      children: [
+        // Активні завдання
+        ..._activeTasks.map(
+              (task) => Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: _SwipableTaskCard(
+              key: ValueKey(task.id),
+              task: task,
+              onToggle: () => _toggleTask(task),
+              onDelete: () => _deleteTask(task),
+            ),
+          ),
+        ),
+
+        // Секція завершених — тільки якщо є хоча б одне
+        if (_completedTasks.isNotEmpty) ...[
+          const SizedBox(height: 4),
+          _CompletedSection(
+            isExpanded: _completedExpanded,
+            count: _completedTasks.length,
+            onToggle: () =>
+                setState(() => _completedExpanded = !_completedExpanded),
+            children: _completedTasks
+                .map(
+                  (task) => _SwipableCompletedTile(
+                key: ValueKey(task.id),
+                task: task,
+                onToggle: () => _toggleTask(task),
+                onDelete: () => _deleteTask(task),
+              ),
+            )
+                .toList(),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+// Активне завдання зі свайпом
+
+class _SwipableTaskCard extends StatelessWidget {
+  const _SwipableTaskCard({
+    super.key,
+    required this.task,
+    required this.onToggle,
+    required this.onDelete,
+  });
+
+  final CalendarTaskItem task;
+  final VoidCallback onToggle;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Dismissible(
+      key: ValueKey('cal-dismissible-${task.id}'),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFEBEE),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Icon(
+          Icons.delete_outline,
+          color: Color(0xFFB00020),
+          size: 24,
+        ),
+      ),
+      confirmDismiss: (_) => _confirmDelete(context),
+      onDismissed: (_) => onDelete(),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFFE0E0E0)),
+        ),
+        child: ListTile(
+          contentPadding:
+          const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+          horizontalTitleGap: 8,
+          leading: SizedBox(
+            width: 24,
+            height: 24,
+            child: Checkbox(
+              value: task.isCompleted,
+              onChanged: (_) => onToggle(),
+              activeColor: const Color(0xFF8BA88E),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+              ),
+              side: const BorderSide(color: Color(0xFF8BA88E), width: 1.5),
+            ),
+          ),
+          title: Text(task.title, style: textTheme.titleMedium),
+          subtitle: task.subtitle.isNotEmpty
+              ? Text(
+            task.subtitle,
+            style: textTheme.bodySmall
+                ?.copyWith(color: const Color(0xFF828282)),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          )
+              : null,
+          trailing: Text(task.category.label, style: textTheme.bodySmall),
+        ),
+      ),
+    );
+  }
+}
+
+// Завершене завдання зі свайпом
+
+class _SwipableCompletedTile extends StatelessWidget {
+  const _SwipableCompletedTile({
+    super.key,
+    required this.task,
+    required this.onToggle,
+    required this.onDelete,
+  });
+
+  final CalendarTaskItem task;
+  final VoidCallback onToggle;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Dismissible(
+      key: ValueKey('cal-completed-${task.id}'),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFEBEE),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Icon(
+          Icons.delete_outline,
+          color: Color(0xFFB00020),
+          size: 24,
+        ),
+      ),
+      confirmDismiss: (_) => _confirmDelete(context),
+      onDismissed: (_) => onDelete(),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+        child: Row(
+          children: [
+            // Натискання повертає в активні
+            GestureDetector(
+              onTap: onToggle,
+              child: Container(
+                width: 20,
+                height: 20,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF8BA88E),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child:
+                const Icon(Icons.check, size: 14, color: Colors.white),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                task.title,
+                style: textTheme.titleMedium?.copyWith(
+                  decoration: TextDecoration.lineThrough,
+                  color: const Color(0xFF828282),
+                ),
+              ),
+            ),
+            Text(task.category.label, style: textTheme.bodySmall),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Секція "Завершені"
+
+class _CompletedSection extends StatelessWidget {
+  const _CompletedSection({
+    required this.isExpanded,
+    required this.count,
+    required this.onToggle,
+    required this.children,
+  });
+
+  final bool isExpanded;
+  final int count;
+  final VoidCallback onToggle;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFE0E0E0)),
+      ),
+      child: Column(
+        children: [
+          InkWell(
+            onTap: onToggle,
+            borderRadius: BorderRadius.circular(20),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 14,
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    'Завершені',
+                    style: textTheme.titleMedium?.copyWith(
+                      color: const Color(0xFF828282),
+                    ),
+                  ),
+                  const Spacer(),
+                  Text('$count', style: textTheme.bodySmall),
+                  const SizedBox(width: 4),
+                  AnimatedRotation(
+                    turns: isExpanded ? 0 : -0.5,
+                    duration: const Duration(milliseconds: 200),
+                    child: const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Color(0xFF828282),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          AnimatedCrossFade(
+            firstChild: Column(children: children),
+            secondChild: const SizedBox.shrink(),
+            crossFadeState: isExpanded
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+            duration: const Duration(milliseconds: 200),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Діалог підтвердження видалення
+
+Future<bool> _confirmDelete(BuildContext context) async {
+  final result = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: const Text('Видалити завдання?'),
+      content: const Text('Це завдання буде видалено назавжди.'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(false),
+          child: const Text('Скасувати'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(true),
+          style: TextButton.styleFrom(
+            foregroundColor: const Color(0xFFB00020),
+          ),
+          child: const Text('Видалити'),
+        ),
+      ],
+    ),
+  );
+  return result ?? false;
+}
+
+// Картка з TableCalendar
+
+class _CalendarCard extends StatelessWidget {
+  const _CalendarCard({
+    required this.focusedDay,
+    required this.selectedDay,
+    required this.viewMode,
+    required this.onDaySelected,
+    required this.onPageChanged,
+  });
+
+  final DateTime focusedDay;
+  final DateTime selectedDay;
+  final CalendarViewMode viewMode;
+  final void Function(DateTime, DateTime) onDaySelected;
+  final void Function(DateTime) onPageChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(bottom: 12, left: 8, right: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: TableCalendar<dynamic>(
+        firstDay: DateTime.utc(2020, 1, 1),
+        lastDay: DateTime.utc(2030, 12, 31),
+        focusedDay: focusedDay,
+        calendarFormat: viewMode.calendarFormat ?? CalendarFormat.month,
+        startingDayOfWeek: StartingDayOfWeek.sunday,
+        selectedDayPredicate: (day) => isSameDay(selectedDay, day),
+        onDaySelected: onDaySelected,
+        onPageChanged: onPageChanged,
+        headerStyle: const HeaderStyle(
+          formatButtonVisible: false,
+          titleTextStyle: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF2D2D2D),
+          ),
+          headerPadding:
+          EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          leftChevronIcon: Icon(
+            Icons.chevron_left,
+            color: Color(0xFF828282),
+            size: 20,
+          ),
+          rightChevronIcon: Icon(
+            Icons.chevron_right,
+            color: Color(0xFF828282),
+            size: 20,
+          ),
+          leftChevronMargin: EdgeInsets.zero,
+          rightChevronMargin: EdgeInsets.zero,
+        ),
+        daysOfWeekStyle: const DaysOfWeekStyle(
+          weekdayStyle: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFFBDBDBD),
+          ),
+          weekendStyle: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFFBDBDBD),
+          ),
+        ),
+        daysOfWeekHeight: 24,
+        calendarStyle: CalendarStyle(
+          cellMargin: const EdgeInsets.all(4),
+          selectedDecoration: BoxDecoration(
+            color: const Color(0xFF8BA88E).withValues(alpha: 0.12),
+            shape: BoxShape.circle,
+            border: Border.all(color: const Color(0xFF8BA88E), width: 1.5),
+          ),
+          selectedTextStyle: const TextStyle(
+            color: Color(0xFF8BA88E),
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+          ),
+          todayDecoration: const BoxDecoration(
+            color: Colors.transparent,
+            shape: BoxShape.circle,
+          ),
+          todayTextStyle: const TextStyle(
+            color: Color(0xFF8BA88E),
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+          defaultTextStyle: const TextStyle(
+            color: Color(0xFF2D2D2D),
+            fontSize: 14,
+          ),
+          weekendTextStyle: const TextStyle(
+            color: Color(0xFF2D2D2D),
+            fontSize: 14,
+          ),
+          outsideDaysVisible: false,
+        ),
+      ),
+    );
+  }
+}
+
+// Заголовок режиму "День"
+
+class _DayHeader extends StatelessWidget {
+  const _DayHeader({
+    required this.date,
+    required this.title,
+    required this.onPrev,
+    required this.onNext,
+  });
+
+  final DateTime date;
+  final String title;
+  final VoidCallback onPrev;
+  final VoidCallback onNext;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: onPrev,
+            child: const Icon(
+              Icons.chevron_left,
+              color: Color(0xFF828282),
+              size: 20,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: textTheme.titleMedium,
+            ),
+          ),
+          GestureDetector(
+            onTap: onNext,
+            child: const Icon(
+              Icons.chevron_right,
+              color: Color(0xFF828282),
+              size: 20,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Bottom Sheet: режим перегляду
+
+class _ViewModeSheet extends StatelessWidget {
+  const _ViewModeSheet({
+    required this.current,
+    required this.onSelected,
+  });
+
+  final CalendarViewMode current;
+  final ValueChanged<CalendarViewMode> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD9D9D9),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text('Вигляд календаря', style: textTheme.titleLarge),
+            const SizedBox(height: 16),
+            ...CalendarViewMode.values.map(
+                  (mode) => ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Icon(
+                  mode.icon,
+                  color: current == mode
+                      ? const Color(0xFF8BA88E)
+                      : const Color(0xFF828282),
+                ),
+                title: Text(
+                  mode.label,
+                  style: textTheme.titleMedium?.copyWith(
+                    color: current == mode
+                        ? const Color(0xFF8BA88E)
+                        : const Color(0xFF2D2D2D),
+                  ),
+                ),
+                trailing: current == mode
+                    ? const Icon(
+                  Icons.check,
+                  color: Color(0xFF8BA88E),
+                  size: 20,
+                )
+                    : null,
+                onTap: () => onSelected(mode),
+              ),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Bottom Sheet: фільтр категорій
+
+class _FilterSheet extends StatelessWidget {
+  const _FilterSheet({
+    required this.current,
+    required this.onSelected,
+  });
+
+  final TaskCategory current;
+  final ValueChanged<TaskCategory> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD9D9D9),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text('Категорія завдань', style: textTheme.titleLarge),
+            const SizedBox(height: 16),
+            ...TaskCategory.values.map(
+                  (cat) => ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(
+                  cat.label,
+                  style: textTheme.titleMedium?.copyWith(
+                    color: current == cat
+                        ? const Color(0xFF8BA88E)
+                        : const Color(0xFF2D2D2D),
+                  ),
+                ),
+                trailing: current == cat
+                    ? const Icon(
+                  Icons.check,
+                  color: Color(0xFF8BA88E),
+                  size: 20,
+                )
+                    : null,
+                onTap: () => onSelected(cat),
+              ),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Bottom Navigation Bar
+
+class _BottomNav extends StatelessWidget {
+  const _BottomNav({
+    required this.currentIndex,
+    required this.onTap,
+  });
+
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Color(0xFFD9D9D9),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: onTap,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        selectedItemColor: const Color(0xFF8BA88E),
+        unselectedItemColor: const Color(0xFF2D2D2D),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.check_box_outlined),
+            label: 'Tasks',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: 'Calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+}

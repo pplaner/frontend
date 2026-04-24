@@ -62,6 +62,8 @@ dependencies:
   unorm_dart:
   fpdart:
   logger:
+  flutter_quill_extensions: ^11.0.0
+  table_calendar: ^3.2.0
 
 dev_dependencies:
   flutter_test:
