@@ -9,6 +9,47 @@ part of 'dio_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
+@ProviderFor(tokenRefresher)
+final tokenRefresherProvider = TokenRefresherProvider._();
+
+final class TokenRefresherProvider
+    extends $FunctionalProvider<TokenRefresher, TokenRefresher, TokenRefresher>
+    with $Provider<TokenRefresher> {
+  TokenRefresherProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'tokenRefresherProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$tokenRefresherHash();
+
+  @$internal
+  @override
+  $ProviderElement<TokenRefresher> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  TokenRefresher create(Ref ref) {
+    return tokenRefresher(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(TokenRefresher value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TokenRefresher>(value),
+    );
+  }
+}
+
+String _$tokenRefresherHash() => r'03e1eab9344c500fa2dba4e37d685558fa7009b9';
+
 @ProviderFor(dio)
 final dioProvider = DioProvider._();
 
@@ -47,4 +88,44 @@ final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
   }
 }
 
-String _$dioHash() => r'2b7fa756261f87a385292c19cbf9ba148b8115d3';
+String _$dioHash() => r'f1ec02c6cadde290f7b0cf621c37705ce0e03d76';
+
+@ProviderFor(refreshDio)
+final refreshDioProvider = RefreshDioProvider._();
+
+final class RefreshDioProvider extends $FunctionalProvider<Dio, Dio, Dio>
+    with $Provider<Dio> {
+  RefreshDioProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'refreshDioProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$refreshDioHash();
+
+  @$internal
+  @override
+  $ProviderElement<Dio> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Dio create(Ref ref) {
+    return refreshDio(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Dio value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Dio>(value),
+    );
+  }
+}
+
+String _$refreshDioHash() => r'bb5ab7274a2bd993fd17dbd8260b01463dec9942';
