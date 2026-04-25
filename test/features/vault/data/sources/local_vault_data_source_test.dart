@@ -24,7 +24,7 @@ void main() {
     test('saveKeySlot delegates to KeySlotsDao', () async {
       when(() => mockDao.saveKeySlot(any())).thenAnswer((_) async {});
 
-      final companion = VaultFixtures.emptyPinSlot.toCompanion();
+      final companion = VaultFixtures.buildKeySlot().toCompanion();
 
       await dataSource.saveKeySlot(companion);
 

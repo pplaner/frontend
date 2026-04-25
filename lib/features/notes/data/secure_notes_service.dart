@@ -42,7 +42,7 @@ class SecureNotesService implements NotesService {
         masterKey,
       );
 
-      final encryptedNote = note.toEncryped(
+      final encryptedNote = note.toEncrypted(
         encryptedTitle: encryptedTitle,
         encryptedContent: encryptedContent,
       );
@@ -52,11 +52,11 @@ class SecureNotesService implements NotesService {
   }
 
   @override
-  Future<Result<Note?, NotesFailure>> loadNote(String id) async {
+  Future<Result<Note?, NotesFailure>> getNote(String id) async {
     return _guard(() async {
       final masterKey = _cryptoSession.masterKey;
 
-      final encryptedNoteResult = await _repository.getNoteById(id);
+      final encryptedNoteResult = await _repository.getNote(id);
       if (encryptedNoteResult case Failure(error: final e)) return Failure(e);
 
       final encryptedNote = encryptedNoteResult.unwrap;

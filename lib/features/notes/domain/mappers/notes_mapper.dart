@@ -5,7 +5,7 @@ import 'package:frontend/features/notes/domain/entities/encrypted_note.dart';
 import 'package:frontend/features/notes/domain/entities/note.dart';
 
 extension NoteToEncrypted on Note {
-  EncryptedNote toEncryped({
+  EncryptedNote toEncrypted({
     required Uint8List encryptedTitle,
     required Uint8List encryptedContent,
   }) => EncryptedNote(
@@ -19,8 +19,9 @@ extension NoteToEncrypted on Note {
 
     createdAt: createdAt,
     updatedAt: updatedAt,
+    deletedAt: deletedAt,
 
-    folderId: folderId,
+    projectId: projectId,
   );
 }
 
@@ -36,7 +37,8 @@ extension EncryptedToNote on EncryptedNote {
 
     createdAt: createdAt,
     updatedAt: updatedAt,
+    deletedAt: deletedAt,
 
-    folderId: folderId,
+    projectId: projectId,
   );
 }

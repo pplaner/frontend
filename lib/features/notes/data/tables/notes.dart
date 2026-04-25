@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
-import 'package:frontend/features/notes/data/tables/folders.dart';
-import 'package:frontend/features/notes/domain/entities/sync_status.dart';
+import 'package:frontend/features/notes/data/tables/projects.dart';
+import 'package:frontend/core/sync/sync_status.dart';
 
 @DataClassName('NoteModel')
 class Notes extends Table {
@@ -17,8 +17,8 @@ class Notes extends Table {
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get deletedAt => dateTime().nullable()();
 
-  TextColumn get folderId => text().nullable().references(
-    Folders,
+  TextColumn get projectId => text().nullable().references(
+    Projects,
     #id,
     onDelete: KeyAction.setNull,
     onUpdate: KeyAction.cascade,

@@ -1,10 +1,15 @@
-const String _notesBase = '/api/v1/notes';
-const String _projectsBase = '/api/v1/projects';
+const String _apiBase = '/api/v1';
+const String _authBase = '$_apiBase/auth';
+const String _userBase = '$_apiBase/users/me';
+const String _vaultBase = '$_apiBase/vault';
 
-const String sync = '/api/v1/sync';
+const String login = '$_authBase/login';
+const String register = '$_authBase/register';
+const String refresh = '$_authBase/refresh';
+const String logout = '$_authBase/logout';
 
-const String notes = _notesBase;
-String noteById(String id) => '$_notesBase/$id';
+const String me = _userBase;
 
-const String projects = _projectsBase;
-String projectById(String id) => '$_projectsBase/$id';
+const String keySlots = '$_vaultBase/keys';
+
+const String sync = '$_apiBase/sync';

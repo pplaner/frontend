@@ -21,9 +21,11 @@ void main() {
   });
 
   group('KeySlotsDao', () {
-    final pinSlot = VaultFixtures.emptyPinSlot;
-    final graphSlot = VaultFixtures.emptyGraphSlot;
-    final newPinSlot = VaultFixtures.validPinSlot;
+    final pinSlot = VaultFixtures.buildKeySlot(type: KeyType.pin);
+    final graphSlot = VaultFixtures.buildKeySlot(type: KeyType.graph);
+    final newPinSlot = VaultFixtures.buildKeySlot(
+      wmk: VaultFixtures.generateBytes(32, 99),
+    );
 
     test('getKeySlotByType return null when db is empty', () async {
       final result = await dao.getKeySlotByType(KeyType.pin);
