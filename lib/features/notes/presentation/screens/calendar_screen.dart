@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/core/utils/app_assets.dart';
+import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/features/notes/presentation/screens/add_task_bottom_sheet.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -124,7 +125,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Future<void> _openViewModePicker() async {
     await showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -141,7 +142,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Future<void> _openFilterSheet() async {
     await showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -192,7 +193,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEBEBEB),
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Stack(
           children: [
@@ -231,7 +232,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       IconButton(
                         icon: Icon(
                           _viewMode.icon,
-                          color: const Color(0xFF2D2D2D),
+                          color: AppColors.textPrimary,
                           size: 24,
                         ),
                         tooltip: _viewMode.label,
@@ -241,8 +242,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         icon: Icon(
                           Icons.filter_alt_outlined,
                           color: _selectedCategory != TaskCategory.all
-                              ? const Color(0xFF8BA88E)
-                              : const Color(0xFF2D2D2D),
+                              ? AppColors.primary
+                              : AppColors.textPrimary,
                           size: 24,
                         ),
                         tooltip: 'Фільтр',
@@ -274,6 +275,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     focusedDay: _focusedDay,
                     selectedDay: _selectedDay,
                     viewMode: _viewMode,
+                    textTheme: Theme.of(context).textTheme,
                     onDaySelected: (selected, focused) {
                       setState(() {
                         _selectedDay = selected;
@@ -301,8 +303,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _openAddTaskSheet,
-        backgroundColor: const Color(0xFF8BA88E),
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.surface,
         elevation: 4,
         shape: const CircleBorder(),
         child: const Icon(Icons.add, size: 28),
@@ -382,12 +384,12 @@ class _SwipableTaskCard extends StatelessWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFEBEE),
+          color: AppColors.deleteBackground,
           borderRadius: BorderRadius.circular(20),
         ),
         child: const Icon(
           Icons.delete_outline,
-          color: Color(0xFFB00020),
+          color: AppColors.error,
           size: 24,
         ),
       ),
@@ -395,9 +397,9 @@ class _SwipableTaskCard extends StatelessWidget {
       onDismissed: (_) => onDelete(),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE0E0E0)),
+          border: Border.all(color: AppColors.cardBorder),
         ),
         child: ListTile(
           contentPadding:
@@ -409,11 +411,11 @@ class _SwipableTaskCard extends StatelessWidget {
             child: Checkbox(
               value: task.isCompleted,
               onChanged: (_) => onToggle(),
-              activeColor: const Color(0xFF8BA88E),
+              activeColor: AppColors.primary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4),
               ),
-              side: const BorderSide(color: Color(0xFF8BA88E), width: 1.5),
+              side: const BorderSide(color: AppColors.primary, width: 1.5),
             ),
           ),
           title: Text(task.title, style: textTheme.titleMedium),
@@ -421,7 +423,7 @@ class _SwipableTaskCard extends StatelessWidget {
               ? Text(
             task.subtitle,
             style: textTheme.bodySmall
-                ?.copyWith(color: const Color(0xFF828282)),
+                ?.copyWith(color: AppColors.textSecondary),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           )
@@ -458,12 +460,12 @@ class _SwipableCompletedTile extends StatelessWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFEBEE),
+          color: AppColors.deleteBackground,
           borderRadius: BorderRadius.circular(12),
         ),
         child: const Icon(
           Icons.delete_outline,
-          color: Color(0xFFB00020),
+          color: AppColors.error,
           size: 24,
         ),
       ),
@@ -480,11 +482,11 @@ class _SwipableCompletedTile extends StatelessWidget {
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF8BA88E),
+                  color: AppColors.primary,
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child:
-                const Icon(Icons.check, size: 14, color: Colors.white),
+                const Icon(Icons.check, size: 14, color: AppColors.surface),
               ),
             ),
             const SizedBox(width: 12),
@@ -493,7 +495,7 @@ class _SwipableCompletedTile extends StatelessWidget {
                 task.title,
                 style: textTheme.titleMedium?.copyWith(
                   decoration: TextDecoration.lineThrough,
-                  color: const Color(0xFF828282),
+                  color: AppColors.textSecondary,
                 ),
               ),
             ),
@@ -526,9 +528,9 @@ class _CompletedSection extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFE0E0E0)),
+        border: Border.all(color: AppColors.cardBorder),
       ),
       child: Column(
         children: [
@@ -545,7 +547,7 @@ class _CompletedSection extends StatelessWidget {
                   Text(
                     'Завершені',
                     style: textTheme.titleMedium?.copyWith(
-                      color: const Color(0xFF828282),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                   const Spacer(),
@@ -556,7 +558,7 @@ class _CompletedSection extends StatelessWidget {
                     duration: const Duration(milliseconds: 200),
                     child: const Icon(
                       Icons.keyboard_arrow_down,
-                      color: Color(0xFF828282),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -594,7 +596,7 @@ Future<bool> _confirmDelete(BuildContext context) async {
         TextButton(
           onPressed: () => Navigator.of(ctx).pop(true),
           style: TextButton.styleFrom(
-            foregroundColor: const Color(0xFFB00020),
+            foregroundColor: AppColors.error,
           ),
           child: const Text('Видалити'),
         ),
@@ -611,6 +613,7 @@ class _CalendarCard extends StatelessWidget {
     required this.focusedDay,
     required this.selectedDay,
     required this.viewMode,
+    required this.textTheme,
     required this.onDaySelected,
     required this.onPageChanged,
   });
@@ -618,15 +621,37 @@ class _CalendarCard extends StatelessWidget {
   final DateTime focusedDay;
   final DateTime selectedDay;
   final CalendarViewMode viewMode;
+  final TextTheme textTheme;
   final void Function(DateTime, DateTime) onDaySelected;
   final void Function(DateTime) onPageChanged;
 
   @override
   Widget build(BuildContext context) {
+    // Стилі для дат беремо з textTheme — єдине джерело правди
+    final dayStyle = (textTheme.bodyMedium ?? const TextStyle()).copyWith(
+      color: AppColors.textPrimary,
+      fontWeight: FontWeight.w400,
+    );
+    final selectedDayStyle = (textTheme.bodyMedium ?? const TextStyle()).copyWith(
+      color: AppColors.primary,
+      fontWeight: FontWeight.w700,
+    );
+    final todayStyle = (textTheme.bodyMedium ?? const TextStyle()).copyWith(
+      color: AppColors.primary,
+      fontWeight: FontWeight.w600,
+    );
+    final dowStyle = (textTheme.labelSmall ?? const TextStyle()).copyWith(
+      color: AppColors.calendarDayOfWeek,
+      fontWeight: FontWeight.w600,
+    );
+    final headerStyle = (textTheme.titleMedium ?? const TextStyle()).copyWith(
+      color: AppColors.textPrimary,
+    );
+
     return Container(
       padding: const EdgeInsets.only(bottom: 12, left: 8, right: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -645,70 +670,43 @@ class _CalendarCard extends StatelessWidget {
         selectedDayPredicate: (day) => isSameDay(selectedDay, day),
         onDaySelected: onDaySelected,
         onPageChanged: onPageChanged,
-        headerStyle: const HeaderStyle(
+        headerStyle: HeaderStyle(
           formatButtonVisible: false,
-          titleTextStyle: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF2D2D2D),
-          ),
-          headerPadding:
-          EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-          leftChevronIcon: Icon(
+          titleTextStyle: headerStyle,
+          headerPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          leftChevronIcon: const Icon(
             Icons.chevron_left,
-            color: Color(0xFF828282),
+            color: AppColors.textSecondary,
             size: 20,
           ),
-          rightChevronIcon: Icon(
+          rightChevronIcon: const Icon(
             Icons.chevron_right,
-            color: Color(0xFF828282),
+            color: AppColors.textSecondary,
             size: 20,
           ),
           leftChevronMargin: EdgeInsets.zero,
           rightChevronMargin: EdgeInsets.zero,
         ),
-        daysOfWeekStyle: const DaysOfWeekStyle(
-          weekdayStyle: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFFBDBDBD),
-          ),
-          weekendStyle: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFFBDBDBD),
-          ),
+        daysOfWeekStyle: DaysOfWeekStyle(
+          weekdayStyle: dowStyle,
+          weekendStyle: dowStyle,
         ),
         daysOfWeekHeight: 24,
         calendarStyle: CalendarStyle(
           cellMargin: const EdgeInsets.all(4),
           selectedDecoration: BoxDecoration(
-            color: const Color(0xFF8BA88E).withValues(alpha: 0.12),
+            color: AppColors.primary.withValues(alpha: 0.12),
             shape: BoxShape.circle,
-            border: Border.all(color: const Color(0xFF8BA88E), width: 1.5),
+            border: Border.all(color: AppColors.primary, width: 1.5),
           ),
-          selectedTextStyle: const TextStyle(
-            color: Color(0xFF8BA88E),
-            fontWeight: FontWeight.w700,
-            fontSize: 14,
-          ),
+          selectedTextStyle: selectedDayStyle,
           todayDecoration: const BoxDecoration(
             color: Colors.transparent,
             shape: BoxShape.circle,
           ),
-          todayTextStyle: const TextStyle(
-            color: Color(0xFF8BA88E),
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-          ),
-          defaultTextStyle: const TextStyle(
-            color: Color(0xFF2D2D2D),
-            fontSize: 14,
-          ),
-          weekendTextStyle: const TextStyle(
-            color: Color(0xFF2D2D2D),
-            fontSize: 14,
-          ),
+          todayTextStyle: todayStyle,
+          defaultTextStyle: dayStyle,
+          weekendTextStyle: dayStyle,
           outsideDaysVisible: false,
         ),
       ),
@@ -738,7 +736,7 @@ class _DayHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -747,7 +745,7 @@ class _DayHeader extends StatelessWidget {
             onTap: onPrev,
             child: const Icon(
               Icons.chevron_left,
-              color: Color(0xFF828282),
+              color: AppColors.textSecondary,
               size: 20,
             ),
           ),
@@ -762,7 +760,7 @@ class _DayHeader extends StatelessWidget {
             onTap: onNext,
             child: const Icon(
               Icons.chevron_right,
-              color: Color(0xFF828282),
+              color: AppColors.textSecondary,
               size: 20,
             ),
           ),
@@ -799,7 +797,7 @@ class _ViewModeSheet extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFD9D9D9),
+                  color: AppColors.bottomNavBackground,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -813,21 +811,21 @@ class _ViewModeSheet extends StatelessWidget {
                 leading: Icon(
                   mode.icon,
                   color: current == mode
-                      ? const Color(0xFF8BA88E)
-                      : const Color(0xFF828282),
+                      ? AppColors.primary
+                      : AppColors.textSecondary,
                 ),
                 title: Text(
                   mode.label,
                   style: textTheme.titleMedium?.copyWith(
                     color: current == mode
-                        ? const Color(0xFF8BA88E)
-                        : const Color(0xFF2D2D2D),
+                        ? AppColors.primary
+                        : AppColors.textSecondary,
                   ),
                 ),
                 trailing: current == mode
                     ? const Icon(
                   Icons.check,
-                  color: Color(0xFF8BA88E),
+                  color: AppColors.primary,
                   size: 20,
                 )
                     : null,
@@ -869,7 +867,7 @@ class _FilterSheet extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFD9D9D9),
+                  color: AppColors.divider,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -884,14 +882,14 @@ class _FilterSheet extends StatelessWidget {
                   cat.label,
                   style: textTheme.titleMedium?.copyWith(
                     color: current == cat
-                        ? const Color(0xFF8BA88E)
-                        : const Color(0xFF2D2D2D),
+                        ? AppColors.primary
+                        : AppColors.textPrimary,
                   ),
                 ),
                 trailing: current == cat
                     ? const Icon(
                   Icons.check,
-                  color: Color(0xFF8BA88E),
+                  color: AppColors.primary,
                   size: 20,
                 )
                     : null,
@@ -921,7 +919,7 @@ class _BottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: Color(0xFFD9D9D9),
+        color: AppColors.divider,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: BottomNavigationBar(
@@ -931,8 +929,8 @@ class _BottomNav extends StatelessWidget {
         elevation: 0,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        selectedItemColor: const Color(0xFF8BA88E),
-        unselectedItemColor: const Color(0xFF2D2D2D),
+        selectedItemColor: AppColors.primary,
+        unselectedItemColor: AppColors.textPrimary,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.check_box_outlined),

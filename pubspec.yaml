@@ -45,7 +45,6 @@ dependencies:
 
   # UI
   flutter_quill:
-  flutter_quill_extensions:
   slang_flutter:
   cupertino_icons:
   google_fonts:

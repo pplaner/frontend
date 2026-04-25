@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/utils/app_assets.dart';
+import 'package:frontend/core/theme/app_colors.dart';
 import 'add_task_bottom_sheet.dart';
 
 // Модель завдання
@@ -79,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEBEBEB),
+      backgroundColor: AppColors.background,
       body: Stack(
         children: [
           // Основний контент
@@ -87,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               AppBar(
                 leading: IconButton(
-                  icon: const Icon(Icons.menu, color: Color(0xFF2D2D2D)),
+                  icon: const Icon(Icons.menu, color: AppColors.textPrimary),
                   onPressed: () {},
                 ),
                 backgroundColor: Colors.transparent,
@@ -129,8 +130,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _openAddTask,
-        backgroundColor: const Color(0xFF8BA88E),
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.surface,
         elevation: 4,
         shape: const CircleBorder(),
         child: const Icon(Icons.add, size: 28),
@@ -266,12 +267,12 @@ class _SwipableTaskCard extends StatelessWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 10),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFEBEE),
+          color: AppColors.deleteBackground,
           borderRadius: BorderRadius.circular(20),
         ),
         child: const Icon(
           Icons.delete_outline,
-          color: Color(0xFFB00020),
+          color: AppColors.error,
           size: 24,
         ),
       ),
@@ -280,9 +281,9 @@ class _SwipableTaskCard extends StatelessWidget {
       onDismissed: (_) => onDelete(),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFE0E0E0)),
+          border: Border.all(color: AppColors.cardBorder),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
@@ -294,9 +295,9 @@ class _SwipableTaskCard extends StatelessWidget {
                 child: Checkbox(
                   value: task.isCompleted,
                   onChanged: (_) => onToggle(),
-                  activeColor: const Color(0xFF8BA88E),
+                  activeColor: AppColors.primary,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                  side: const BorderSide(color: Color(0xFF8BA88E), width: 1.5),
+                  side: const BorderSide(color: AppColors.primary, width: 1.5),
                 ),
               ),
               const SizedBox(width: 12),
@@ -343,12 +344,12 @@ class _SwipableCompletedTile extends StatelessWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFEBEE),
+          color: AppColors.deleteBackground,
           borderRadius: BorderRadius.circular(12),
         ),
         child: const Icon(
           Icons.delete_outline,
-          color: Color(0xFFB00020),
+          color: AppColors.error,
           size: 24,
         ),
       ),
@@ -365,10 +366,10 @@ class _SwipableCompletedTile extends StatelessWidget {
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF8BA88E),
+                  color: AppColors.primary,
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: const Icon(Icons.check, size: 14, color: Colors.white),
+                child: const Icon(Icons.check, size: 14, color: AppColors.surface),
               ),
             ),
             const SizedBox(width: 12),
@@ -377,7 +378,7 @@ class _SwipableCompletedTile extends StatelessWidget {
                 task.title,
                 style: textTheme.titleMedium?.copyWith(
                   decoration: TextDecoration.lineThrough,
-                  color: const Color(0xFF828282),
+                  color: AppColors.textSecondary,
                 ),
               ),
             ),
@@ -405,7 +406,7 @@ Future<bool> _confirmDelete(BuildContext context) async {
         ),
         TextButton(
           onPressed: () => Navigator.of(ctx).pop(true),
-          style: TextButton.styleFrom(foregroundColor: Color(0xFFB00020)),
+          style: TextButton.styleFrom(foregroundColor: AppColors.error),
           child: const Text('Видалити'),
         ),
       ],
@@ -435,9 +436,9 @@ class _CompletedSection extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFE0E0E0)),
+        border: Border.all(color: AppColors.cardBorder),
       ),
       child: Column(
         children: [
@@ -451,7 +452,7 @@ class _CompletedSection extends StatelessWidget {
                   Text(
                     'Завершені',
                     style: textTheme.titleMedium?.copyWith(
-                      color: const Color(0xFF828282),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                   const Spacer(),
@@ -462,7 +463,7 @@ class _CompletedSection extends StatelessWidget {
                     duration: const Duration(milliseconds: 200),
                     child: const Icon(
                       Icons.keyboard_arrow_down,
-                      color: Color(0xFF828282),
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
@@ -498,7 +499,7 @@ class _BottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: Color(0xFFD9D9D9),
+        color: AppColors.bottomNavBackground,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: BottomNavigationBar(
@@ -508,8 +509,8 @@ class _BottomNav extends StatelessWidget {
         elevation: 0,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        selectedItemColor: const Color(0xFF8BA88E),
-        unselectedItemColor: const Color(0xFF2D2D2D),
+        selectedItemColor: AppColors.primary,
+        unselectedItemColor: AppColors.textPrimary,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.check_box_outlined),
