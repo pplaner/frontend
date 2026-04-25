@@ -63,6 +63,7 @@ dependencies:
   logger:
   flutter_quill_extensions: ^11.0.0
   table_calendar: ^3.2.0
+  pattern_lock: ^2.0.0
 
 dev_dependencies:
   flutter_test:
