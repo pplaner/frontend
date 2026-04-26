@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/utils/app_assets.dart';
 
 class CreatePinScreen extends StatefulWidget {
-  const CreatePinScreen({super.key});
+  final bool isSetup;
+
+  const CreatePinScreen({super.key, this.isSetup = false});
 
   @override
   State<CreatePinScreen> createState() => _CreatePinScreenState();
@@ -13,17 +15,21 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
 
   void _addDigit(String digit) {
     if (pinCode.length < 4) {
-      setState(() {
-        pinCode += digit;
-      });
+      setState(() => pinCode += digit);
     }
   }
 
   void _removeDigit() {
     if (pinCode.isNotEmpty) {
-      setState(() {
-        pinCode = pinCode.substring(0, pinCode.length - 1);
-      });
+      setState(() => pinCode = pinCode.substring(0, pinCode.length - 1));
+    }
+  }
+
+  void _onSubmit() {
+    if (widget.isSetup) {
+      Navigator.pushNamed(context, '/secret-setup');
+    } else {
+      // TODO: перевірити PIN і увійти
     }
   }
 
@@ -38,11 +44,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: colorScheme.primary,
-            size: 20,
-          ),
+          icon: Icon(Icons.arrow_back_ios_new, color: colorScheme.primary, size: 20),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -53,35 +55,32 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
             children: [
               const SizedBox(height: 10),
               Text(
-                'Створення PIN-коду',
+                widget.isSetup ? 'Створення PIN-коду' : 'Введіть PIN-код',
                 style: textTheme.displayLarge?.copyWith(fontSize: 26),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 4),
               Text(
-                'Для швидкого доступу до ваших планів',
+                widget.isSetup
+                    ? 'Для швидкого доступу до ваших планів'
+                    : 'Введіть ваш PIN-код для входу',
                 style: textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              Image.asset(
-                AppAssets.logo,
-                height: 100,
-                width: 100,
-                fit: BoxFit.contain,
-              ),
+              Image.asset(AppAssets.logo, height: 100, width: 100, fit: BoxFit.contain),
               const Spacer(),
               _buildPinDots(pinCode.length, context),
               const SizedBox(height: 30),
               _buildKeypad(context),
               const Spacer(),
               FilledButton(
-                onPressed: pinCode.length == 4 ? () {} : null,
+                onPressed: pinCode.length == 4 ? _onSubmit : null,
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(double.infinity, 56),
                 ),
                 child: Text(
-                  'Зареєструватись',
+                  widget.isSetup ? 'Зареєструватись' : 'Увійти',
                   style: textTheme.labelLarge?.copyWith(color: Colors.white),
                 ),
               ),

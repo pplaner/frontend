@@ -17,12 +17,28 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
+      // Додаємо AppBar для можливості повернутися назад
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0, // Щоб колір не змінювався при скролі
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: colorScheme.primary,
+            size: 20,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
+        // top: false, щоб контент не "відстрибував" вниз через AppBar
+        top: false,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              const SizedBox(height: 60),
+              const SizedBox(height: 20),
               Text(
                 'Метод захисту',
                 style: textTheme.displayLarge?.copyWith(fontSize: 28),
@@ -30,12 +46,11 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                'Оберіть, як ви будете отримувати доступ до своїх зашифрованих планів',
+                'Оберіть спосіб швидкого входу. Секретна фраза буде створена обов’язково на наступному кроці.',
                 style: textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 48),
-
 
               _buildOption(
                 title: 'PIN-код',
@@ -52,34 +67,26 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
                 subtitle: 'Пароль із підказкою для відновлення',
                 id: 'word',
               ),
-              _buildOption(
-                title: 'Seed-фраза',
-                subtitle: 'Максимальний захист. 12 випадкових слів. Тільки для вас.',
-                id: 'seed',
-              ),
 
               const Spacer(),
 
-
               FilledButton(
-                onPressed: selectedMethodId == null ? null : () async {
+                onPressed: selectedMethodId == null ? null : () {
                   if (selectedMethodId == 'pin') {
-                    await Navigator.pushNamed(context, '/pin');
+                    Navigator.pushNamed(context, '/pin-setup');
                   } else if (selectedMethodId == 'pattern') {
-                    await Navigator.pushNamed(context, '/pattern');
+                    Navigator.pushNamed(context, '/pattern-setup');
                   } else if (selectedMethodId == 'word') {
-                    await Navigator.pushNamed(context, '/association');
-                  } else if (selectedMethodId == 'seed') {
-                    await Navigator.pushNamed(context, '/secret');
+                    Navigator.pushNamed(context, '/association-setup');
                   }
                 },
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(double.infinity, 56),
-                  backgroundColor: colorScheme.primary,
-                  disabledBackgroundColor:
-                  colorScheme.primary.withValues(alpha:0.5),
                 ),
-                child: const Text('Далі'),
+                child: const Text(
+                  'Далі',
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                ),
               ),
               const SizedBox(height: 24),
             ],
@@ -89,11 +96,7 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
     );
   }
 
-  Widget _buildOption({
-    required String title,
-    required String subtitle,
-    required String id,
-  }) {
+  Widget _buildOption({required String title, required String subtitle, required String id}) {
     final isSelected = selectedMethodId == id;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
@@ -108,15 +111,15 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isSelected ? Colors.white : Colors.white.withOpacity(0.9),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: isSelected ? colorScheme.primary : Colors.transparent,
-              width: 2,
+              color: isSelected ? colorScheme.primary : colorScheme.primary.withOpacity(0.1),
+              width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha:0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -135,7 +138,9 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
               Text(
                 subtitle,
                 textAlign: TextAlign.center,
-                style: textTheme.bodySmall,
+                style: textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurface.withOpacity(0.7),
+                ),
               ),
             ],
           ),
