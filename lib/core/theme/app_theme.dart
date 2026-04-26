@@ -13,7 +13,7 @@ class AppTheme {
       secondary: AppColors.secondary,
       secondaryContainer: AppColors.secondaryContainer,
       tertiary: AppColors.tertiary,
-      appBarColor: AppColors.appBarLight,
+      appBarColor: AppColors.lightAppBar,
       error: AppColors.error,
     ),
     surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
@@ -36,8 +36,8 @@ class AppTheme {
     swapLegacyOnMaterial3: true,
     fontFamily: GoogleFonts.inter().fontFamily,
     textTheme: _buildTextTheme(
-      textColor: AppColors.textPrimary,
-      subtextColor: AppColors.textSecondary,
+      textColor: AppColors.lightTextPrimary,
+      subtextColor: AppColors.lightTextSecondary,
     ),
   );
 
@@ -76,76 +76,63 @@ class AppTheme {
     ),
   );
 
-  // TextTheme Builder
-
   static TextTheme _buildTextTheme({
     required Color textColor,
     required Color subtextColor,
   }) =>
       GoogleFonts.interTextTheme().copyWith(
-        // Великі заголовки екранів (напр. "PPlaner", "Сьогодні")
         displayLarge: GoogleFonts.inter(
           fontWeight: FontWeight.w700,
           fontSize: 32,
           color: textColor,
         ),
-        // Середні заголовки (напр. назва розділу)
         headlineMedium: GoogleFonts.inter(
           fontWeight: FontWeight.w700,
           fontSize: 24,
           color: textColor,
         ),
-        // Підзаголовки карток, діалогів, bottom sheet
         titleLarge: GoogleFonts.inter(
           fontWeight: FontWeight.w600,
           fontSize: 20,
           color: textColor,
         ),
-        // Назви елементів списку, секцій
         titleMedium: GoogleFonts.inter(
           fontWeight: FontWeight.w600,
           fontSize: 16,
           color: textColor,
         ),
-        // Допоміжні підписи у списках
         titleSmall: GoogleFonts.inter(
           fontWeight: FontWeight.w500,
           fontSize: 14,
           color: subtextColor,
         ),
-        // Основний текст контенту
         bodyLarge: GoogleFonts.inter(
           fontWeight: FontWeight.w500,
           fontSize: 14,
           height: 1.5,
           color: textColor,
         ),
-        // Вторинний текст, підписи (напр. AuthScreen)
         bodyMedium: GoogleFonts.inter(
           fontWeight: FontWeight.w600,
           fontSize: 12,
           height: 1.4,
           color: subtextColor,
         ),
-        // Дрібні підказки, мітки дати
         bodySmall: GoogleFonts.inter(
           fontWeight: FontWeight.w400,
           fontSize: 11,
           color: subtextColor,
         ),
-        // Текст кнопок
         labelLarge: GoogleFonts.inter(
           fontWeight: FontWeight.w600,
           fontSize: 16,
           color: textColor,
         ),
-        // Чіпи, бейджі, малі кнопки
         labelMedium: GoogleFonts.inter(
           fontWeight: FontWeight.w500,
           fontSize: 13,
           color: subtextColor,
         ),
-        // Підписи до іконок (BottomNavBar)
         labelSmall: GoogleFonts.inter(
           fontWeight: FontWeight.w500,
           fontSize: 11,

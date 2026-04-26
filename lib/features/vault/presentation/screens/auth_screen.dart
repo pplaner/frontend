@@ -9,11 +9,10 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
+    final colors = AppColors.of(context);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? AppColors.darkBackground
-          : AppColors.background,
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -21,10 +20,7 @@ class AuthScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Spacer(flex: 3),
-              Text(
-                'PPlaner',
-                style: textTheme.displayLarge,
-              ),
+              Text('PPlaner', style: textTheme.displayLarge),
               const SizedBox(height: 24),
               Image.asset(
                 AppAssets.logo,
@@ -50,31 +46,33 @@ class AuthScreen extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(double.infinity, 51),
                   backgroundColor: colorScheme.primary,
-                  foregroundColor: AppColors.surface,
+                  foregroundColor: colors.surface,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
                 child: Text(
                   'Створити локальне сховище',
-                  style: textTheme.labelLarge?.copyWith(color: AppColors.surface),
+                  style: textTheme.labelLarge?.copyWith(color: colors.surface),
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 16),
               OutlinedButton(
                 onPressed: () {},
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 51),
                   foregroundColor: colorScheme.primary,
                   side: BorderSide(color: colorScheme.primary, width: 1),
-                  backgroundColor: AppColors.surface,
+                  backgroundColor: colors.surface,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
                 child: Text(
                   'У мене вже є акаунт',
-                  style: textTheme.labelLarge?.copyWith(color: colorScheme.primary),
+                  style: textTheme.labelLarge?.copyWith(
+                    color: colorScheme.primary,
+                  ),
                 ),
               ),
               const Spacer(flex: 10),
