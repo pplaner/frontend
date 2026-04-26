@@ -4,7 +4,8 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:frontend/app/init.dart';
 import 'package:frontend/core/theme/app_theme.dart';
 import 'package:frontend/features/notes/presentation/screens/home_screen.dart';
-import 'package:frontend/features/notes/presentation/screens/profile_screen.dart';
+import 'package:frontend/features/profile/presentation/screens/personalization_screen.dart';
+import 'package:frontend/features/profile/presentation/screens/profile_screen.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
 void main() async {
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.light,
 
-      home: const ProfileScreen(),
+      home: const PersonalizationScreen(),
     );
   }
 }
