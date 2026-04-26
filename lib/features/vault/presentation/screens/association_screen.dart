@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/utils/app_assets.dart';
+import 'package:frontend/i18n/strings.g.dart';
 
 class AssociationScreen extends StatefulWidget {
   final bool isSetup;
@@ -69,15 +70,15 @@ class _AssociationScreenState extends State<AssociationScreen> {
             children: [
               const SizedBox(height: 20),
               Text(
-                widget.isSetup ? 'Придумайте\nасоціацію' : 'Введіть\nасоціацію',
+                  widget.isSetup ? t.setup.word_create : t.setup.word_enter,
                 style: textTheme.displayLarge?.copyWith(fontSize: 28),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
               Text(
                 widget.isSetup
-                    ? 'Слово має містити щонайменше 6 символів (без пробілів, цифр та знаків)'
-                    : 'Введіть ваше слово-асоціацію для входу',
+                    ? t.setup.word_desc_setup
+                    : t.setup.word_desc_login,
                 style: textTheme.bodyMedium?.copyWith(
                   color: _hasError ? colorScheme.error : null,
                 ),
@@ -115,7 +116,7 @@ class _AssociationScreenState extends State<AssociationScreen> {
                       contentPadding: EdgeInsets.zero,
                       border: InputBorder.none,
                       filled: false,
-                      hintText: _focusNode.hasFocus ? '' : 'Введіть слово-асоціацію',
+                      hintText: _focusNode.hasFocus ? '' : t.setup.word_hint,
                       hintStyle: const TextStyle(color: Colors.grey, fontSize: 15),
                     ),
                   ),
@@ -130,7 +131,7 @@ class _AssociationScreenState extends State<AssociationScreen> {
                   minimumSize: const Size(double.infinity, 56),
                 ),
                 child: Text(
-                  widget.isSetup ? 'Зареєструватись' : 'Увійти',
+                  widget.isSetup ? t.common.register : t.common.login,
                   style: textTheme.labelLarge?.copyWith(color: Colors.white),
                 ),
               ),

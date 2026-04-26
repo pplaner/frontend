@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/i18n/strings.g.dart';
 
 class AuthMethodSelectionScreen extends StatelessWidget {
   const AuthMethodSelectionScreen({super.key});
@@ -11,10 +12,10 @@ class AuthMethodSelectionScreen extends StatelessWidget {
 
     // Список методів для тестування
     final methods = [
-      {'title': 'Вхід через PIN-код', 'route': '/pin-login'},
-      {'title': 'Графічний ключ', 'route': '/pattern-login'},
-      {'title': 'Слово-асоціація', 'route': '/association-login'},
-      {'title': 'Seed-фраза (Master Key)', 'route': '/secret-login'},
+      {'title': t.security_methods.method_pin, 'route': '/pin-login'},
+      {'title': t.security_methods.method_pattern, 'route': '/pattern-login'},
+      {'title': t.security_methods.method_word, 'route': '/association-login'},
+      {'title': t.security_methods.method_seed, 'route': '/secret-login'},
     ];
 
     return Scaffold(
@@ -34,13 +35,13 @@ class AuthMethodSelectionScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 20),
               Text(
-                'Підтвердження особи',
+                t.security_methods.selection_title,
                 style: textTheme.displayLarge?.copyWith(fontSize: 28),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
               Text(
-                'Оберіть метод розблокування для перевірки',
+                t.security_methods.selection_subtitle,
                 style: textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
