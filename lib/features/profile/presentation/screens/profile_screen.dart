@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/theme/theme_provider.dart';
 
-class ProfileScreen extends StatefulWidget {
+// ProfileScreen
+
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  // Зробити: замінити на Riverpod провайдер
-  // false → є акаунт (Головна 7)
-  // true  → локальне сховище без акаунту (Головна 13)
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final bool _hasAccount = false;
 
   int _currentNavIndex = 2;
-
-  // Стан налаштувань
   AppLanguage _language = AppLanguage.ukrainian;
-  AppAppearance _appearance = AppAppearance.light;
   String _timezone = 'Україна';
 
   Future<void> _openLanguage() async {
@@ -27,8 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _openAppearance() async {
-    final result = await showAppearanceSheet(context, _appearance);
-    if (result != null) setState(() => _appearance = result);
+    await showAppearanceSheet(context, ref);
   }
 
   Future<void> _openTimezone() async {
@@ -42,8 +39,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       body: SafeArea(
         child: _hasAccount
             ? _AccountView(
@@ -57,9 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onAppearanceTap: _openAppearance,
           onTimezoneTap: _openTimezone,
           onWidgetsTap: _openWidgets,
-          onLogout: () {
-            // Зробити: логіка виходу / очищення локального сховища
-          },
+          onLogout: () {},
         ),
       ),
       bottomNavigationBar: _BottomNav(
@@ -70,7 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-// Стан "є акаунт" (Головна 7)
+// Стан "є акаунт"
 
 class _AccountView extends StatelessWidget {
   const _AccountView({
@@ -93,9 +90,7 @@ class _AccountView extends StatelessWidget {
         _ProfileHeader(
           name: 'Ім\'я',
           email: 'email',
-          onTap: () {
-            // Зробити: перейти до редагування профілю
-          },
+          onTap: () {},
         ),
         const SizedBox(height: 12),
         _SettingsCard(
@@ -104,9 +99,7 @@ class _AccountView extends StatelessWidget {
               icon: Icons.lock_outline,
               title: 'Створити акаунт',
               subtitle: 'Створи акаунт, щоб не втратити дані',
-              onTap: () {
-                // Зробити: перехід до реєстрації
-              },
+              onTap: () {},
             ),
           ],
         ),
@@ -143,7 +136,7 @@ class _AccountView extends StatelessWidget {
   }
 }
 
-// Стан "локальне / без акаунту" (Головна 13)
+// Стан "локальне / без акаунту"
 
 class _LocalView extends StatelessWidget {
   const _LocalView({
@@ -168,9 +161,7 @@ class _LocalView extends StatelessWidget {
         _ProfileHeader(
           name: 'Ім\'я',
           email: 'email',
-          onTap: () {
-            // Зробити: редагування імені
-          },
+          onTap: () {},
         ),
         const SizedBox(height: 12),
         _SettingsCard(
@@ -178,9 +169,7 @@ class _LocalView extends StatelessWidget {
             _SettingsTile(
               icon: Icons.lock_outline,
               title: 'Персоналізація',
-              onTap: () {
-                // Зробити: Navigator.push до PersonalizationScreen
-              },
+              onTap: () {},
             ),
           ],
         ),
@@ -237,13 +226,14 @@ class _ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.fromLTRB(8, 12, 16, 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: AppColors.background,
+          color: colors.background,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
@@ -255,9 +245,9 @@ class _ProfileHeader extends StatelessWidget {
                 color: AppColors.primary,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.person_outline,
-                color: AppColors.surface,
+                color: colors.surface,
                 size: 32,
               ),
             ),
@@ -272,9 +262,9 @@ class _ProfileHeader extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(
+            Icon(
               Icons.chevron_right,
-              color: AppColors.textSecondary,
+              color: colors.textSecondary,
               size: 20,
             ),
           ],
@@ -288,14 +278,14 @@ class _ProfileHeader extends StatelessWidget {
 
 class _SettingsCard extends StatelessWidget {
   const _SettingsCard({required this.children});
-
   final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(children: children),
@@ -321,6 +311,7 @@ class _SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return InkWell(
       onTap: onTap,
@@ -332,8 +323,8 @@ class _SettingsTile extends StatelessWidget {
             Container(
               width: 36,
               height: 36,
-              decoration: const BoxDecoration(
-                color: AppColors.bottomNavBackground,
+              decoration: BoxDecoration(
+                color: colors.surfaceVariant,
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, color: AppColors.primary, size: 20),
@@ -351,9 +342,9 @@ class _SettingsTile extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(
+            Icon(
               Icons.chevron_right,
-              color: AppColors.textSecondary,
+              color: colors.textSecondary,
               size: 20,
             ),
           ],
@@ -367,12 +358,12 @@ class _SettingsTile extends StatelessWidget {
 
 class _LogoutTile extends StatelessWidget {
   const _LogoutTile({required this.onTap});
-
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return InkWell(
       onTap: onTap,
@@ -383,7 +374,7 @@ class _LogoutTile extends StatelessWidget {
           child: Text(
             'Вийти',
             style: textTheme.titleMedium?.copyWith(
-              color: AppColors.textPrimary,
+              color: colors.textPrimary,
             ),
           ),
         ),
@@ -397,11 +388,12 @@ class _LogoutTile extends StatelessWidget {
 class _TileDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Divider(
+    final colors = AppColors.of(context);
+    return Divider(
       height: 1,
       indent: 66,
       endIndent: 16,
-      color: AppColors.cardBorder,
+      color: colors.cardBorder,
     );
   }
 }
@@ -410,16 +402,17 @@ class _TileDivider extends StatelessWidget {
 
 class _BottomNav extends StatelessWidget {
   const _BottomNav({required this.currentIndex, required this.onTap});
-
   final int currentIndex;
   final ValueChanged<int> onTap;
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.bottomNavBackground,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: colors.bottomNav,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: BottomNavigationBar(
         currentIndex: currentIndex,
@@ -429,7 +422,7 @@ class _BottomNav extends StatelessWidget {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textPrimary,
+        unselectedItemColor: colors.textPrimary,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.check_box_outlined),
@@ -449,43 +442,21 @@ class _BottomNav extends StatelessWidget {
   }
 }
 
-/// BOTTOM SHEETS для налаштувань (Головні 9, 10, 11, 12)
-
-// Enum: мова
+/// BOTTOM SHEETS
 
 enum AppLanguage { ukrainian, english }
 
 extension AppLanguageLabel on AppLanguage {
-  String get label {
-    switch (this) {
-      case AppLanguage.ukrainian: return 'Українська';
-      case AppLanguage.english:   return 'Англійська';
-    }
-  }
+  String get label => switch (this) {
+    AppLanguage.ukrainian => 'Українська',
+    AppLanguage.english => 'Англійська',
+  };
 }
 
-// Enum: вигляд
-
-enum AppAppearance { light, dark }
-
-extension AppAppearanceLabel on AppAppearance {
-  String get label {
-    switch (this) {
-      case AppAppearance.light: return 'Світлий';
-      case AppAppearance.dark:  return 'Темний';
-    }
-  }
-}
-
-// Головна 9: Мова
-
-Future<AppLanguage?> showLanguageSheet(
-    BuildContext context,
-    AppLanguage current,
-    ) {
+Future<AppLanguage?> showLanguageSheet(BuildContext context, AppLanguage current) {
   return showModalBottomSheet<AppLanguage>(
     context: context,
-    backgroundColor: AppColors.surface,
+    backgroundColor: AppColors.of(context).surface,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
@@ -506,6 +477,7 @@ class _LanguageSheet extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _SheetHandle(),
             const SizedBox(height: 20),
@@ -516,11 +488,7 @@ class _LanguageSheet extends StatelessWidget {
                 contentPadding: EdgeInsets.zero,
                 title: Text(lang.label, style: textTheme.titleMedium),
                 trailing: current == lang
-                    ? const Icon(
-                  Icons.check,
-                  color: AppColors.primary,
-                  size: 20,
-                )
+                    ? const Icon(Icons.check, color: AppColors.primary, size: 20)
                     : null,
                 onTap: () => Navigator.pop(context, lang),
               ),
@@ -533,52 +501,62 @@ class _LanguageSheet extends StatelessWidget {
   }
 }
 
-// Головна 10: Вигляд
-
-Future<AppAppearance?> showAppearanceSheet(
-    BuildContext context,
-    AppAppearance current,
-    ) {
-  return showModalBottomSheet<AppAppearance>(
+Future<void> showAppearanceSheet(BuildContext context, WidgetRef ref) {
+  return showModalBottomSheet<void>(
     context: context,
-    backgroundColor: AppColors.surface,
+    backgroundColor: AppColors.of(context).surface,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
-    builder: (_) => _AppearanceSheet(current: current),
+    builder: (_) => _AppearanceSheet(ref: ref),
   );
 }
 
-class _AppearanceSheet extends StatelessWidget {
-  const _AppearanceSheet({required this.current});
-  final AppAppearance current;
+class _AppearanceSheet extends ConsumerWidget {
+  const _AppearanceSheet({required this.ref});
+  final WidgetRef ref;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef innerRef) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
+    final currentMode = ref.watch(themeModeProvider);
+
+    final options = [
+      (mode: ThemeMode.light, label: 'Світлий', icon: Icons.light_mode_outlined),
+      (mode: ThemeMode.dark, label: 'Темний', icon: Icons.dark_mode_outlined),
+      (mode: ThemeMode.system, label: 'Системний', icon: Icons.brightness_auto_outlined),
+    ];
 
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _SheetHandle(),
             const SizedBox(height: 20),
             Text('Вигляд', style: textTheme.titleLarge),
             const SizedBox(height: 8),
-            ...AppAppearance.values.map(
-                  (mode) => ListTile(
+            ...options.map(
+                  (opt) => ListTile(
                 contentPadding: EdgeInsets.zero,
-                title: Text(mode.label, style: textTheme.titleMedium),
-                trailing: current == mode
-                    ? const Icon(
-                  Icons.check,
-                  color: AppColors.primary,
-                  size: 20,
-                )
+                leading: Icon(
+                  opt.icon,
+                  color: currentMode == opt.mode
+                      ? AppColors.primary
+                      : colors.textSecondary,
+                  size: 22,
+                ),
+                title: Text(opt.label, style: textTheme.titleMedium),
+                trailing: currentMode == opt.mode
+                    ? const Icon(Icons.check, color: AppColors.primary, size: 20)
                     : null,
-                onTap: () => Navigator.pop(context, mode),
+                onTap: () {
+                  ref.read(themeModeProvider.notifier).setTheme(opt.mode);
+                  Navigator.pop(context);
+                },
               ),
             ),
             const SizedBox(height: 8),
@@ -589,21 +567,14 @@ class _AppearanceSheet extends StatelessWidget {
   }
 }
 
-// Головна 11: Часовий пояс
-
 const List<String> _timezones = [
-  'Україна',
-  'Польща',
-  'Німеччина',
-  'США (Нью-Йорк)',
-  'США (Лос-Анджелес)',
-  'Велика Британія',
+  'Україна', 'Польща', 'Германія', 'США (Нью-Йорк)', 'США (Лос-Анджелес)', 'Велика Британія',
 ];
 
 Future<String?> showTimezoneSheet(BuildContext context, String current) {
   return showModalBottomSheet<String>(
     context: context,
-    backgroundColor: AppColors.surface,
+    backgroundColor: AppColors.of(context).surface,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
@@ -631,12 +602,14 @@ class _TimezoneSheetState extends State<_TimezoneSheet> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _SheetHandle(),
             const SizedBox(height: 20),
@@ -644,7 +617,7 @@ class _TimezoneSheetState extends State<_TimezoneSheet> {
             const SizedBox(height: 12),
             Container(
               decoration: BoxDecoration(
-                color: AppColors.background,
+                color: colors.background,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: DropdownButtonHideUnderline(
@@ -653,16 +626,12 @@ class _TimezoneSheetState extends State<_TimezoneSheet> {
                   isExpanded: true,
                   borderRadius: BorderRadius.circular(16),
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.keyboard_arrow_down,
-                    color: AppColors.textSecondary,
+                    color: colors.textSecondary,
                   ),
                   style: textTheme.titleMedium,
-                  items: _timezones
-                      .map(
-                        (tz) => DropdownMenuItem(value: tz, child: Text(tz)),
-                  )
-                      .toList(),
+                  items: _timezones.map((tz) => DropdownMenuItem(value: tz, child: Text(tz))).toList(),
                   onChanged: (val) {
                     if (val != null) setState(() => _selected = val);
                   },
@@ -674,7 +643,7 @@ class _TimezoneSheetState extends State<_TimezoneSheet> {
               onPressed: () => Navigator.pop(context, _selected),
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.surface,
+                foregroundColor: colors.surface,
                 minimumSize: const Size(double.infinity, 48),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -682,9 +651,7 @@ class _TimezoneSheetState extends State<_TimezoneSheet> {
               ),
               child: Text(
                 'Зберегти',
-                style: textTheme.labelLarge?.copyWith(
-                  color: AppColors.surface,
-                ),
+                style: textTheme.labelLarge?.copyWith(color: colors.surface),
               ),
             ),
           ],
@@ -694,12 +661,10 @@ class _TimezoneSheetState extends State<_TimezoneSheet> {
   }
 }
 
-// Головна 12: Віджети
-
 Future<void> showWidgetsSheet(BuildContext context) {
   return showModalBottomSheet<void>(
     context: context,
-    backgroundColor: AppColors.surface,
+    backgroundColor: AppColors.of(context).surface,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
@@ -715,22 +680,23 @@ class _WidgetsSheet extends StatefulWidget {
 }
 
 class _WidgetsSheetState extends State<_WidgetsSheet> {
-  // Зробити: замінити на реальні дані з Riverpod провайдера
   final List<({String title, bool enabled})> _widgets = [
-    (title: 'Задачі на сьогодні', enabled: false),
-    (title: 'Задачі на тиждень', enabled: false),
+    (title: 'Задачі на сьогодні', enabled: true),
     (title: 'Календар', enabled: false),
+    (title: 'Прогрес', enabled: false),
   ];
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _SheetHandle(),
             const SizedBox(height: 20),
@@ -741,14 +707,16 @@ class _WidgetsSheetState extends State<_WidgetsSheet> {
                 contentPadding: EdgeInsets.zero,
                 title: Text(entry.value.title, style: textTheme.titleMedium),
                 value: entry.value.enabled,
+
                 activeThumbColor: AppColors.primary,
-                    activeTrackColor: AppColors.surface,
-                    trackOutlineColor: WidgetStateProperty.resolveWith((states){
-                      if (states.contains(WidgetState.selected)) {
-                        return AppColors.primary;
-                      }
-                      return null;
-                    }),
+                activeTrackColor: colors.surface,
+                trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+                  if (states.contains(WidgetState.selected)) {
+                    return AppColors.primary;
+                  }
+                  return null;
+                }),
+
                 onChanged: (val) {
                   setState(() {
                     _widgets[entry.key] = (
@@ -767,17 +735,16 @@ class _WidgetsSheetState extends State<_WidgetsSheet> {
   }
 }
 
-// Drag handle (спільний для всіх bottom sheet)
-
 class _SheetHandle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Center(
       child: Container(
         width: 40,
         height: 4,
         decoration: BoxDecoration(
-          color: AppColors.divider,
+          color: colors.divider,
           borderRadius: BorderRadius.circular(2),
         ),
       ),
