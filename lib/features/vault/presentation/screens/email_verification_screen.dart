@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/i18n/strings.g.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({super.key, this.email});
@@ -23,48 +24,41 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     final code = _codeController.text.trim();
     if (code.isEmpty || code.length < 4) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Введіть код підтвердження')),
+        SnackBar(content: Text(t.email_verify.code_error)),
       );
       return;
     }
-
     setState(() => _isLoading = true);
-
-    // Імітація запиту до сервера
+    // TODO: виклик AuthBloc / AuthRepository для верифікації коду
     await Future.delayed(const Duration(seconds: 2));
-
     setState(() => _isLoading = false);
-
     if (!mounted) return;
-
-    // --- НАВІГАЦІЯ ПІСЛЯ ПІДТВЕРДЖЕННЯ ---
-    // Використовуємо pushNamedAndRemoveUntil, щоб видалити попередні екрани реєстрації
-    // Користувач потрапляє на форму Login як на "чистий аркуш"
     Navigator.of(context).pushNamedAndRemoveUntil(
-      '/login',
+      '/security_method',
           (route) => false,
     );
   }
 
   Future<void> _onResend() async {
-    // Логіка повторного відправлення (наприклад, виклик API)
+    // TODO: повторне відправлення коду
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Код відправлено повторно')),
+      SnackBar(content: Text(t.email_verify.resend_success)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = AppColors.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          color: AppColors.textPrimary,
+          color: AppColors.primary,              // статичний — як у інших екранах
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -76,15 +70,15 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             children: [
               const SizedBox(height: 24),
               Text(
-                'Підтвердження\nелектронної пошти',
-                style: theme.textTheme.displayLarge,
+                t.email_verify.title,
+                style: theme.textTheme.displayLarge,  // колір вже в textTheme
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               if (widget.email != null)
                 Text(
-                  'Ми надіслали код на\n${widget.email}',
-                  style: theme.textTheme.bodyMedium,
+                  '${t.email_verify.sent_to}\n${widget.email}',
+                  style: theme.textTheme.bodyMedium,  // колір вже в textTheme
                   textAlign: TextAlign.center,
                 ),
               const SizedBox(height: 40),
@@ -93,15 +87,15 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 keyboardType: TextInputType.number,
                 style: theme.textTheme.bodyLarge,
                 decoration: InputDecoration(
-                  hintText: 'Код підтвердження',
+                  hintText: t.email_verify.code_hint,
                   hintStyle: theme.textTheme.bodyLarge?.copyWith(
-                    color: AppColors.textSecondary,
+                    color: colors.textSecondary,
                   ),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: colors.surface,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: AppColors.cardBorder),
+                    borderSide: BorderSide(color: colors.cardBorder),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -120,6 +114,10 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               const SizedBox(height: 32),
               FilledButton(
                 onPressed: _isLoading ? null : _onConfirm,
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.primary,  // явно статичний
+                  minimumSize: const Size(double.infinity, 56),
+                ),
                 child: _isLoading
                     ? const SizedBox(
                   height: 20,
@@ -129,11 +127,10 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     color: Colors.white,
                   ),
                 )
-                    : const Text(
-                  'Підтвердити',
-                  style: TextStyle(
+                    : Text(
+                  t.common.confirm,
+                  style: theme.textTheme.labelLarge?.copyWith(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -142,7 +139,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 child: TextButton(
                   onPressed: _onResend,
                   child: Text(
-                    'Надіслати повторно',
+                    t.email_verify.resend,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: AppColors.primary,
                       decoration: TextDecoration.underline,

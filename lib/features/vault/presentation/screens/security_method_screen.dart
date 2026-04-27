@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/i18n/strings.g.dart';
 
 class SecurityMethodScreen extends StatefulWidget {
   const SecurityMethodScreen({super.key});
@@ -13,26 +15,21 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
+    final colors = AppColors.of(context);
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
-      // Додаємо AppBar для можливості повернутися назад
+      backgroundColor: colors.surface,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        scrolledUnderElevation: 0, // Щоб колір не змінювався при скролі
+        scrolledUnderElevation: 0,
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: colorScheme.primary,
-            size: 20,
-          ),
+          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+          color: AppColors.primary,
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SafeArea(
-        // top: false, щоб контент не "відстрибував" вниз через AppBar
         top: false,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -40,38 +37,43 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
             children: [
               const SizedBox(height: 20),
               Text(
-                'Метод захисту',
+                t.security_methods.title,
                 style: textTheme.displayLarge?.copyWith(fontSize: 28),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
               Text(
-                'Оберіть спосіб швидкого входу. Секретна фраза буде створена обов’язково на наступному кроці.',
+                t.security_methods.subtitle,
                 style: textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 48),
 
               _buildOption(
-                title: 'PIN-код',
-                subtitle: 'Швидкий доступ через 4-значний код',
+                title: t.security_methods.pin_title,
+                subtitle: t.security_methods.pin_sub,
                 id: 'pin',
+                colors: colors,
               ),
               _buildOption(
-                title: 'Графічний ключ',
-                subtitle: 'Захист за допомогою унікального жесту',
+                title: t.security_methods.pattern_title,
+                subtitle: t.security_methods.pattern_sub,
                 id: 'pattern',
+                colors: colors,
               ),
               _buildOption(
-                title: 'Слово-асоціація',
-                subtitle: 'Пароль із підказкою для відновлення',
+                title: t.security_methods.word_title,
+                subtitle: t.security_methods.word_sub,
                 id: 'word',
+                colors: colors,
               ),
 
               const Spacer(),
 
               FilledButton(
-                onPressed: selectedMethodId == null ? null : () {
+                onPressed: selectedMethodId == null
+                    ? null
+                    : () {
                   if (selectedMethodId == 'pin') {
                     Navigator.pushNamed(context, '/pin-setup');
                   } else if (selectedMethodId == 'pattern') {
@@ -82,10 +84,11 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
                 },
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(double.infinity, 56),
+                  backgroundColor: AppColors.primary,
                 ),
-                child: const Text(
-                  'Далі',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                child: Text(
+                  t.common.next,
+                  style: textTheme.labelLarge?.copyWith(color: Colors.white),
                 ),
               ),
               const SizedBox(height: 24),
@@ -96,9 +99,13 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
     );
   }
 
-  Widget _buildOption({required String title, required String subtitle, required String id}) {
+  Widget _buildOption({
+    required String title,
+    required String subtitle,
+    required String id,
+    required AppColorScheme colors,
+  }) {
     final isSelected = selectedMethodId == id;
-    final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     return Padding(
@@ -111,15 +118,17 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.white : Colors.white.withOpacity(0.9),
+            color: colors.surface,                        // адаптивний
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: isSelected ? colorScheme.primary : colorScheme.primary.withOpacity(0.1),
+              color: isSelected
+                  ? AppColors.primary                    // статичний
+                  : AppColors.primary.withOpacity(0.1),  // статичний
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: Colors.black.withOpacity(0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -130,7 +139,7 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
               Text(
                 title,
                 style: textTheme.titleLarge?.copyWith(
-                  color: colorScheme.primary,
+                  color: AppColors.primary,              // статичний
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -139,7 +148,7 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
                 subtitle,
                 textAlign: TextAlign.center,
                 style: textTheme.bodySmall?.copyWith(
-                  color: colorScheme.onSurface.withOpacity(0.7),
+                  color: colors.textSecondary,           // адаптивний
                 ),
               ),
             ],

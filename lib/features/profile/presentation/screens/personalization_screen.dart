@@ -11,75 +11,78 @@ class PersonalizationScreen extends StatelessWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       barrierColor: Colors.black.withValues(alpha: 0.25),
-      builder: (ctx) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        backgroundColor: AppColors.surface,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Ваші дані будуть втрачені',
-                textAlign: TextAlign.center,
-                style: textTheme.titleLarge,
-              ),
-              const SizedBox(height: 24),
-              Row(
-                children: [
-                  // Скасувати — зелена filled кнопка
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: () => Navigator.of(ctx).pop(false),
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: AppColors.surface,
-                        minimumSize: const Size(double.infinity, 46),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      child:
-                      Text(
-                        'Скасувати',
-                        style: textTheme.labelMedium?.copyWith(
-                          color: AppColors.surface,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  // Видалити — червона outlined кнопка
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.of(ctx).pop(true),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.error,
-                        side: const BorderSide(
-                          color: AppColors.error,
-                          width: 1,
-                        ),
-                        minimumSize: const Size(double.infinity, 46),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      child: Text(
-                        'Видалити',
-                        style: textTheme.labelMedium?.copyWith(
-                          color: AppColors.error,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+      builder: (ctx) {
+        final dialogColors = AppColors.of(ctx);
+
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
-        ),
-      ),
+          backgroundColor: dialogColors.surface,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Ваші дані будуть втрачені',
+                  textAlign: TextAlign.center,
+                  style: textTheme.titleLarge,
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    // Скасувати — зелена filled кнопка
+                    Expanded(
+                      child: FilledButton(
+                        onPressed: () => Navigator.of(ctx).pop(false),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          foregroundColor: dialogColors.surface,
+                          minimumSize: const Size(double.infinity, 46),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          'Скасувати',
+                          style: textTheme.labelMedium?.copyWith(
+                            color: dialogColors.surface,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    // Видалити — червона outlined кнопка
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.of(ctx).pop(true),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.error,
+                          side: const BorderSide(
+                            color: AppColors.error,
+                            width: 1,
+                          ),
+                          minimumSize: const Size(double.infinity, 46),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          'Видалити',
+                          style: textTheme.labelMedium?.copyWith(
+                            color: AppColors.error,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
 
     if (confirmed == true && context.mounted) {
@@ -91,9 +94,10 @@ class PersonalizationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -110,15 +114,14 @@ class PersonalizationScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.chevron_left,
-                        color: AppColors.textPrimary,
+                        color: colors.textPrimary,
                         size: 28,
                       ),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ),
-                  // Заголовок по центру
                   Text(
                     'Персоналізація',
                     style: textTheme.titleLarge,
@@ -192,9 +195,10 @@ class _SettingsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(children: children),
@@ -222,6 +226,7 @@ class _SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return InkWell(
       onTap: onTap,
@@ -235,13 +240,13 @@ class _SettingsTile extends StatelessWidget {
               Container(
                 width: 36,
                 height: 36,
-                decoration: const BoxDecoration(
-                  color: AppColors.cardBorder,
+                decoration: BoxDecoration(
+                  color: colors.surfaceVariant,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   icon,
-                  color: AppColors.textSecondary,
+                  color: colors.textSecondary,
                   size: 20,
                 ),
               ),
@@ -264,9 +269,9 @@ class _SettingsTile extends StatelessWidget {
 
             // Стрілка (опціональна)
             if (showArrow)
-              const Icon(
+              Icon(
                 Icons.chevron_right,
-                color: AppColors.textSecondary,
+                color: colors.textSecondary,
                 size: 20,
               ),
           ],
@@ -281,11 +286,12 @@ class _SettingsTile extends StatelessWidget {
 class _TileDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Divider(
+    final colors = AppColors.of(context);
+    return Divider(
       height: 1,
       indent: 16,
       endIndent: 16,
-      color: AppColors.cardBorder,
+      color: colors.cardBorder,
     );
   }
 }
@@ -297,10 +303,12 @@ class _BottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.bottomNavBackground,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: colors.bottomNav,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: BottomNavigationBar(
         currentIndex: 2,
@@ -310,7 +318,7 @@ class _BottomNav extends StatelessWidget {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textPrimary,
+        unselectedItemColor: colors.textPrimary,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.check_box_outlined),

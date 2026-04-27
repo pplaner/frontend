@@ -79,8 +79,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       body: Stack(
         children: [
           // Основний контент
@@ -88,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               AppBar(
                 leading: IconButton(
-                  icon: const Icon(Icons.menu, color: AppColors.textPrimary),
+                  icon: Icon(Icons.menu, color: colors.textPrimary),
                   onPressed: () {},
                 ),
                 backgroundColor: Colors.transparent,
@@ -131,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: _openAddTask,
         backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.surface,
+        foregroundColor: colors.surface,
         elevation: 4,
         shape: const CircleBorder(),
         child: const Icon(Icons.add, size: 28),
@@ -258,6 +260,7 @@ class _SwipableTaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return Dismissible(
       key: ValueKey('dismissible-${task.id}'),
@@ -281,9 +284,9 @@ class _SwipableTaskCard extends StatelessWidget {
       onDismissed: (_) => onDelete(),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.cardBorder),
+          border: Border.all(color: colors.cardBorder),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
@@ -336,6 +339,7 @@ class _SwipableCompletedTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return Dismissible(
       key: ValueKey('dismissible-${task.id}'),
@@ -369,7 +373,7 @@ class _SwipableCompletedTile extends StatelessWidget {
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: const Icon(Icons.check, size: 14, color: AppColors.surface),
+                child: Icon(Icons.check, size: 14, color: colors.surface),
               ),
             ),
             const SizedBox(width: 12),
@@ -378,7 +382,7 @@ class _SwipableCompletedTile extends StatelessWidget {
                 task.title,
                 style: textTheme.titleMedium?.copyWith(
                   decoration: TextDecoration.lineThrough,
-                  color: AppColors.textSecondary,
+                  color: colors.textSecondary,
                 ),
               ),
             ),
@@ -393,12 +397,17 @@ class _SwipableCompletedTile extends StatelessWidget {
 // Діалог підтвердження видалення
 
 Future<bool> _confirmDelete(BuildContext context) async {
+  final textTheme = Theme.of(context).textTheme;
   final result = await showDialog<bool>(
     context: context,
     builder: (ctx) => AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: const Text('Видалити завдання?'),
-      content: const Text('Це завдання буде видалено назавжди.'),
+      actionsAlignment: MainAxisAlignment.center,
+      title: Text('Видалити завдання?',
+        textAlign: TextAlign.center,
+        style: textTheme.titleLarge,),
+      content: const Text('Це завдання буде видалено назавжди',
+        textAlign: TextAlign.center,  ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(ctx).pop(false),
@@ -433,12 +442,13 @@ class _CompletedSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.cardBorder),
+        border: Border.all(color: colors.cardBorder),
       ),
       child: Column(
         children: [
@@ -452,7 +462,7 @@ class _CompletedSection extends StatelessWidget {
                   Text(
                     'Завершені',
                     style: textTheme.titleMedium?.copyWith(
-                      color: AppColors.textSecondary,
+                      color: colors.textSecondary,
                     ),
                   ),
                   const Spacer(),
@@ -461,9 +471,9 @@ class _CompletedSection extends StatelessWidget {
                   AnimatedRotation(
                     turns: isExpanded ? 0 : -0.5,
                     duration: const Duration(milliseconds: 200),
-                    child: const Icon(
+                    child: Icon(
                       Icons.keyboard_arrow_down,
-                      color: AppColors.textSecondary,
+                      color: colors.textSecondary,
                     ),
                   ),
                 ],
@@ -497,10 +507,12 @@ class _BottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.bottomNavBackground,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: colors.bottomNav,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: BottomNavigationBar(
         currentIndex: currentIndex,
@@ -510,7 +522,7 @@ class _BottomNav extends StatelessWidget {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textPrimary,
+        unselectedItemColor: colors.textPrimary,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.check_box_outlined),

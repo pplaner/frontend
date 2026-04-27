@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/utils/app_assets.dart';
+import 'package:frontend/i18n/strings.g.dart';
 import 'package:pattern_lock/pattern_lock.dart';
 
 class PatternLockScreen extends StatefulWidget {
@@ -59,15 +61,16 @@ class _PatternLockScreenState extends State<PatternLockScreen>
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
+    final colors = AppColors.of(context);
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: colors.surface,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: colorScheme.primary),
+          icon: const Icon(Icons.arrow_back_ios_new),
+          color: AppColors.primary,              // статичний
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -78,19 +81,21 @@ class _PatternLockScreenState extends State<PatternLockScreen>
             children: [
               const SizedBox(height: 20),
               Text(
-                widget.isSetup ? 'Придумайте графічний ключ' : 'Введіть графічний ключ',
+                widget.isSetup
+                    ? t.setup.pattern_create
+                    : t.setup.pattern_enter,
                 style: textTheme.displayLarge?.copyWith(fontSize: 28),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
               Text(
                 isError
-                    ? 'Занадто короткий ключ!'
+                    ? t.setup.pattern_short
                     : widget.isSetup
-                    ? "З'єднайте щонайменше 4 точки"
-                    : 'Намалюйте ваш графічний ключ',
+                    ? t.setup.pattern_desc_setup
+                    : t.setup.pattern_desc_login,
                 style: textTheme.bodyMedium?.copyWith(
-                  color: isError ? Colors.red : null,
+                  color: isError ? AppColors.error : null, // статичний error
                   fontWeight: isError ? FontWeight.bold : null,
                 ),
                 textAlign: TextAlign.center,
@@ -108,8 +113,10 @@ class _PatternLockScreenState extends State<PatternLockScreen>
                 child: SizedBox(
                   height: 300,
                   child: PatternLock(
-                    selectedColor: isError ? Colors.red : colorScheme.primary,
-                    notSelectedColor: colorScheme.onSurface.withValues(alpha: 0.2),
+                    selectedColor: isError
+                        ? AppColors.error                  // статичний
+                        : AppColors.primary,               // статичний
+                    notSelectedColor: colors.textSecondary.withOpacity(0.3),
                     onInputComplete: (input) async {
                       if (input.length < 4) {
                         await _triggerError();
@@ -132,9 +139,10 @@ class _PatternLockScreenState extends State<PatternLockScreen>
                     : null,
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(double.infinity, 56),
+                  backgroundColor: AppColors.primary,      // статичний
                 ),
                 child: Text(
-                  widget.isSetup ? 'Зареєструватись' : 'Увійти',
+                  widget.isSetup ? t.common.register : t.common.login,
                   style: textTheme.labelLarge?.copyWith(color: Colors.white),
                 ),
               ),

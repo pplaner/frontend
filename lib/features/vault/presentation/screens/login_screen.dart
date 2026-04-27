@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/i18n/strings.g.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,43 +26,38 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _onLogin() async {
     if (!_formKey.currentState!.validate()) return;
-
     setState(() => _isLoading = true);
-
-    // Імітація запиту до сервера
+    // TODO: виклик AuthBloc / AuthRepository для входу
+    // TODO: отримати метод захисту з відповіді бекенду і навігувати:
+    // 'pin'         → '/login/pin'
+    // 'pattern'     → '/login/pattern'
+    // 'association' → '/login/association'
+    // 'seed'        → '/login/secret'
     await Future.delayed(const Duration(seconds: 2));
-
     setState(() => _isLoading = false);
-
     if (!mounted) return;
-
-    // Перехід на екран вибору методів підтвердження (твій тестовий хаб)
     Navigator.of(context).pushNamed('/auth-method-selection');
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final colors = AppColors.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
-      // ДОДАЄМО AppBar ДЛЯ ПОВЕРНЕННЯ НАЗАД
+      backgroundColor: colors.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: colorScheme.primary,
-            size: 20,
-          ),
-          onPressed: () => Navigator.of(context).pop(), // Повертає на AuthScreen
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+          color: AppColors.primary,              // статичний — як у всіх екранах
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: SafeArea(
-        top: false, // Щоб контент не зсувався занадто низько через наявність AppBar
+        top: false,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: Form(
@@ -70,61 +66,61 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 24),
-
                 Text(
-                  'Авторизація',
-                  style: theme.textTheme.displayLarge,
+                  t.auth.login_title,
+                  style: theme.textTheme.displayLarge, // колір вже в textTheme
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 40),
 
-                // Поле Email
+                // ── Email ──
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   style: theme.textTheme.bodyLarge,
-                  decoration: _inputDecoration(hint: 'Електронна пошта', theme: theme),
+                  decoration: _inputDecoration(hint: t.auth.email, colors: colors),
                   validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Введіть email';
+                    if (v == null || v.trim().isEmpty) return t.auth.email_error;
                     final emailRegex = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
-                    if (!emailRegex.hasMatch(v.trim())) return 'Невірний формат email';
+                    if (!emailRegex.hasMatch(v.trim())) return t.auth.email_format_error;
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
 
-                // Поле Пароль
+                // ── Пароль ──
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
                   style: theme.textTheme.bodyLarge,
                   decoration: _inputDecoration(
-                    hint: 'Пароль',
-                    theme: theme,
+                    hint: t.auth.password,
+                    colors: colors,
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword
                             ? Icons.visibility_off_outlined
                             : Icons.visibility_outlined,
-                        color: AppColors.textSecondary,
+                        color: colors.textSecondary,
                       ),
                       onPressed: () =>
                           setState(() => _obscurePassword = !_obscurePassword),
                     ),
                   ),
                   validator: (v) {
-                    if (v == null || v.isEmpty) return 'Введіть пароль';
-                    if (v.length < 6) return 'Мінімум 6 символів';
+                    if (v == null || v.isEmpty) return t.auth.password_error;
+                    if (v.length < 6) return t.auth.password_length_error;
                     return null;
                   },
                 ),
                 const SizedBox(height: 32),
 
-                // Кнопка входу
+                // ── Кнопка входу ──
                 FilledButton(
                   onPressed: _isLoading ? null : _onLogin,
                   style: FilledButton.styleFrom(
                     minimumSize: const Size(double.infinity, 56),
+                    backgroundColor: AppColors.primary,
                   ),
                   child: _isLoading
                       ? const SizedBox(
@@ -135,29 +131,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Colors.white,
                     ),
                   )
-                      : const Text(
-                    'Увійти',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      : Text(
+                    t.common.login,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: Colors.white,    // консистентно з рештою екранів
                     ),
                   ),
                 ),
                 const SizedBox(height: 24),
 
-                // Посилання на реєстрацію
+                // ── Посилання на реєстрацію ──
                 Column(
                   children: [
                     Text(
-                      'Ще не маєте акаунту?',
-                      style: theme.textTheme.bodyMedium,
+                      t.auth.no_account,
+                      style: theme.textTheme.bodyMedium,  // колір вже в textTheme
                     ),
                     const SizedBox(height: 4),
                     GestureDetector(
                       onTap: () => Navigator.of(context).pushNamed('/register'),
                       child: Text(
-                        'Зареєструватись',
+                        t.common.register,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.bold,
@@ -179,25 +173,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
   InputDecoration _inputDecoration({
     required String hint,
-    required ThemeData theme,
+    required AppColorScheme colors,
     Widget? suffixIcon,
   }) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: theme.textTheme.bodyLarge?.copyWith(
-        color: AppColors.textSecondary,
-      ),
+      hintStyle: TextStyle(color: colors.textSecondary),
       suffixIcon: suffixIcon,
       filled: true,
-      fillColor: Colors.white,
+      fillColor: colors.surface,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: const BorderSide(color: AppColors.cardBorder),
+        borderSide: BorderSide(color: colors.cardBorder),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: const BorderSide(color: AppColors.primary),
+        borderSide: const BorderSide(color: AppColors.primary, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
@@ -205,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(20),
-        borderSide: const BorderSide(color: AppColors.error),
+        borderSide: const BorderSide(color: AppColors.error, width: 2),
       ),
     );
   }

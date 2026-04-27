@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/utils/app_assets.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
-class AssociationScreen extends StatefulWidget {
+class AssociationScreen extends ConsumerStatefulWidget {
   final bool isSetup;
 
   const AssociationScreen({super.key, this.isSetup = false});
 
   @override
-  State<AssociationScreen> createState() => _AssociationScreenState();
+  ConsumerState<AssociationScreen> createState() => _AssociationScreenState();
 }
 
-class _AssociationScreenState extends State<AssociationScreen> {
+class _AssociationScreenState extends ConsumerState<AssociationScreen> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   bool _isButtonEnabled = false;
   final RegExp _lettersOnly = RegExp(r'^[a-zA-Zа-яА-ЯіїєґІЇЄҐ]+$');
 
-  bool get _hasError =>
-      _controller.text.isNotEmpty && !_isButtonEnabled;
+  bool get _hasError => _controller.text.isNotEmpty && !_isButtonEnabled;
 
   @override
   void initState() {
@@ -50,16 +51,20 @@ class _AssociationScreenState extends State<AssociationScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);       // адаптивні кольори (як у profile_screen)
     final colorScheme = Theme.of(context).colorScheme;
-    final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: colors.surface,           // surface — не хардкод
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: colorScheme.primary, size: 20),
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: AppColors.primary,            // primary — статичний, не змінюється
+            size: 20,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -69,33 +74,39 @@ class _AssociationScreenState extends State<AssociationScreen> {
           child: Column(
             children: [
               const SizedBox(height: 20),
+
+              // ── Заголовок ──
               Text(
-                  widget.isSetup ? t.setup.word_create : t.setup.word_enter,
+                widget.isSetup ? t.setup.word_create : t.setup.word_enter,
                 style: textTheme.displayLarge?.copyWith(fontSize: 28),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
+
+              // ── Підзаголовок / помилка ──
               Text(
                 widget.isSetup
                     ? t.setup.word_desc_setup
                     : t.setup.word_desc_login,
                 style: textTheme.bodyMedium?.copyWith(
-                  color: _hasError ? colorScheme.error : null,
+                  color: _hasError
+                      ? colorScheme.error          // error — через colorScheme
+                      : colors.textSecondary,      // звичайний — через colors
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40),
+
+              // ── Поле вводу ──
               Container(
                 height: 60,
                 decoration: BoxDecoration(
-                  color: isLight
-                      ? Colors.white
-                      : colorScheme.surfaceContainerHighest.withValues(alpha: 0.1),
+                  color: colors.surface,           // surface адаптивний
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: _hasError
                         ? colorScheme.error.withValues(alpha: 0.5)
-                        : colorScheme.primary.withValues(alpha: 0.15),
+                        : AppColors.primary.withValues(alpha: 0.15),
                     width: 1.5,
                   ),
                   boxShadow: [
@@ -117,22 +128,37 @@ class _AssociationScreenState extends State<AssociationScreen> {
                       border: InputBorder.none,
                       filled: false,
                       hintText: _focusNode.hasFocus ? '' : t.setup.word_hint,
-                      hintStyle: const TextStyle(color: Colors.grey, fontSize: 15),
+                      hintStyle: TextStyle(
+                        color: colors.textSecondary, // адаптивний сірий
+                        fontSize: 15,
+                      ),
                     ),
                   ),
                 ),
               ),
               const SizedBox(height: 60),
-              Image.asset(AppAssets.logo, height: 170, width: 170, fit: BoxFit.contain),
+
+              // ── Лого ──
+              Image.asset(
+                AppAssets.logo,
+                height: 170,
+                width: 170,
+                fit: BoxFit.contain,
+              ),
               const SizedBox(height: 80),
+
+              // ── Кнопка ──
               FilledButton(
                 onPressed: _isButtonEnabled ? _onSubmit : null,
                 style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.primary,  // статичний primary
                   minimumSize: const Size(double.infinity, 56),
                 ),
                 child: Text(
                   widget.isSetup ? t.common.register : t.common.login,
-                  style: textTheme.labelLarge?.copyWith(color: Colors.white),
+                  style: textTheme.labelLarge?.copyWith(
+                    color: Colors.white,               // білий завжди на primary кнопці
+                  ),
                 ),
               ),
               const SizedBox(height: 24),

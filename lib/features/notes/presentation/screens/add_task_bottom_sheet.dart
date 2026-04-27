@@ -64,11 +64,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   Widget build(BuildContext context) {
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: colors.background,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: EdgeInsets.fromLTRB(16, 0, 16, keyboardHeight + 16),
       child: SafeArea(
@@ -82,7 +83,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.divider,
+                color: colors.divider,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -93,9 +94,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               children: [
                 GestureDetector(
                   onTap: _onCancel,
-                  child: const Icon(
+                  child: Icon(
                     Icons.cancel_outlined,
-                    color: AppColors.textSecondary,
+                    color: colors.textSecondary,
                     size: 24,
                   ),
                 ),
@@ -123,7 +124,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             Container(
               height: 51,
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(20),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
@@ -134,11 +135,11 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 decoration: InputDecoration(
                   hintText: 'Що потрібно зробити?',
                   hintStyle: textTheme.bodyLarge?.copyWith(
-                    color: AppColors.textSecondary,
+                    color: colors.textSecondary,
                   ),
 
                   filled: true,
-                  fillColor: AppColors.surface,
+                  fillColor: colors.surface,
 
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
@@ -156,7 +157,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             // Поле "Додати деталі..." + іконки метаданих
             Container(
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(20),
               ),
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
@@ -184,7 +185,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                   fontFamily: fontFamily,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
-                                  color: AppColors.textSecondary,
+                                  color: colors.textSecondary,
                                   height: 1.5,
                                 ),
                                 HorizontalSpacing.zero,
@@ -197,7 +198,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                   fontFamily: fontFamily,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
-                                  color: AppColors.textPrimary,
+                                  color: colors.textPrimary,
                                   height: 1.5,
                                 ),
                                 HorizontalSpacing.zero,
@@ -212,7 +213,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     ),
                   ),
 
-                  const Divider(height: 16, color: AppColors.secondaryContainer),
+                  Divider(height: 16, color: colors.divider),
 
                   // Іконки метаданих
                   Row(
@@ -256,7 +257,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             // Quill Toolbar
             Container(
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: QuillSimpleToolbar(

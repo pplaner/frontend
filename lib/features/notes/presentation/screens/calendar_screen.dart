@@ -125,7 +125,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Future<void> _openViewModePicker() async {
     await showModalBottomSheet<void>(
       context: context,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.of(context).surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -142,7 +142,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Future<void> _openFilterSheet() async {
     await showModalBottomSheet<void>(
       context: context,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.of(context).surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -192,8 +192,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Stack(
           children: [
@@ -232,7 +234,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       IconButton(
                         icon: Icon(
                           _viewMode.icon,
-                          color: AppColors.textPrimary,
+                          color: colors.textPrimary,
                           size: 24,
                         ),
                         tooltip: _viewMode.label,
@@ -243,7 +245,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           Icons.filter_alt_outlined,
                           color: _selectedCategory != TaskCategory.all
                               ? AppColors.primary
-                              : AppColors.textPrimary,
+                              : colors.textPrimary,
                           size: 24,
                         ),
                         tooltip: 'Фільтр',
@@ -304,7 +306,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: _openAddTaskSheet,
         backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.surface,
+        foregroundColor: colors.surface,
         elevation: 4,
         shape: const CircleBorder(),
         child: const Icon(Icons.add, size: 28),
@@ -376,6 +378,7 @@ class _SwipableTaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return Dismissible(
       key: ValueKey('cal-dismissible-${task.id}'),
@@ -397,9 +400,9 @@ class _SwipableTaskCard extends StatelessWidget {
       onDismissed: (_) => onDelete(),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.cardBorder),
+          border: Border.all(color: colors.cardBorder),
         ),
         child: ListTile(
           contentPadding:
@@ -423,7 +426,7 @@ class _SwipableTaskCard extends StatelessWidget {
               ? Text(
             task.subtitle,
             style: textTheme.bodySmall
-                ?.copyWith(color: AppColors.textSecondary),
+                ?.copyWith(color: colors.textSecondary),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           )
@@ -452,6 +455,7 @@ class _SwipableCompletedTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return Dismissible(
       key: ValueKey('cal-completed-${task.id}'),
@@ -485,8 +489,7 @@ class _SwipableCompletedTile extends StatelessWidget {
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child:
-                const Icon(Icons.check, size: 14, color: AppColors.surface),
+                child: Icon(Icons.check, size: 14, color: colors.surface),
               ),
             ),
             const SizedBox(width: 12),
@@ -495,7 +498,7 @@ class _SwipableCompletedTile extends StatelessWidget {
                 task.title,
                 style: textTheme.titleMedium?.copyWith(
                   decoration: TextDecoration.lineThrough,
-                  color: AppColors.textSecondary,
+                  color: colors.textSecondary,
                 ),
               ),
             ),
@@ -525,12 +528,13 @@ class _CompletedSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.cardBorder),
+        border: Border.all(color: colors.cardBorder),
       ),
       child: Column(
         children: [
@@ -547,7 +551,7 @@ class _CompletedSection extends StatelessWidget {
                   Text(
                     'Завершені',
                     style: textTheme.titleMedium?.copyWith(
-                      color: AppColors.textSecondary,
+                      color: colors.textSecondary,
                     ),
                   ),
                   const Spacer(),
@@ -556,9 +560,9 @@ class _CompletedSection extends StatelessWidget {
                   AnimatedRotation(
                     turns: isExpanded ? 0 : -0.5,
                     duration: const Duration(milliseconds: 200),
-                    child: const Icon(
+                    child: Icon(
                       Icons.keyboard_arrow_down,
-                      color: AppColors.textSecondary,
+                      color: colors.textSecondary,
                     ),
                   ),
                 ],
@@ -582,12 +586,17 @@ class _CompletedSection extends StatelessWidget {
 // Діалог підтвердження видалення
 
 Future<bool> _confirmDelete(BuildContext context) async {
+  final textTheme = Theme.of(context).textTheme;
   final result = await showDialog<bool>(
     context: context,
     builder: (ctx) => AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: const Text('Видалити завдання?'),
-      content: const Text('Це завдання буде видалено назавжди.'),
+      actionsAlignment: MainAxisAlignment.center,
+      title: Text('Видалити завдання?',
+        textAlign: TextAlign.center,
+        style: textTheme.titleLarge,),
+      content: const Text('Це завдання буде видалено назавжди',
+        textAlign: TextAlign.center,  ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(ctx).pop(false),
@@ -595,9 +604,7 @@ Future<bool> _confirmDelete(BuildContext context) async {
         ),
         TextButton(
           onPressed: () => Navigator.of(ctx).pop(true),
-          style: TextButton.styleFrom(
-            foregroundColor: AppColors.error,
-          ),
+          style: TextButton.styleFrom(foregroundColor: AppColors.error),
           child: const Text('Видалити'),
         ),
       ],
@@ -627,9 +634,11 @@ class _CalendarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+
     // Стилі для дат беремо з textTheme — єдине джерело правди
     final dayStyle = (textTheme.bodyMedium ?? const TextStyle()).copyWith(
-      color: AppColors.textPrimary,
+      color: colors.textPrimary,
       fontWeight: FontWeight.w400,
     );
     final selectedDayStyle = (textTheme.bodyMedium ?? const TextStyle()).copyWith(
@@ -645,13 +654,13 @@ class _CalendarCard extends StatelessWidget {
       fontWeight: FontWeight.w600,
     );
     final headerStyle = (textTheme.titleMedium ?? const TextStyle()).copyWith(
-      color: AppColors.textPrimary,
+      color: colors.textPrimary,
     );
 
     return Container(
       padding: const EdgeInsets.only(bottom: 12, left: 8, right: 8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -674,14 +683,14 @@ class _CalendarCard extends StatelessWidget {
           formatButtonVisible: false,
           titleTextStyle: headerStyle,
           headerPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-          leftChevronIcon: const Icon(
+          leftChevronIcon: Icon(
             Icons.chevron_left,
-            color: AppColors.textSecondary,
+            color: colors.textSecondary,
             size: 20,
           ),
-          rightChevronIcon: const Icon(
+          rightChevronIcon: Icon(
             Icons.chevron_right,
-            color: AppColors.textSecondary,
+            color: colors.textSecondary,
             size: 20,
           ),
           leftChevronMargin: EdgeInsets.zero,
@@ -732,20 +741,21 @@ class _DayHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         children: [
           GestureDetector(
             onTap: onPrev,
-            child: const Icon(
+            child: Icon(
               Icons.chevron_left,
-              color: AppColors.textSecondary,
+              color: colors.textSecondary,
               size: 20,
             ),
           ),
@@ -758,9 +768,9 @@ class _DayHeader extends StatelessWidget {
           ),
           GestureDetector(
             onTap: onNext,
-            child: const Icon(
+            child: Icon(
               Icons.chevron_right,
-              color: AppColors.textSecondary,
+              color: colors.textSecondary,
               size: 20,
             ),
           ),
@@ -784,6 +794,7 @@ class _ViewModeSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return SafeArea(
       child: Padding(
@@ -797,7 +808,7 @@ class _ViewModeSheet extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.bottomNavBackground,
+                  color: colors.divider,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -812,14 +823,14 @@ class _ViewModeSheet extends StatelessWidget {
                   mode.icon,
                   color: current == mode
                       ? AppColors.primary
-                      : AppColors.textSecondary,
+                      : colors.textSecondary,
                 ),
                 title: Text(
                   mode.label,
                   style: textTheme.titleMedium?.copyWith(
                     color: current == mode
                         ? AppColors.primary
-                        : AppColors.textSecondary,
+                        : colors.textSecondary,
                   ),
                 ),
                 trailing: current == mode
@@ -854,6 +865,7 @@ class _FilterSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colors = AppColors.of(context);
 
     return SafeArea(
       child: Padding(
@@ -867,7 +879,7 @@ class _FilterSheet extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.divider,
+                  color: colors.divider,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -883,7 +895,7 @@ class _FilterSheet extends StatelessWidget {
                   style: textTheme.titleMedium?.copyWith(
                     color: current == cat
                         ? AppColors.primary
-                        : AppColors.textPrimary,
+                        : colors.textPrimary,
                   ),
                 ),
                 trailing: current == cat
@@ -917,10 +929,12 @@ class _BottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.divider,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: colors.bottomNav,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: BottomNavigationBar(
         currentIndex: currentIndex,
@@ -930,7 +944,7 @@ class _BottomNav extends StatelessWidget {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textPrimary,
+        unselectedItemColor: colors.textPrimary,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.check_box_outlined),
