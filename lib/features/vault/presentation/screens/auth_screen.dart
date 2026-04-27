@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/utils/app_assets.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/i18n/strings.g.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
@@ -8,7 +9,6 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
     final colors = AppColors.of(context);
 
     return Scaffold(
@@ -20,7 +20,7 @@ class AuthScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Spacer(flex: 3),
-              Text('PPlaner', style: textTheme.displayLarge),
+              Text(t.common.app_name, style: textTheme.displayLarge),
               const SizedBox(height: 24),
               Image.asset(
                 AppAssets.logo,
@@ -30,48 +30,56 @@ class AuthScreen extends StatelessWidget {
               ),
               const Spacer(flex: 2),
               Text(
-                'Ваші плани під надійним захистом',
+                t.auth.welcome_title,
                 textAlign: TextAlign.center,
                 style: textTheme.bodyMedium,
               ),
               const SizedBox(height: 8),
               Text(
-                'Оберіть спосіб використання',
+                t.auth.welcome_subtitle,
                 textAlign: TextAlign.center,
                 style: textTheme.bodyMedium,
               ),
               const Spacer(flex: 3),
+
+              // ── Створити локальне сховище ──
               FilledButton(
-                onPressed: () {},
+                onPressed: () {
+                  // TODO: навігація до вибору методу шифрування
+                },
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(double.infinity, 51),
-                  backgroundColor: colorScheme.primary,
-                  foregroundColor: colors.surface,
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
                 child: Text(
-                  'Створити локальне сховище',
-                  style: textTheme.labelLarge?.copyWith(color: colors.surface),
+                  t.auth.create_local,
+                  style: textTheme.labelLarge?.copyWith(color: Colors.white),
                 ),
               ),
               const SizedBox(height: 16),
+
+              // ── Вже є акаунт ──
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  // TODO: навігація до екрану логіну
+                },
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 51),
-                  foregroundColor: colorScheme.primary,
-                  side: BorderSide(color: colorScheme.primary, width: 1),
+                  foregroundColor: AppColors.primary,
+                  side: const BorderSide(color: AppColors.primary, width: 1),
                   backgroundColor: colors.surface,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
                 child: Text(
-                  'У мене вже є акаунт',
+                  t.auth.already_have_account,
                   style: textTheme.labelLarge?.copyWith(
-                    color: colorScheme.primary,
+                    color: AppColors.primary,
                   ),
                 ),
               ),
