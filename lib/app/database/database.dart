@@ -35,6 +35,17 @@ class AppDatabase extends _$AppDatabase {
 
   AppDatabase.forTesting(super.e);
 
+  Future<void> resetDatabase() async {
+    await transaction(() async {
+      await customStatement('PRAGMA foreign_keys = OFF');
+
+      for (final table in allTables) {
+        await delete(table).go();
+      }
+      await customStatement('PRAGMA foreign_keys = ON');
+    });
+  }
+
   @override
   int get schemaVersion => 1;
 

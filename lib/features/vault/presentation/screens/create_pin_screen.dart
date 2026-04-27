@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/core/utils/app_assets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/utils/app_assets.dart';
+import 'package:frontend/features/vault/domain/vault_state.dart';
+import 'package:frontend/features/vault/presentation/vault_notifier.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
-class CreatePinScreen extends StatefulWidget {
-  final bool isSetup;
-
+class CreatePinScreen extends ConsumerStatefulWidget {
   const CreatePinScreen({super.key, this.isSetup = false});
 
+  final bool isSetup;
+
   @override
-  State<CreatePinScreen> createState() => _CreatePinScreenState();
+  ConsumerState<CreatePinScreen> createState() => _CreatePinScreenState();
 }
 
-class _CreatePinScreenState extends State<CreatePinScreen> {
+class _CreatePinScreenState extends ConsumerState<CreatePinScreen> {
   String pinCode = '';
 
   void _addDigit(String digit) {
@@ -35,10 +38,31 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
     }
   }
 
+  Future<void> _handleRegisterPressed() async {
+    final state = ref.read(vaultProvider);
+    final notifier = ref.read(vaultProvider.notifier);
+
+    switch (state) {
+      case VaultNotInitialized():
+        await notifier.initializeWithPin(pinCode);
+      default:
+        await notifier.unlockWithPin(pinCode);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colors = AppColors.of(context);
+
+    ref.listen<VaultState>(vaultProvider, (previous, next) {
+      if (next is VaultError) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('err: ${next.failure}')));
+        setState(() => pinCode = '');
+      }
+    });
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -46,7 +70,11 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: AppColors.primary, size: 20),
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: AppColors.primary,
+            size: 20,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -63,19 +91,26 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
               ),
               const SizedBox(height: 4),
               Text(
-                widget.isSetup ? t.setup.pin_desc_setup : t.setup.pin_desc_login,
+                widget.isSetup
+                    ? t.setup.pin_desc_setup
+                    : t.setup.pin_desc_login,
                 style: textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              Image.asset(AppAssets.logo, height: 100, width: 100, fit: BoxFit.contain),
+              Image.asset(
+                AppAssets.logo,
+                height: 100,
+                width: 100,
+                fit: BoxFit.contain,
+              ),
               const Spacer(),
               _buildPinDots(pinCode.length),
               const SizedBox(height: 30),
               _buildKeypad(colors),
               const Spacer(),
               FilledButton(
-                onPressed: pinCode.length == 4 ? _onSubmit : null,
+                onPressed: pinCode.length == 4 ? _handleRegisterPressed : null,
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(double.infinity, 56),
                   backgroundColor: AppColors.primary,
@@ -164,7 +199,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
           child: Text(
             digit,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: colors.textPrimary,           // адаптивний
+              color: colors.textPrimary, // адаптивний
             ),
           ),
         ),
@@ -182,7 +217,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
         child: Center(
           child: Icon(
             Icons.backspace_outlined,
-            color: AppColors.primary,              // статичний
+            color: AppColors.primary, // статичний
             size: 26,
           ),
         ),
@@ -190,3 +225,4 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
     );
   }
 }
+

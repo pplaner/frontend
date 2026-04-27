@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/features/vault/presentation/navigation/vault_routes.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
-class SecurityMethodScreen extends StatefulWidget {
+class SecurityMethodScreen extends ConsumerStatefulWidget {
   const SecurityMethodScreen({super.key});
 
   @override
-  State<SecurityMethodScreen> createState() => _SecurityMethodScreenState();
+  ConsumerState<SecurityMethodScreen> createState() =>
+      _SecurityMethodScreenState();
 }
 
-class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
+class _SecurityMethodScreenState extends ConsumerState<SecurityMethodScreen> {
   String? selectedMethodId;
 
   @override
@@ -73,15 +76,17 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
               FilledButton(
                 onPressed: selectedMethodId == null
                     ? null
-                    : () {
-                  if (selectedMethodId == 'pin') {
-                    Navigator.pushNamed(context, '/pin-setup');
-                  } else if (selectedMethodId == 'pattern') {
-                    Navigator.pushNamed(context, '/pattern-setup');
-                  } else if (selectedMethodId == 'word') {
-                    Navigator.pushNamed(context, '/association-setup');
-                  }
-                },
+                    : () async {
+                        if (selectedMethodId == 'pin') {
+                          const CreatePinRoute().go(context);
+                        } else if (selectedMethodId == 'pattern') {
+                          const CreateGraphRoute().go(context);
+                        } else if (selectedMethodId == 'word') {
+                          const CreateAssociationRoute().go(context);
+                        } else if (selectedMethodId == 'seed') {
+                          const CreateRecoveryRoute().go(context);
+                        }
+                      },
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(double.infinity, 56),
                   backgroundColor: AppColors.primary,
@@ -118,12 +123,13 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
           decoration: BoxDecoration(
-            color: colors.surface,                        // адаптивний
+            color: colors.surface, // адаптивний
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isSelected
-                  ? AppColors.primary                    // статичний
-                  : AppColors.primary.withOpacity(0.1),  // статичний
+                  ? AppColors
+                        .primary // статичний
+                  : AppColors.primary.withOpacity(0.1), // статичний
               width: 1.5,
             ),
             boxShadow: [
@@ -139,7 +145,7 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
               Text(
                 title,
                 style: textTheme.titleLarge?.copyWith(
-                  color: AppColors.primary,              // статичний
+                  color: AppColors.primary, // статичний
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -148,7 +154,7 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
                 subtitle,
                 textAlign: TextAlign.center,
                 style: textTheme.bodySmall?.copyWith(
-                  color: colors.textSecondary,           // адаптивний
+                  color: colors.textSecondary, // адаптивний
                 ),
               ),
             ],
@@ -158,3 +164,4 @@ class _SecurityMethodScreenState extends State<SecurityMethodScreen> {
     );
   }
 }
+
