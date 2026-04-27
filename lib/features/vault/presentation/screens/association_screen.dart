@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/ui/widgets/back_app_bar.dart';
 import 'package:frontend/core/utils/app_assets.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
@@ -55,19 +56,8 @@ class _AssociationScreenState extends ConsumerState<AssociationScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colors.surface,           // surface — не хардкод
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: AppColors.primary,            // primary — статичний, не змінюється
-            size: 20,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      backgroundColor: colors.surface, // surface — не хардкод
+      appBar: const BackAppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),

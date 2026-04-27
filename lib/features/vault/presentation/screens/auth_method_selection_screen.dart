@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/ui/widgets/back_app_bar.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
 class AuthMethodSelectionScreen extends StatelessWidget {
@@ -19,18 +20,7 @@ class AuthMethodSelectionScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: colors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: AppColors.primary,
-            size: 20,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      appBar: const BackAppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/ui/widgets/back_app_bar.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
@@ -53,15 +54,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
     return Scaffold(
       backgroundColor: colors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          color: AppColors.primary,              // статичний — як у інших екранах
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
+      appBar: const BackAppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),

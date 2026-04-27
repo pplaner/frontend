@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/ui/widgets/back_app_bar.dart';
 import 'package:frontend/core/utils/app_assets.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
@@ -103,15 +104,7 @@ class _VerifyPhraseScreenState extends State<VerifyPhraseScreen>
 
     return Scaffold(
       backgroundColor: colors.surface,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-          color: AppColors.primary,
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      appBar: const BackAppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),

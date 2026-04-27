@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/ui/widgets/back_app_bar.dart';
 import 'package:frontend/i18n/strings.g.dart'; // Імпорт для локалізації
 
 class RegisterScreen extends StatefulWidget {
@@ -47,14 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return Scaffold(
       backgroundColor: colors.background, // Адаптивний фон
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: colors.textPrimary, size: 20),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
+      appBar: const BackAppBar(),
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(

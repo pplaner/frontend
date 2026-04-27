@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/ui/widgets/back_app_bar.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -46,16 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       backgroundColor: colors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
-          color: AppColors.primary,              // статичний — як у всіх екранах
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
+      appBar: const BackAppBar(),
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
