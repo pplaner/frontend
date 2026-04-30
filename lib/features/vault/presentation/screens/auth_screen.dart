@@ -63,8 +63,6 @@ class AuthScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // ── Вже є акаунт ──
               OutlinedButton(
                 onPressed: () {
                   // TODO: навігація до екрану логіну
@@ -81,7 +79,7 @@ class AuthScreen extends StatelessWidget {
                 child: Text(
                   t.auth.haveAccount,
                   style: textTheme.labelLarge?.copyWith(
-                    color: AppColors.primary,
+                    color: colorScheme.primary,
                   ),
                 ),
               ),
