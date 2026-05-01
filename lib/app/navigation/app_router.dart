@@ -1,7 +1,9 @@
+import 'package:frontend/app/presentation/app_routes.dart';
 import 'package:frontend/features/notes/presentation/navigation/notes_routes.dart';
 import 'package:frontend/features/vault/domain/vault_state.dart';
-import 'package:frontend/features/vault/presentation/navigation/vault_routes.dart';
-import 'package:frontend/features/vault/presentation/vault_notifier.dart';
+import 'package:frontend/features/vault/presentation/navigation/vault_setup_routes.dart';
+import 'package:frontend/features/vault/presentation/navigation/vault_unlock_routes.dart';
+import 'package:frontend/features/vault/presentation/notifiers/vault_notifier.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -10,16 +12,38 @@ part 'app_router.g.dart';
 @Riverpod(keepAlive: true)
 GoRouter appRouter(Ref ref) {
   final router = GoRouter(
-    initialLocation: const VaultRoute().location,
-    routes: [$vaultRoute, $notesRoute],
+    initialLocation: const SplashRoute().location,
+    routes: [
+      $splashRoute,
+      $welcomeRoute,
+      $setupVaultRoute,
+      $unlockVaultRoute,
+      $notesRoute,
+    ],
     redirect: (context, state) {
       final vaultState = ref.read(vaultProvider);
 
-      final isUnlocked = vaultState is VaultUnlocked;
-      final isInVault = state.matchedLocation.startsWith('/vault');
+      final location = state.matchedLocation;
+      final isGoingToSetup = location.startsWith('/setup');
+      final isGoingToUnlock = location.startsWith('/unlock');
+      final isGoingToWelcome = location.startsWith('/welcome');
 
-      if (isUnlocked && isInVault) return const NotesRoute().location;
-      if (!isUnlocked && !isInVault) return const VaultRoute().location;
+      switch (vaultState) {
+        case VaultInitializing():
+          return location == '/splash' ? null : '/splash';
+        case VaultNotInitialized():
+          if (isGoingToSetup || isGoingToWelcome) return null;
+          return const WelcomeRoute().location;
+        case VaultLocked():
+          if (isGoingToUnlock) return null;
+          return const UnlockVaultRoute().location;
+        case VaultUnlocked():
+          if (isGoingToSetup || isGoingToUnlock || isGoingToWelcome) {
+            return const NotesRoute().location;
+          }
+        case VaultError():
+          return null;
+      }
 
       return null;
     },
