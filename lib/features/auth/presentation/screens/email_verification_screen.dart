@@ -5,6 +5,7 @@ import 'package:frontend/i18n/strings.g.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({super.key, this.email});
+
   final String? email;
 
   @override
@@ -63,19 +64,24 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 24),
+
               Text(
                 t.email_verify.title,
-                style: theme.textTheme.displayLarge, // колір вже в textTheme
+                style: theme.textTheme.displayLarge,
                 textAlign: TextAlign.center,
               ),
+
               const SizedBox(height: 16),
+
               if (widget.email != null)
                 Text(
                   '${t.email_verify.sent_to}\n${widget.email}',
-                  style: theme.textTheme.bodyMedium, // колір вже в textTheme
+                  style: theme.textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
+
               const SizedBox(height: 40),
+
               TextFormField(
                 controller: _codeController,
                 keyboardType: TextInputType.number,
@@ -105,11 +111,13 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   ),
                 ),
               ),
+
               const SizedBox(height: 32),
+
               FilledButton(
                 onPressed: _isLoading ? null : _onConfirm,
                 style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.primary, // явно статичний
+                  backgroundColor: AppColors.primary,
                   minimumSize: const Size(double.infinity, 56),
                 ),
                 child: _isLoading
@@ -128,7 +136,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         ),
                       ),
               ),
+
               const SizedBox(height: 24),
+
               Center(
                 child: TextButton(
                   onPressed: _onResend,
@@ -149,4 +159,3 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     );
   }
 }
-
