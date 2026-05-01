@@ -73,12 +73,15 @@ class _PatternLockScreenState extends State<PatternLockScreen>
           child: Column(
             children: [
               const SizedBox(height: 20),
+
               Text(
                 widget.isSetup ? t.setup.pattern_create : t.setup.pattern_enter,
                 style: textTheme.displayLarge?.copyWith(fontSize: 28),
                 textAlign: TextAlign.center,
               ),
+
               const SizedBox(height: 12),
+
               Text(
                 isError
                     ? t.setup.pattern_short
@@ -91,7 +94,9 @@ class _PatternLockScreenState extends State<PatternLockScreen>
                 ),
                 textAlign: TextAlign.center,
               ),
+
               const Spacer(flex: 3),
+
               AnimatedBuilder(
                 animation: _shakeController,
                 builder: (context, child) {
@@ -122,14 +127,18 @@ class _PatternLockScreenState extends State<PatternLockScreen>
                   ),
                 ),
               ),
+
               const Spacer(),
+
               Image.asset(
                 AppAssets.logo,
                 height: 160,
                 width: 160,
                 fit: BoxFit.contain,
               ),
+
               const Spacer(flex: 3),
+
               FilledButton(
                 onPressed: (pattern != null && pattern!.length >= 4 && !isError)
                     ? _onSubmit
@@ -143,6 +152,7 @@ class _PatternLockScreenState extends State<PatternLockScreen>
                   style: textTheme.labelLarge?.copyWith(color: Colors.white),
                 ),
               ),
+
               const SizedBox(height: 24),
             ],
           ),
@@ -151,4 +161,3 @@ class _PatternLockScreenState extends State<PatternLockScreen>
     );
   }
 }
-
