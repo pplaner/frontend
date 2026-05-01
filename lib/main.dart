@@ -30,7 +30,7 @@ class MyApp extends ConsumerWidget {
     final t = context.t;
 
     return MaterialApp.router(
-      title: t.appName,
+      title: t.common.app_name,
       debugShowCheckedModeBanner: false,
 
       locale: TranslationProvider.of(context).flutterLocale,

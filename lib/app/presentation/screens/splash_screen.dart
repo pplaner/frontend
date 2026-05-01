@@ -83,7 +83,7 @@ class _SplashScreenState extends State<SplashScreen>
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  t.auth.welcome_title,
+                  t.widgets.welcome_title,
                   style: textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -95,4 +95,3 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 }
-

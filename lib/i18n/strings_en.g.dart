@@ -46,7 +46,6 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsCalendarEn calendar = TranslationsCalendarEn.internal(_root);
 	late final TranslationsProfileEn profile = TranslationsProfileEn.internal(_root);
 	late final TranslationsCategoryEn category = TranslationsCategoryEn.internal(_root);
-	late final TranslationsCommonEn common = TranslationsCommonEn.internal(_root);
 	late final TranslationsTimezonesEn timezones = TranslationsTimezonesEn.internal(_root);
 	late final TranslationsBottomNavEn bottomNav = TranslationsBottomNavEn.internal(_root);
 	late final TranslationsWidgetsEn widgets = TranslationsWidgetsEn.internal(_root);
@@ -90,6 +89,15 @@ class TranslationsCommonEn {
 
 	/// en: 'Loading...'
 	String get loading => 'Loading...';
+
+	/// en: 'Save'
+	String get save => 'Save';
+
+	/// en: 'Cancel'
+	String get cancel => 'Cancel';
+
+	/// en: 'Delete'
+	String get delete => 'Delete';
 }
 
 // Path: auth
@@ -100,173 +108,8 @@ class TranslationsAuthEn {
 
 	// Translations
 
-	/// en: 'Your plans under reliable protection'
-	String get welcome_title => 'Your plans under reliable protection';
-
-	/// en: 'Choose how to use'
-	String get welcome_subtitle => 'Choose how to use';
-
-	/// en: 'Create local vault'
-	String get create_local => 'Create local vault';
-
-	/// en: 'I already have an account'
-	String get already_have_account => 'I already have an account';
-
-	/// en: 'Authorization'
-	String get login_title => 'Authorization';
-
-	/// en: 'Create Account'
-	String get register_title => 'Create Account';
-
-	/// en: 'Email address'
-	String get email => 'Email address';
-
-	/// en: 'Password'
-	String get password => 'Password';
-
-	/// en: 'Repeat password'
-	String get confirm_password => 'Repeat password';
-
-	/// en: 'Don't have an account?'
-	String get no_account => 'Don\'t have an account?';
-
-	/// en: 'Already have an account?'
-	String get have_account => 'Already have an account?';
-
-	/// en: 'Enter email'
-	String get email_error => 'Enter email';
-
-	/// en: 'Invalid email format'
-	String get email_format_error => 'Invalid email format';
-
-	/// en: 'Enter password'
-	String get password_error => 'Enter password';
-
-	/// en: 'Minimum 6 characters'
-	String get password_length_error => 'Minimum 6 characters';
-
-	/// en: 'Passwords do not match'
-	String get passwords_not_match => 'Passwords do not match';
-}
-
-// Path: email_verify
-class TranslationsEmailVerifyEn {
-	TranslationsEmailVerifyEn.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Email Verification'
-	String get title => 'Email\nVerification';
-
-	/// en: 'We sent a code to'
-	String get sent_to => 'We sent a code to';
-
-	/// en: 'Verification code'
-	String get code_hint => 'Verification code';
-
-	/// en: 'Enter verification code'
-	String get code_error => 'Enter verification code';
-
-	/// en: 'Resend code'
-	String get resend => 'Resend code';
-
-	/// en: 'Code resent successfully'
-	String get resend_success => 'Code resent successfully';
-}
-
-// Path: security_methods
-class TranslationsSecurityMethodsEn {
-	TranslationsSecurityMethodsEn.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Security Method'
-	String get title => 'Security Method';
-
-	/// en: 'Choose a quick login method. A secret phrase will be mandatory in the next step.'
-	String get subtitle => 'Choose a quick login method. A secret phrase will be mandatory in the next step.';
-
-	/// en: 'PIN-code'
-	String get pin_title => 'PIN-code';
-
-	/// en: 'Quick access via 4-digit code'
-	String get pin_sub => 'Quick access via 4-digit code';
-
-	/// en: 'Pattern Lock'
-	String get pattern_title => 'Pattern Lock';
-
-	/// en: 'Protection with a unique gesture'
-	String get pattern_sub => 'Protection with a unique gesture';
-
-	/// en: 'Association Word'
-	String get word_title => 'Association Word';
-
-	/// en: 'Password with a hint for recovery'
-	String get word_sub => 'Password with a hint for recovery';
-
-	/// en: 'Identity Verification'
-	String get selection_title => 'Identity Verification';
-
-	/// en: 'Choose an unlock method to verify'
-	String get selection_subtitle => 'Choose an unlock method to verify';
-
-	/// en: 'Login via PIN-code'
-	String get method_pin => 'Login via PIN-code';
-
-	/// en: 'Pattern Lock'
-	String get method_pattern => 'Pattern Lock';
-
-	/// en: 'Association Word'
-	String get method_word => 'Association Word';
-
-	/// en: 'Seed Phrase (Master Key)'
-	String get method_seed => 'Seed Phrase (Master Key)';
-}
-
-// Path: setup
-class TranslationsSetupEn {
-	TranslationsSetupEn.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Create PIN-code'
-	String get pin_create => 'Create PIN-code';
-
-	/// en: 'Enter PIN-code'
-	String get pin_enter => 'Enter PIN-code';
-
-	/// en: 'For quick access to your plans'
-	String get pin_desc_setup => 'For quick access to your plans';
-
-	/// en: 'Enter your PIN-code to login'
-	String get pin_desc_login => 'Enter your PIN-code to login';
-
-	/// en: 'Create Pattern Lock'
-	String get pattern_create => 'Create Pattern Lock';
-
-	/// en: 'Enter Pattern Lock'
-	String get pattern_enter => 'Enter Pattern Lock';
-
-	/// en: 'Pattern too short!'
-	String get pattern_short => 'Pattern too short!';
-
-	/// en: 'Connect at least 4 dots'
-	String get pattern_desc_setup => 'Connect at least 4 dots';
-
-	/// en: 'Draw your pattern to login'
-	String get pattern_desc_login => 'Draw your pattern to login';
-
-	/// en: 'Think of an association'
-	String get word_create => 'Think of\nan association';
-
-	/// en: 'Enter association'
-	String get word_enter => 'Enter\nassociation';
+	/// en: 'Log In'
+	String get login => 'Log In';
 
 	/// en: 'Log Out'
 	String get logout => 'Log Out';
@@ -488,27 +331,6 @@ class TranslationsCategoryEn {
 	String get other => 'Other';
 }
 
-// Path: common
-class TranslationsCommonEn {
-	TranslationsCommonEn.internal(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Save'
-	String get save => 'Save';
-
-	/// en: 'Cancel'
-	String get cancel => 'Cancel';
-
-	/// en: 'Delete'
-	String get delete => 'Delete';
-
-	/// en: 'Back'
-	String get back => 'Back';
-}
-
 // Path: timezones
 class TranslationsTimezonesEn {
 	TranslationsTimezonesEn.internal(this._root);
@@ -570,6 +392,175 @@ class TranslationsWidgetsEn {
 
 	/// en: 'Progress'
 	String get progress => 'Progress';
+
+	/// en: 'Your plans under reliable protection'
+	String get welcome_title => 'Your plans under reliable protection';
+
+	/// en: 'Choose how to use'
+	String get welcome_subtitle => 'Choose how to use';
+
+	/// en: 'Create local vault'
+	String get create_local => 'Create local vault';
+
+	/// en: 'I already have an account'
+	String get already_have_account => 'I already have an account';
+
+	/// en: 'Authorization'
+	String get login_title => 'Authorization';
+
+	/// en: 'Create Account'
+	String get register_title => 'Create Account';
+
+	/// en: 'Email address'
+	String get email => 'Email address';
+
+	/// en: 'Password'
+	String get password => 'Password';
+
+	/// en: 'Repeat password'
+	String get confirm_password => 'Repeat password';
+
+	/// en: 'Don't have an account?'
+	String get no_account => 'Don\'t have an account?';
+
+	/// en: 'Already have an account?'
+	String get have_account => 'Already have an account?';
+
+	/// en: 'Enter email'
+	String get email_error => 'Enter email';
+
+	/// en: 'Invalid email format'
+	String get email_format_error => 'Invalid email format';
+
+	/// en: 'Enter password'
+	String get password_error => 'Enter password';
+
+	/// en: 'Minimum 6 characters'
+	String get password_length_error => 'Minimum 6 characters';
+
+	/// en: 'Passwords do not match'
+	String get passwords_not_match => 'Passwords do not match';
+}
+
+// Path: email_verify
+class TranslationsEmailVerifyEn {
+	TranslationsEmailVerifyEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Email Verification'
+	String get title => 'Email\nVerification';
+
+	/// en: 'We sent a code to'
+	String get sent_to => 'We sent a code to';
+
+	/// en: 'Verification code'
+	String get code_hint => 'Verification code';
+
+	/// en: 'Enter verification code'
+	String get code_error => 'Enter verification code';
+
+	/// en: 'Resend code'
+	String get resend => 'Resend code';
+
+	/// en: 'Code resent successfully'
+	String get resend_success => 'Code resent successfully';
+}
+
+// Path: security_methods
+class TranslationsSecurityMethodsEn {
+	TranslationsSecurityMethodsEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Security Method'
+	String get title => 'Security Method';
+
+	/// en: 'Choose a quick login method. A secret phrase will be mandatory in the next step.'
+	String get subtitle => 'Choose a quick login method. A secret phrase will be mandatory in the next step.';
+
+	/// en: 'PIN-code'
+	String get pin_title => 'PIN-code';
+
+	/// en: 'Quick access via 4-digit code'
+	String get pin_sub => 'Quick access via 4-digit code';
+
+	/// en: 'Pattern Lock'
+	String get pattern_title => 'Pattern Lock';
+
+	/// en: 'Protection with a unique gesture'
+	String get pattern_sub => 'Protection with a unique gesture';
+
+	/// en: 'Association Word'
+	String get word_title => 'Association Word';
+
+	/// en: 'Password with a hint for recovery'
+	String get word_sub => 'Password with a hint for recovery';
+
+	/// en: 'Identity Verification'
+	String get selection_title => 'Identity Verification';
+
+	/// en: 'Choose an unlock method to verify'
+	String get selection_subtitle => 'Choose an unlock method to verify';
+
+	/// en: 'Login via PIN-code'
+	String get method_pin => 'Login via PIN-code';
+
+	/// en: 'Pattern Lock'
+	String get method_pattern => 'Pattern Lock';
+
+	/// en: 'Association Word'
+	String get method_word => 'Association Word';
+
+	/// en: 'Seed Phrase (Master Key)'
+	String get method_seed => 'Seed Phrase (Master Key)';
+}
+
+// Path: setup
+class TranslationsSetupEn {
+	TranslationsSetupEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Create PIN-code'
+	String get pin_create => 'Create PIN-code';
+
+	/// en: 'Enter PIN-code'
+	String get pin_enter => 'Enter PIN-code';
+
+	/// en: 'For quick access to your plans'
+	String get pin_desc_setup => 'For quick access to your plans';
+
+	/// en: 'Enter your PIN-code to login'
+	String get pin_desc_login => 'Enter your PIN-code to login';
+
+	/// en: 'Create Pattern Lock'
+	String get pattern_create => 'Create Pattern Lock';
+
+	/// en: 'Enter Pattern Lock'
+	String get pattern_enter => 'Enter Pattern Lock';
+
+	/// en: 'Pattern too short!'
+	String get pattern_short => 'Pattern too short!';
+
+	/// en: 'Connect at least 4 dots'
+	String get pattern_desc_setup => 'Connect at least 4 dots';
+
+	/// en: 'Draw your pattern to login'
+	String get pattern_desc_login => 'Draw your pattern to login';
+
+	/// en: 'Think of an association'
+	String get word_create => 'Think of\nan association';
+
+	/// en: 'Enter association'
+	String get word_enter => 'Enter\nassociation';
+
 	/// en: 'Word must be at least 6 characters (no spaces, digits or signs)'
 	String get word_desc_setup => 'Word must be at least 6 characters (no spaces, digits or signs)';
 
@@ -642,69 +633,9 @@ extension on Translations {
 			'common.register' => 'Register',
 			'common.error_title' => 'Error',
 			'common.loading' => 'Loading...',
-			'auth.welcome_title' => 'Your plans under reliable protection',
-			'auth.welcome_subtitle' => 'Choose how to use',
-			'auth.create_local' => 'Create local vault',
-			'auth.already_have_account' => 'I already have an account',
-			'auth.login_title' => 'Authorization',
-			'auth.register_title' => 'Create Account',
-			'auth.email' => 'Email address',
-			'auth.password' => 'Password',
-			'auth.confirm_password' => 'Repeat password',
-			'auth.no_account' => 'Don\'t have an account?',
-			'auth.have_account' => 'Already have an account?',
-			'auth.email_error' => 'Enter email',
-			'auth.email_format_error' => 'Invalid email format',
-			'auth.password_error' => 'Enter password',
-			'auth.password_length_error' => 'Minimum 6 characters',
-			'auth.passwords_not_match' => 'Passwords do not match',
-			'email_verify.title' => 'Email\nVerification',
-			'email_verify.sent_to' => 'We sent a code to',
-			'email_verify.code_hint' => 'Verification code',
-			'email_verify.code_error' => 'Enter verification code',
-			'email_verify.resend' => 'Resend code',
-			'email_verify.resend_success' => 'Code resent successfully',
-			'security_methods.title' => 'Security Method',
-			'security_methods.subtitle' => 'Choose a quick login method. A secret phrase will be mandatory in the next step.',
-			'security_methods.pin_title' => 'PIN-code',
-			'security_methods.pin_sub' => 'Quick access via 4-digit code',
-			'security_methods.pattern_title' => 'Pattern Lock',
-			'security_methods.pattern_sub' => 'Protection with a unique gesture',
-			'security_methods.word_title' => 'Association Word',
-			'security_methods.word_sub' => 'Password with a hint for recovery',
-			'security_methods.selection_title' => 'Identity Verification',
-			'security_methods.selection_subtitle' => 'Choose an unlock method to verify',
-			'security_methods.method_pin' => 'Login via PIN-code',
-			'security_methods.method_pattern' => 'Pattern Lock',
-			'security_methods.method_word' => 'Association Word',
-			'security_methods.method_seed' => 'Seed Phrase (Master Key)',
-			'setup.pin_create' => 'Create PIN-code',
-			'setup.pin_enter' => 'Enter PIN-code',
-			'setup.pin_desc_setup' => 'For quick access to your plans',
-			'setup.pin_desc_login' => 'Enter your PIN-code to login',
-			'setup.pattern_create' => 'Create Pattern Lock',
-			'setup.pattern_enter' => 'Enter Pattern Lock',
-			'setup.pattern_short' => 'Pattern too short!',
-			'setup.pattern_desc_setup' => 'Connect at least 4 dots',
-			'setup.pattern_desc_login' => 'Draw your pattern to login',
-			'setup.word_create' => 'Think of\nan association',
-			'setup.word_enter' => 'Enter\nassociation',
-			'setup.word_desc_setup' => 'Word must be at least 6 characters (no spaces, digits or signs)',
-			'setup.word_desc_login' => 'Enter your association word to login',
-			'setup.word_hint' => 'Enter association word',
-			'seed.title' => 'Your Secret Phrase',
-			'seed.warning' => 'Write these 12 words on paper and keep them in a safe place. If you lose them, access to your data cannot be restored.',
-			'seed.copy' => 'Copy to clipboard',
-			'seed.copy_done' => 'Phrase copied to clipboard',
-			'seed.saved_button' => 'I have written these words',
-			'seed.login_title' => 'Enter your\nsecret phrase',
-			'seed.login_subtitle' => 'Enter all 12 words in the correct order',
-			'seed.word_hint' => 'word',
-			'seed.verify_title' => 'Record Verification',
-			'seed.verify_error' => 'Words do not match. Try again!',
-			'seed.verify_desc' => 'Please enter the specified words from your secret phrase',
-			'seed.verify_input_hint' => 'Enter word...',
-			'appName' => 'PPlaner',
+			'common.save' => 'Save',
+			'common.cancel' => 'Cancel',
+			'common.delete' => 'Delete',
 			'auth.login' => 'Log In',
 			'auth.logout' => 'Log Out',
 			'auth.createLocalStorage' => 'Create local storage',
@@ -774,10 +705,6 @@ extension on Translations {
 			'category.personal' => 'Personal',
 			'category.health' => 'Health',
 			'category.other' => 'Other',
-			'common.save' => 'Save',
-			'common.cancel' => 'Cancel',
-			'common.delete' => 'Delete',
-			'common.back' => 'Back',
 			'timezones.ukraine' => 'Ukraine',
 			'timezones.poland' => 'Poland',
 			'timezones.germany' => 'Germany',
@@ -790,6 +717,68 @@ extension on Translations {
 			'widgets.tasks' => 'Today\'s tasks',
 			'widgets.calendar' => 'Calendar',
 			'widgets.progress' => 'Progress',
+			'widgets.welcome_title' => 'Your plans under reliable protection',
+			'widgets.welcome_subtitle' => 'Choose how to use',
+			'widgets.create_local' => 'Create local vault',
+			'widgets.already_have_account' => 'I already have an account',
+			'widgets.login_title' => 'Authorization',
+			'widgets.register_title' => 'Create Account',
+			'widgets.email' => 'Email address',
+			'widgets.password' => 'Password',
+			'widgets.confirm_password' => 'Repeat password',
+			'widgets.no_account' => 'Don\'t have an account?',
+			'widgets.have_account' => 'Already have an account?',
+			'widgets.email_error' => 'Enter email',
+			'widgets.email_format_error' => 'Invalid email format',
+			'widgets.password_error' => 'Enter password',
+			'widgets.password_length_error' => 'Minimum 6 characters',
+			'widgets.passwords_not_match' => 'Passwords do not match',
+			'email_verify.title' => 'Email\nVerification',
+			'email_verify.sent_to' => 'We sent a code to',
+			'email_verify.code_hint' => 'Verification code',
+			'email_verify.code_error' => 'Enter verification code',
+			'email_verify.resend' => 'Resend code',
+			'email_verify.resend_success' => 'Code resent successfully',
+			'security_methods.title' => 'Security Method',
+			'security_methods.subtitle' => 'Choose a quick login method. A secret phrase will be mandatory in the next step.',
+			'security_methods.pin_title' => 'PIN-code',
+			'security_methods.pin_sub' => 'Quick access via 4-digit code',
+			'security_methods.pattern_title' => 'Pattern Lock',
+			'security_methods.pattern_sub' => 'Protection with a unique gesture',
+			'security_methods.word_title' => 'Association Word',
+			'security_methods.word_sub' => 'Password with a hint for recovery',
+			'security_methods.selection_title' => 'Identity Verification',
+			'security_methods.selection_subtitle' => 'Choose an unlock method to verify',
+			'security_methods.method_pin' => 'Login via PIN-code',
+			'security_methods.method_pattern' => 'Pattern Lock',
+			'security_methods.method_word' => 'Association Word',
+			'security_methods.method_seed' => 'Seed Phrase (Master Key)',
+			'setup.pin_create' => 'Create PIN-code',
+			'setup.pin_enter' => 'Enter PIN-code',
+			'setup.pin_desc_setup' => 'For quick access to your plans',
+			'setup.pin_desc_login' => 'Enter your PIN-code to login',
+			'setup.pattern_create' => 'Create Pattern Lock',
+			'setup.pattern_enter' => 'Enter Pattern Lock',
+			'setup.pattern_short' => 'Pattern too short!',
+			'setup.pattern_desc_setup' => 'Connect at least 4 dots',
+			'setup.pattern_desc_login' => 'Draw your pattern to login',
+			'setup.word_create' => 'Think of\nan association',
+			'setup.word_enter' => 'Enter\nassociation',
+			'setup.word_desc_setup' => 'Word must be at least 6 characters (no spaces, digits or signs)',
+			'setup.word_desc_login' => 'Enter your association word to login',
+			'setup.word_hint' => 'Enter association word',
+			'seed.title' => 'Your Secret Phrase',
+			'seed.warning' => 'Write these 12 words on paper and keep them in a safe place. If you lose them, access to your data cannot be restored.',
+			'seed.copy' => 'Copy to clipboard',
+			'seed.copy_done' => 'Phrase copied to clipboard',
+			'seed.saved_button' => 'I have written these words',
+			'seed.login_title' => 'Enter your\nsecret phrase',
+			'seed.login_subtitle' => 'Enter all 12 words in the correct order',
+			'seed.word_hint' => 'word',
+			'seed.verify_title' => 'Record Verification',
+			'seed.verify_error' => 'Words do not match. Try again!',
+			'seed.verify_desc' => 'Please enter the specified words from your secret phrase',
+			'seed.verify_input_hint' => 'Enter word...',
 			_ => null,
 		};
 	}

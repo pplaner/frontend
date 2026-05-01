@@ -25,7 +25,7 @@ class WelcomeScreen extends StatelessWidget {
             children: [
               const Spacer(flex: 3),
 
-              Text(t.appName, style: textTheme.displayLarge),
+              Text(t.common.app_name, style: textTheme.displayLarge),
 
               const SizedBox(height: 24),
 
@@ -85,7 +85,7 @@ class WelcomeScreen extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 51),
                   foregroundColor: colorScheme.primary,
-                  side: const BorderSide(color: colorScheme.primary),
+                  side: BorderSide(color: colorScheme.primary),
                   backgroundColor: colors.surface,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
