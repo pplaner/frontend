@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/app/navigation/app_router.dart';
-import 'package:frontend/features/notes/presentation/navigation/notes_routes.dart';
+import 'package:frontend/features/auth/presentation/navigation/auth_routes.dart';
 import 'package:frontend/features/vault/presentation/navigation/vault_navigator.dart';
 
 class AppVaultNavigator implements VaultNavigator {
@@ -9,12 +9,7 @@ class AppVaultNavigator implements VaultNavigator {
   final Ref ref;
 
   @override
-  void onAuth() {
-    // TO-DO: implement onAuth
-  }
-
-  @override
-  void onVaultUnlocked() {
-    ref.read(appRouterProvider).go(const NotesRoute().location);
+  void onAuthSelected() {
+    ref.read(appRouterProvider).go(const LoginRoute().location);
   }
 }
