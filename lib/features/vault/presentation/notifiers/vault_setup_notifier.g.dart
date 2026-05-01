@@ -41,7 +41,7 @@ final class VaultSetupProvider
   }
 }
 
-String _$vaultSetupHash() => r'13df95a16e2ce936aae3bab37daa579ccabf1497';
+String _$vaultSetupHash() => r'9062183887dacdfcea4d11e171824922ca3132f4';
 
 abstract class _$VaultSetup extends $Notifier<VaultSetupData> {
   VaultSetupData build();

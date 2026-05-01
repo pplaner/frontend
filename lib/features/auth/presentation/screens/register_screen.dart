@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/ui/widgets/back_app_bar.dart';
-import 'package:frontend/i18n/strings.g.dart'; // Імпорт для локалізації
+import 'package:frontend/core/utils/navigation_helper.dart';
+import 'package:frontend/core/utils/validators.dart';
+import 'package:frontend/features/auth/presentation/widgets/email_form_field.dart';
+import 'package:frontend/features/auth/presentation/widgets/password_form_field.dart';
+import 'package:frontend/i18n/strings.g.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,8 +20,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  bool _obscurePassword = true;
-  bool _obscureConfirm = true;
   bool _isLoading = false;
 
   @override
@@ -25,6 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+
     super.dispose();
   }
 
@@ -43,11 +46,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // Отримуємо адаптивні кольори
     final colors = AppColors.of(context);
 
     return Scaffold(
-      backgroundColor: colors.background, // Адаптивний фон
+      backgroundColor: colors.background,
       appBar: const BackAppBar(),
       body: SafeArea(
         top: false,
@@ -59,88 +61,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 24),
+
                 Text(
-                  t.auth.register_title, // "Створення акаунту"
+                  t.widgets.register_title,
                   style: theme.textTheme.displayLarge?.copyWith(
                     color: colors.textPrimary,
                   ),
                   textAlign: TextAlign.center,
                 ),
+
                 const SizedBox(height: 40),
 
-                // --- Поле Email ---
-                _AuthTextField(
-                  controller: _emailController,
-                  hint: t.auth.email,
-                  keyboardType: TextInputType.emailAddress,
-                  colors: colors,
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty)
-                      return t.auth.email_error;
-                    final emailRegex = RegExp(
-                      r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$',
-                    );
-                    if (!emailRegex.hasMatch(v.trim()))
-                      return t.auth.email_format_error;
-                    return null;
-                  },
-                ),
+                EmailFormField(controller: _emailController),
+
                 const SizedBox(height: 16),
 
-                // --- Поле Пароль ---
-                _AuthTextField(
-                  controller: _passwordController,
-                  hint: t.auth.password,
-                  obscureText: _obscurePassword,
-                  colors: colors,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: colors.textSecondary,
-                    ),
-                    onPressed: () =>
-                        setState(() => _obscurePassword = !_obscurePassword),
-                  ),
-                  validator: (v) {
-                    if (v == null || v.isEmpty) return t.auth.password_error;
-                    if (v.length < 6) return t.auth.password_length_error;
-                    return null;
-                  },
-                ),
+                PasswordFormField(controller: _passwordController),
+
                 const SizedBox(height: 16),
 
-                // --- Повтор пароля ---
-                _AuthTextField(
+                PasswordFormField(
                   controller: _confirmPasswordController,
-                  hint: t.auth.confirm_password,
-                  obscureText: _obscureConfirm,
-                  colors: colors,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscureConfirm
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: colors.textSecondary,
-                    ),
-                    onPressed: () =>
-                        setState(() => _obscureConfirm = !_obscureConfirm),
+                  hintText: t.widgets.confirm_password,
+                  validator: (v) => passwordConfirmValidator(
+                    v,
+                    password: _passwordController.text,
+                    emptyError: context.t.widgets.confirm_password,
+                    noMatchError: context.t.widgets.passwords_not_match,
                   ),
-                  validator: (v) {
-                    if (v == null || v.isEmpty)
-                      return t
-                          .auth
-                          .confirm_password; // Або окремий ключ confirm_password_error
-                    if (v != _passwordController.text)
-                      return t.auth.passwords_not_match;
-                    return null;
-                  },
                 ),
+
                 const SizedBox(height: 32),
 
                 _PrimaryButton(
-                  label: t.common.register, // "Зареєструватись"
+                  label: t.common.register,
                   isLoading: _isLoading,
                   onPressed: _onRegister,
                 ),
@@ -149,14 +103,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Column(
                   children: [
                     Text(
-                      t.auth.have_account, // "Вже маєте акаунт?"
+                      t.widgets.have_account,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: colors.textSecondary,
                       ),
                     ),
                     const SizedBox(height: 4),
                     GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
+                      onTap: () => context.safePop(),
                       child: Text(
                         t.common.login, // "Увійти"
                         style: theme.textTheme.bodyMedium?.copyWith(
@@ -276,4 +230,3 @@ class _PrimaryButton extends StatelessWidget {
     );
   }
 }
-

@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/ui/widgets/back_app_bar.dart';
+import 'package:frontend/core/utils/validators.dart';
+import 'package:frontend/features/auth/presentation/navigation/auth_routes.dart';
+import 'package:frontend/features/auth/presentation/widgets/email_form_field.dart';
+import 'package:frontend/features/auth/presentation/widgets/password_form_field.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginScreen> createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  bool _obscurePassword = true;
   bool _isLoading = false;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+
     super.dispose();
   }
 
@@ -49,7 +53,6 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: colors.background,
       appBar: const BackAppBar(),
       body: SafeArea(
-        top: false,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: Form(
@@ -58,60 +61,21 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: 24),
+
                 Text(
-                  t.auth.login_title,
-                  style: theme.textTheme.displayLarge, // колір вже в textTheme
+                  context.t.widgets.login_title,
+                  style: theme.textTheme.displayLarge,
                   textAlign: TextAlign.center,
                 ),
+
                 const SizedBox(height: 40),
 
-                // ── Email ──
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  style: theme.textTheme.bodyLarge,
-                  decoration: _inputDecoration(
-                    hint: t.auth.email,
-                    colors: colors,
-                  ),
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty)
-                      return t.auth.email_error;
-                    final emailRegex = RegExp(
-                      r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$',
-                    );
-                    if (!emailRegex.hasMatch(v.trim()))
-                      return t.auth.email_format_error;
-                    return null;
-                  },
-                ),
+                EmailFormField(controller: _emailController),
+
                 const SizedBox(height: 16),
 
-                // ── Пароль ──
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  style: theme.textTheme.bodyLarge,
-                  decoration: _inputDecoration(
-                    hint: t.auth.password,
-                    colors: colors,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off_outlined
-                            : Icons.visibility_outlined,
-                        color: colors.textSecondary,
-                      ),
-                      onPressed: () =>
-                          setState(() => _obscurePassword = !_obscurePassword),
-                    ),
-                  ),
-                  validator: (v) {
-                    if (v == null || v.isEmpty) return t.auth.password_error;
-                    if (v.length < 6) return t.auth.password_length_error;
-                    return null;
-                  },
-                ),
+                PasswordFormField(controller: _passwordController),
+
                 const SizedBox(height: 32),
 
                 // ── Кнопка входу ──
@@ -131,28 +95,29 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         )
                       : Text(
-                          t.common.login,
+                          context.t.common.login,
                           style: theme.textTheme.labelLarge?.copyWith(
-                            color:
-                                Colors.white, // консистентно з рештою екранів
+                            color: Colors.white,
                           ),
                         ),
                 ),
+
                 const SizedBox(height: 24),
 
                 // ── Посилання на реєстрацію ──
                 Column(
                   children: [
                     Text(
-                      t.auth.no_account,
-                      style:
-                          theme.textTheme.bodyMedium, // колір вже в textTheme
+                      context.t.widgets.no_account,
+                      style: theme.textTheme.bodyMedium,
                     ),
+
                     const SizedBox(height: 4),
+
                     GestureDetector(
-                      onTap: () => Navigator.of(context).pushNamed('/register'),
+                      onTap: () => const RegisterRoute().push<void>(context),
                       child: Text(
-                        t.common.register,
+                        context.t.common.register,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.bold,
@@ -163,6 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 32),
               ],
             ),
@@ -203,4 +169,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
