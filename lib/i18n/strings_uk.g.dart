@@ -40,15 +40,14 @@ class TranslationsUk extends Translations with BaseTranslations<AppLocale, Trans
 
 	// Translations
 	@override late final _TranslationsCommonUk common = _TranslationsCommonUk._(_root);
-	@override late final _TranslationsAuthUk auth = _TranslationsAuthUk._(_root);
 	@override late final _TranslationsHomeUk home = _TranslationsHomeUk._(_root);
 	@override late final _TranslationsCalendarUk calendar = _TranslationsCalendarUk._(_root);
 	@override late final _TranslationsProfileUk profile = _TranslationsProfileUk._(_root);
 	@override late final _TranslationsCategoryUk category = _TranslationsCategoryUk._(_root);
-	@override late final _TranslationsCommonUk common = _TranslationsCommonUk._(_root);
 	@override late final _TranslationsTimezonesUk timezones = _TranslationsTimezonesUk._(_root);
 	@override late final _TranslationsBottomNavUk bottomNav = _TranslationsBottomNavUk._(_root);
 	@override late final _TranslationsWidgetsUk widgets = _TranslationsWidgetsUk._(_root);
+	@override late final _TranslationsAuthUk auth = _TranslationsAuthUk._(_root);
 	@override late final _TranslationsEmailVerifyUk email_verify = _TranslationsEmailVerifyUk._(_root);
 	@override late final _TranslationsSecurityMethodsUk security_methods = _TranslationsSecurityMethodsUk._(_root);
 	@override late final _TranslationsSetupUk setup = _TranslationsSetupUk._(_root);
@@ -68,24 +67,14 @@ class _TranslationsCommonUk extends TranslationsCommonEn {
 	@override String get kContinue => 'Продовжити';
 	@override String get confirm => 'Підтвердити';
 	@override String get login => 'Увійти';
-	@override String get register => 'Зареєструватись';
-	@override String get error_title => 'Помилка';
-	@override String get loading => 'Завантаження...';
-}
-
-// Path: auth
-class _TranslationsAuthUk extends TranslationsAuthEn {
-	_TranslationsAuthUk._(TranslationsUk root) : this._root = root, super.internal(root);
-
-	final TranslationsUk _root; // ignore: unused_field
-
-	// Translations
-	@override String get login => 'Увійти';
 	@override String get logout => 'Вийти';
 	@override String get createLocalStorage => 'Створити локальне сховище';
 	@override String get haveAccount => 'У мене вже є акаунт';
 	@override String get tagline => 'Ваші плани під надійним захистом';
 	@override String get chooseMethod => 'Оберіть спосіб використання';
+	@override String get save => 'Зберегти';
+	@override String get cancel => 'Скасувати';
+	@override String get delete => 'Видалити';
 }
 
 // Path: home
@@ -189,19 +178,6 @@ class _TranslationsCategoryUk extends TranslationsCategoryEn {
 	@override String get other => 'Інше';
 }
 
-// Path: common
-class _TranslationsCommonUk extends TranslationsCommonEn {
-	_TranslationsCommonUk._(TranslationsUk root) : this._root = root, super.internal(root);
-
-	final TranslationsUk _root; // ignore: unused_field
-
-	// Translations
-	@override String get save => 'Зберегти';
-	@override String get cancel => 'Скасувати';
-	@override String get delete => 'Видалити';
-	@override String get back => 'Назад';
-}
-
 // Path: timezones
 class _TranslationsTimezonesUk extends TranslationsTimezonesEn {
 	_TranslationsTimezonesUk._(TranslationsUk root) : this._root = root, super.internal(root);
@@ -239,6 +215,18 @@ class _TranslationsWidgetsUk extends TranslationsWidgetsEn {
 	@override String get tasks => 'Задачі на сьогодні';
 	@override String get calendar => 'Календар';
 	@override String get progress => 'Прогрес';
+	@override String get register => 'Зареєструватись';
+	@override String get error_title => 'Помилка';
+	@override String get loading => 'Завантаження...';
+}
+
+// Path: auth
+class _TranslationsAuthUk extends TranslationsAuthEn {
+	_TranslationsAuthUk._(TranslationsUk root) : this._root = root, super.internal(root);
+
+	final TranslationsUk _root; // ignore: unused_field
+
+	// Translations
 	@override String get welcome_title => 'Ваші плани під надійним захистом';
 	@override String get welcome_subtitle => 'Оберіть спосіб використання';
 	@override String get create_local => 'Створити локальне сховище';
@@ -353,78 +341,14 @@ extension on TranslationsUk {
 			'common.kContinue' => 'Продовжити',
 			'common.confirm' => 'Підтвердити',
 			'common.login' => 'Увійти',
-			'common.register' => 'Зареєструватись',
-			'common.error_title' => 'Помилка',
-			'common.loading' => 'Завантаження...',
-			'auth.welcome_title' => 'Ваші плани під надійним захистом',
-			'auth.welcome_subtitle' => 'Оберіть спосіб використання',
-			'auth.create_local' => 'Створити локальне сховище',
-			'auth.already_have_account' => 'У мене вже є акаунт',
-			'auth.login_title' => 'Авторизація',
-			'auth.register_title' => 'Створення акаунту',
-			'auth.email' => 'Електронна пошта',
-			'auth.password' => 'Пароль',
-			'auth.confirm_password' => 'Повторіть пароль',
-			'auth.no_account' => 'Ще не маєте акаунту?',
-			'auth.have_account' => 'Вже маєте акаунт?',
-			'auth.email_error' => 'Введіть email',
-			'auth.email_format_error' => 'Невірний формат email',
-			'auth.password_error' => 'Введіть пароль',
-			'auth.password_length_error' => 'Мінімум 6 символів',
-			'auth.passwords_not_match' => 'Паролі не співпадають',
-			'email_verify.title' => 'Підтвердження\nелектронної пошти',
-			'email_verify.sent_to' => 'Ми надіслали код на',
-			'email_verify.code_hint' => 'Код підтвердження',
-			'email_verify.code_error' => 'Введіть код підтвердження',
-			'email_verify.resend' => 'Надіслати повторно',
-			'email_verify.resend_success' => 'Код відправлено повторно',
-			'security_methods.title' => 'Метод захисту',
-			'security_methods.subtitle' => 'Оберіть спосіб швидкого входу. Секретна фраза буде створена обов’язково на наступному кроці.',
-			'security_methods.pin_title' => 'PIN-код',
-			'security_methods.pin_sub' => 'Швидкий доступ через 4-значний код',
-			'security_methods.pattern_title' => 'Графічний ключ',
-			'security_methods.pattern_sub' => 'Захист за допомогою унікального жесту',
-			'security_methods.word_title' => 'Слово-асоціація',
-			'security_methods.word_sub' => 'Пароль із підказкою для відновлення',
-			'security_methods.selection_title' => 'Підтвердження особи',
-			'security_methods.selection_subtitle' => 'Оберіть метод розблокування для перевірки',
-			'security_methods.method_pin' => 'Вхід через PIN-код',
-			'security_methods.method_pattern' => 'Графічний ключ',
-			'security_methods.method_word' => 'Слово-асоціація',
-			'security_methods.method_seed' => 'Seed-фраза (Master Key)',
-			'setup.pin_create' => 'Створення PIN-коду',
-			'setup.pin_enter' => 'Введіть PIN-код',
-			'setup.pin_desc_setup' => 'Для швидкого доступу до ваших планів',
-			'setup.pin_desc_login' => 'Введіть ваш PIN-код для входу',
-			'setup.pattern_create' => 'Придумайте графічний ключ',
-			'setup.pattern_enter' => 'Введіть графічний ключ',
-			'setup.pattern_short' => 'Занадто короткий ключ!',
-			'setup.pattern_desc_setup' => 'З\'єднайте щонайменше 4 точки',
-			'setup.pattern_desc_login' => 'Намалюйте ваш графічний ключ',
-			'setup.word_create' => 'Придумайте\nасоціацію',
-			'setup.word_enter' => 'Введіть\nасоціацію',
-			'setup.word_desc_setup' => 'Слово має містити щонайменше 6 символів (без пробілів, цифр та знаків)',
-			'setup.word_desc_login' => 'Введіть ваше слово-асоціацію для входу',
-			'setup.word_hint' => 'Введіть слово-асоціацію',
-			'seed.title' => 'Ваша секретна фраза',
-			'seed.warning' => 'Запишіть ці 12 слів на папері та зберігайте їх у безпечному місці. Якщо ви їх загубите, доступ до ваших даних буде неможливо відновити.',
-			'seed.copy' => 'Скопіювати в буфер',
-			'seed.copy_done' => 'Фразу скопійовано у буфер',
-			'seed.saved_button' => 'Я записав/ла ці слова',
-			'seed.login_title' => 'Введіть вашу\nсекретну фразу',
-			'seed.login_subtitle' => 'Введіть усі 12 слів у правильному порядку',
-			'seed.word_hint' => 'слово',
-			'seed.verify_title' => 'Перевірка запису',
-			'seed.verify_error' => 'Слова не збігаються. Спробуйте ще раз!',
-			'seed.verify_desc' => 'Будь ласка, введіть вказані слова з вашої секретної фрази',
-			'seed.verify_input_hint' => 'Введіть слово...',
-			'appName' => 'PPlaner',
-			'auth.login' => 'Увійти',
-			'auth.logout' => 'Вийти',
-			'auth.createLocalStorage' => 'Створити локальне сховище',
-			'auth.haveAccount' => 'У мене вже є акаунт',
-			'auth.tagline' => 'Ваші плани під надійним захистом',
-			'auth.chooseMethod' => 'Оберіть спосіб використання',
+			'common.logout' => 'Вийти',
+			'common.createLocalStorage' => 'Створити локальне сховище',
+			'common.haveAccount' => 'У мене вже є акаунт',
+			'common.tagline' => 'Ваші плани під надійним захистом',
+			'common.chooseMethod' => 'Оберіть спосіб використання',
+			'common.save' => 'Зберегти',
+			'common.cancel' => 'Скасувати',
+			'common.delete' => 'Видалити',
 			'home.today' => 'Сьогодні',
 			'home.completed' => 'Завершені',
 			'home.newTask' => 'Нове завдання',
@@ -488,10 +412,6 @@ extension on TranslationsUk {
 			'category.personal' => 'Особисте',
 			'category.health' => 'Здоров\'я',
 			'category.other' => 'Інше',
-			'common.save' => 'Зберегти',
-			'common.cancel' => 'Скасувати',
-			'common.delete' => 'Видалити',
-			'common.back' => 'Назад',
 			'timezones.ukraine' => 'Україна',
 			'timezones.poland' => 'Польща',
 			'timezones.germany' => 'Німеччина',
@@ -504,6 +424,71 @@ extension on TranslationsUk {
 			'widgets.tasks' => 'Задачі на сьогодні',
 			'widgets.calendar' => 'Календар',
 			'widgets.progress' => 'Прогрес',
+			'widgets.register' => 'Зареєструватись',
+			'widgets.error_title' => 'Помилка',
+			'widgets.loading' => 'Завантаження...',
+			'auth.welcome_title' => 'Ваші плани під надійним захистом',
+			'auth.welcome_subtitle' => 'Оберіть спосіб використання',
+			'auth.create_local' => 'Створити локальне сховище',
+			'auth.already_have_account' => 'У мене вже є акаунт',
+			'auth.login_title' => 'Авторизація',
+			'auth.register_title' => 'Створення акаунту',
+			'auth.email' => 'Електронна пошта',
+			'auth.password' => 'Пароль',
+			'auth.confirm_password' => 'Повторіть пароль',
+			'auth.no_account' => 'Ще не маєте акаунту?',
+			'auth.have_account' => 'Вже маєте акаунт?',
+			'auth.email_error' => 'Введіть email',
+			'auth.email_format_error' => 'Невірний формат email',
+			'auth.password_error' => 'Введіть пароль',
+			'auth.password_length_error' => 'Мінімум 6 символів',
+			'auth.passwords_not_match' => 'Паролі не співпадають',
+			'email_verify.title' => 'Підтвердження\nелектронної пошти',
+			'email_verify.sent_to' => 'Ми надіслали код на',
+			'email_verify.code_hint' => 'Код підтвердження',
+			'email_verify.code_error' => 'Введіть код підтвердження',
+			'email_verify.resend' => 'Надіслати повторно',
+			'email_verify.resend_success' => 'Код відправлено повторно',
+			'security_methods.title' => 'Метод захисту',
+			'security_methods.subtitle' => 'Оберіть спосіб швидкого входу. Секретна фраза буде створена обов’язково на наступному кроці.',
+			'security_methods.pin_title' => 'PIN-код',
+			'security_methods.pin_sub' => 'Швидкий доступ через 4-значний код',
+			'security_methods.pattern_title' => 'Графічний ключ',
+			'security_methods.pattern_sub' => 'Захист за допомогою унікального жесту',
+			'security_methods.word_title' => 'Слово-асоціація',
+			'security_methods.word_sub' => 'Пароль із підказкою для відновлення',
+			'security_methods.selection_title' => 'Підтвердження особи',
+			'security_methods.selection_subtitle' => 'Оберіть метод розблокування для перевірки',
+			'security_methods.method_pin' => 'Вхід через PIN-код',
+			'security_methods.method_pattern' => 'Графічний ключ',
+			'security_methods.method_word' => 'Слово-асоціація',
+			'security_methods.method_seed' => 'Seed-фраза (Master Key)',
+			'setup.pin_create' => 'Створення PIN-коду',
+			'setup.pin_enter' => 'Введіть PIN-код',
+			'setup.pin_desc_setup' => 'Для швидкого доступу до ваших планів',
+			'setup.pin_desc_login' => 'Введіть ваш PIN-код для входу',
+			'setup.pattern_create' => 'Придумайте графічний ключ',
+			'setup.pattern_enter' => 'Введіть графічний ключ',
+			'setup.pattern_short' => 'Занадто короткий ключ!',
+			'setup.pattern_desc_setup' => 'З\'єднайте щонайменше 4 точки',
+			'setup.pattern_desc_login' => 'Намалюйте ваш графічний ключ',
+			'setup.word_create' => 'Придумайте\nасоціацію',
+			'setup.word_enter' => 'Введіть\nасоціацію',
+			'setup.word_desc_setup' => 'Слово має містити щонайменше 6 символів (без пробілів, цифр та знаків)',
+			'setup.word_desc_login' => 'Введіть ваше слово-асоціацію для входу',
+			'setup.word_hint' => 'Введіть слово-асоціацію',
+			'seed.title' => 'Ваша секретна фраза',
+			'seed.warning' => 'Запишіть ці 12 слів на папері та зберігайте їх у безпечному місці. Якщо ви їх загубите, доступ до ваших даних буде неможливо відновити.',
+			'seed.copy' => 'Скопіювати в буфер',
+			'seed.copy_done' => 'Фразу скопійовано у буфер',
+			'seed.saved_button' => 'Я записав/ла ці слова',
+			'seed.login_title' => 'Введіть вашу\nсекретну фразу',
+			'seed.login_subtitle' => 'Введіть усі 12 слів у правильному порядку',
+			'seed.word_hint' => 'слово',
+			'seed.verify_title' => 'Перевірка запису',
+			'seed.verify_error' => 'Слова не збігаються. Спробуйте ще раз!',
+			'seed.verify_desc' => 'Будь ласка, введіть вказані слова з вашої секретної фрази',
+			'seed.verify_input_hint' => 'Введіть слово...',
 			_ => null,
 		};
 	}

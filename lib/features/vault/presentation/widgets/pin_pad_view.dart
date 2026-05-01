@@ -1,37 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/core/utils/app_assets.dart';
 import 'package:frontend/core/theme/app_colors.dart';
-import 'package:frontend/i18n/strings.g.dart';
 
-class CreatePinScreen extends StatefulWidget {
-  final bool isSetup;
+class PinPadView extends StatefulWidget {
+  const PinPadView({
+    required this.buttonTitle,
+    required this.onPinCompleted,
+    super.key,
+  });
 
-  const CreatePinScreen({super.key, this.isSetup = false});
+  final String buttonTitle;
+  final ValueChanged<String> onPinCompleted;
 
   @override
-  State<CreatePinScreen> createState() => _CreatePinScreenState();
+  State<PinPadView> createState() => _PinPadViewState();
 }
 
-class _CreatePinScreenState extends State<CreatePinScreen> {
-  String pinCode = '';
+class _PinPadViewState extends State<PinPadView> {
+  String _pinCode = '';
+  static const int _pinLength = 4;
 
   void _addDigit(String digit) {
-    if (pinCode.length < 4) {
-      setState(() => pinCode += digit);
+    if (_pinCode.length < _pinLength) {
+      setState(() => _pinCode += digit);
     }
   }
 
   void _removeDigit() {
-    if (pinCode.isNotEmpty) {
-      setState(() => pinCode = pinCode.substring(0, pinCode.length - 1));
+    if (_pinCode.isNotEmpty) {
+      setState(() => _pinCode = _pinCode.substring(0, _pinCode.length - 1));
     }
   }
 
   void _onSubmit() {
-    if (widget.isSetup) {
-      Navigator.pushNamed(context, '/secret-setup');
-    } else {
-      // TODO: перевірити PIN і увійти
+    if (_pinCode.length == _pinLength) {
+      widget.onPinCompleted(_pinCode);
     }
   }
 
@@ -40,63 +42,37 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
     final textTheme = Theme.of(context).textTheme;
     final colors = AppColors.of(context);
 
-    return Scaffold(
-      backgroundColor: colors.surface,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new, color: AppColors.primary, size: 20),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              Text(
-                widget.isSetup ? t.setup.pin_create : t.setup.pin_enter,
-                style: textTheme.displayLarge?.copyWith(fontSize: 26),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                widget.isSetup ? t.setup.pin_desc_setup : t.setup.pin_desc_login,
-                style: textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              Image.asset(AppAssets.logo, height: 100, width: 100, fit: BoxFit.contain),
-              const Spacer(),
-              _buildPinDots(pinCode.length),
-              const SizedBox(height: 30),
-              _buildKeypad(colors),
-              const Spacer(),
-              FilledButton(
-                onPressed: pinCode.length == 4 ? _onSubmit : null,
-                style: FilledButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 56),
-                  backgroundColor: AppColors.primary,
-                ),
-                child: Text(
-                  widget.isSetup ? t.common.register : t.common.login,
-                  style: textTheme.labelLarge?.copyWith(color: Colors.white),
-                ),
-              ),
-              const SizedBox(height: 16),
-            ],
+    return Column(
+      children: [
+        const Spacer(),
+
+        _buildPinDots(_pinCode.length),
+
+        const SizedBox(height: 30),
+
+        _buildKeypad(colors),
+
+        const Spacer(),
+
+        FilledButton(
+          onPressed: _pinCode.length == _pinLength ? _onSubmit : null,
+          style: FilledButton.styleFrom(
+            minimumSize: const Size(double.infinity, 56),
+            backgroundColor: AppColors.primary,
+          ),
+          child: Text(
+            widget.buttonTitle,
+            style: textTheme.labelLarge?.copyWith(color: Colors.white),
           ),
         ),
-      ),
+      ],
     );
   }
 
   Widget _buildPinDots(int filledLength) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(4, (index) {
+      children: List.generate(_pinLength, (index) {
         final isFilled = index < filledLength;
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -164,7 +140,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
           child: Text(
             digit,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: colors.textPrimary,           // адаптивний
+              color: colors.textPrimary, // адаптивний
             ),
           ),
         ),
@@ -182,7 +158,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
         child: Center(
           child: Icon(
             Icons.backspace_outlined,
-            color: AppColors.primary,              // статичний
+            color: AppColors.primary, // статичний
             size: 26,
           ),
         ),

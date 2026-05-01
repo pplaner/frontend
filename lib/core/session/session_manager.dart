@@ -1,54 +1,62 @@
 import 'package:drift/drift.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/session/auth_session.dart';
 import 'package:frontend/core/session/crypto_session.dart';
 import 'package:frontend/core/session/session_controller.dart';
 import 'package:frontend/core/session/session_exceptions.dart';
+import 'package:frontend/core/session/session_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'session_manager.g.dart';
 
-class SessionManager implements AuthSession, CryptoSession, SessionController {
-  String? _accessToken;
-  Uint8List? _masterKey;
+@Riverpod(keepAlive: true)
+class SessionManager extends _$SessionManager
+    implements AuthSession, CryptoSession, SessionController {
+  @override
+  SessionState build() => const SessionState();
 
   @override
-  String? get accessToken => _accessToken;
+  String? get accessToken => state.accessToken;
 
   @override
   Uint8List get masterKey {
-    if (_masterKey == null) throw const SessionLockedException();
+    if (state.masterKey == null) throw const SessionLockedException();
 
-    return _masterKey!;
+    return state.masterKey!;
   }
 
   @override
-  void setAuthToken(String token) => _accessToken = token;
+  void setAuthToken(String token) => state = state.copyWith(accessToken: token);
 
   @override
-  void setMasterKey(Uint8List key) => _masterKey = key;
+  void setMasterKey(Uint8List key) => state = state.copyWith(masterKey: key);
 
   @override
   void clearSession() {
-    _accessToken = null;
-
-    if (_masterKey != null) {
-      for (var i = 0; i < _masterKey!.length; i++) {
-        _masterKey![i] = 0;
+    if (state.masterKey != null) {
+      for (var i = 0; i < state.masterKey!.length; i++) {
+        state.masterKey![i] = 0;
       }
-      _masterKey = null;
     }
+
+    state = const SessionState();
   }
 }
 
 @Riverpod(keepAlive: true)
-SessionManager sessionManager(Ref ref) => SessionManager();
+AuthSession authSession(Ref ref) => ref.watch(sessionManagerProvider.notifier);
 
 @Riverpod(keepAlive: true)
-AuthSession authSession(Ref ref) => ref.watch(sessionManagerProvider);
-
-@Riverpod(keepAlive: true)
-CryptoSession cryptoSession(Ref ref) => ref.watch(sessionManagerProvider);
+CryptoSession cryptoSession(Ref ref) =>
+    ref.watch(sessionManagerProvider.notifier);
 
 @Riverpod(keepAlive: true)
 SessionController sessionController(Ref ref) =>
-    ref.watch(sessionManagerProvider);
+    ref.watch(sessionManagerProvider.notifier);
+
+@Riverpod(keepAlive: true)
+bool isMasterKeyPresent(Ref ref) {
+  return ref.watch(
+    sessionManagerProvider.select((state) => state.masterKey != null),
+  );
+}

@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/utils/app_assets.dart';
+import 'package:frontend/features/vault/presentation/navigation/vault_setup_routes.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
-class AuthScreen extends StatelessWidget {
-  const AuthScreen({super.key});
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,37 +20,46 @@ class AuthScreen extends StatelessWidget {
       backgroundColor: colors.background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Spacer(flex: 3),
-              Text(t.appName, style: textTheme.displayLarge),
+
+              Text(t.common.app_name, style: textTheme.displayLarge),
+
               const SizedBox(height: 24),
+
               Image.asset(
                 AppAssets.logo,
                 height: 159,
                 width: 168,
                 fit: BoxFit.contain,
               ),
+
               const Spacer(flex: 2),
+
               Text(
                 t.auth.tagline,
                 textAlign: TextAlign.center,
                 style: textTheme.bodyMedium,
               ),
+
               const SizedBox(height: 8),
+
               Text(
                 t.auth.chooseMethod,
                 textAlign: TextAlign.center,
                 style: textTheme.bodyMedium,
               ),
+
               const Spacer(flex: 3),
 
               // ── Створити локальне сховище ──
               FilledButton(
-                onPressed: () {
-                  // TODO: навігація до вибору методу шифрування
+                onPressed: () async {
+                  if (context.mounted) {
+                    unawaited(const SetupVaultRoute().push<void>(context));
+                  }
                 },
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(double.infinity, 51),
@@ -62,15 +74,18 @@ class AuthScreen extends StatelessWidget {
                   style: textTheme.labelLarge?.copyWith(color: colors.surface),
                 ),
               ),
+
               const SizedBox(height: 16),
+
+              // ── Вже є акаунт ──
               OutlinedButton(
                 onPressed: () {
-                  // TODO: навігація до екрану логіну
+                  // TO-DO: навігація до екрану логіну
                 },
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 51),
-                  foregroundColor: AppColors.primary,
-                  side: const BorderSide(color: AppColors.primary, width: 1),
+                  foregroundColor: colorScheme.primary,
+                  side: BorderSide(color: colorScheme.primary),
                   backgroundColor: colors.surface,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -83,6 +98,7 @@ class AuthScreen extends StatelessWidget {
                   ),
                 ),
               ),
+
               const Spacer(flex: 10),
             ],
           ),

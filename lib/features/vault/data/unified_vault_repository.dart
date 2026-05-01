@@ -36,6 +36,18 @@ class UnifiedVaultRepository with DataSourceRunner implements VaultRepository {
   }
 
   @override
+  Future<Result<List<KeySlot>, VaultFailure>> getAll() async {
+    final result = await localRunner(
+      call: _local.getAll,
+      mapCore: VaultFailure.core,
+    );
+
+    return result.map(
+      (models) => models.map((model) => model.toDomain()).toList(),
+    );
+  }
+
+  @override
   Future<Result<KeySlot?, VaultFailure>> getKeySlotByType(KeyType type) async {
     final result = await localRunner(
       call: () => _local.getKeySlotByType(type),
@@ -46,6 +58,6 @@ class UnifiedVaultRepository with DataSourceRunner implements VaultRepository {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 VaultRepository vaultRepository(Ref ref) =>
     UnifiedVaultRepository(local: ref.watch(vaultLocalDataSourceProvider));

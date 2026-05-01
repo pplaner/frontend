@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/ui/widgets/back_app_bar.dart';
 import 'package:frontend/core/utils/app_assets.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
 class AssociationScreen extends ConsumerStatefulWidget {
-  final bool isSetup;
-
   const AssociationScreen({super.key, this.isSetup = false});
+
+  final bool isSetup;
 
   @override
   ConsumerState<AssociationScreen> createState() => _AssociationScreenState();
@@ -51,23 +52,14 @@ class _AssociationScreenState extends ConsumerState<AssociationScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final colors = AppColors.of(context);       // адаптивні кольори (як у profile_screen)
+    final colors = AppColors.of(
+      context,
+    ); // адаптивні кольори (як у profile_screen)
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colors.surface,           // surface — не хардкод
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: AppColors.primary,            // primary — статичний, не змінюється
-            size: 20,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      backgroundColor: colors.surface, // surface — не хардкод
+      appBar: const BackAppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -90,8 +82,9 @@ class _AssociationScreenState extends ConsumerState<AssociationScreen> {
                     : t.setup.word_desc_login,
                 style: textTheme.bodyMedium?.copyWith(
                   color: _hasError
-                      ? colorScheme.error          // error — через colorScheme
-                      : colors.textSecondary,      // звичайний — через colors
+                      ? colorScheme
+                            .error // error — через colorScheme
+                      : colors.textSecondary, // звичайний — через colors
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -101,7 +94,7 @@ class _AssociationScreenState extends ConsumerState<AssociationScreen> {
               Container(
                 height: 60,
                 decoration: BoxDecoration(
-                  color: colors.surface,           // surface адаптивний
+                  color: colors.surface, // surface адаптивний
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: _hasError
@@ -151,13 +144,13 @@ class _AssociationScreenState extends ConsumerState<AssociationScreen> {
               FilledButton(
                 onPressed: _isButtonEnabled ? _onSubmit : null,
                 style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.primary,  // статичний primary
+                  backgroundColor: AppColors.primary, // статичний primary
                   minimumSize: const Size(double.infinity, 56),
                 ),
                 child: Text(
                   widget.isSetup ? t.common.register : t.common.login,
                   style: textTheme.labelLarge?.copyWith(
-                    color: Colors.white,               // білий завжди на primary кнопці
+                    color: Colors.white, // білий завжди на primary кнопці
                   ),
                 ),
               ),

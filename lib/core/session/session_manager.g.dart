@@ -9,12 +9,11 @@ part of 'session_manager.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(sessionManager)
+@ProviderFor(SessionManager)
 final sessionManagerProvider = SessionManagerProvider._();
 
 final class SessionManagerProvider
-    extends $FunctionalProvider<SessionManager, SessionManager, SessionManager>
-    with $Provider<SessionManager> {
+    extends $NotifierProvider<SessionManager, SessionState> {
   SessionManagerProvider._()
     : super(
         from: null,
@@ -31,24 +30,36 @@ final class SessionManagerProvider
 
   @$internal
   @override
-  $ProviderElement<SessionManager> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  SessionManager create(Ref ref) {
-    return sessionManager(ref);
-  }
+  SessionManager create() => SessionManager();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(SessionManager value) {
+  Override overrideWithValue(SessionState value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<SessionManager>(value),
+      providerOverride: $SyncValueProvider<SessionState>(value),
     );
   }
 }
 
-String _$sessionManagerHash() => r'f570fbc7f47e68c83fd9fdac6d0d719051c1de7e';
+String _$sessionManagerHash() => r'54e2ca7dab1aad9e3dfad297677cc5826d92d5eb';
+
+abstract class _$SessionManager extends $Notifier<SessionState> {
+  SessionState build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<SessionState, SessionState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<SessionState, SessionState>,
+              SessionState,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
 
 @ProviderFor(authSession)
 final authSessionProvider = AuthSessionProvider._();
@@ -89,7 +100,7 @@ final class AuthSessionProvider
   }
 }
 
-String _$authSessionHash() => r'dd9c26738c27af90e7e33dc4d7745b08b4e03b6c';
+String _$authSessionHash() => r'3163f30a65d7bc7a0241c95447ec0cf428761e32';
 
 @ProviderFor(cryptoSession)
 final cryptoSessionProvider = CryptoSessionProvider._();
@@ -130,7 +141,7 @@ final class CryptoSessionProvider
   }
 }
 
-String _$cryptoSessionHash() => r'03ebc6fb2ad2953b11c1b84fce453c7a04554e67';
+String _$cryptoSessionHash() => r'3f0da01a5873179c7cbc73e1c8b5d0cd9a502abe';
 
 @ProviderFor(sessionController)
 final sessionControllerProvider = SessionControllerProvider._();
@@ -177,4 +188,46 @@ final class SessionControllerProvider
   }
 }
 
-String _$sessionControllerHash() => r'e0e8e55baa9e2e47dd238f27ae0563c8d2b43314';
+String _$sessionControllerHash() => r'1f991dc89d3785dbf0cd61bb8f83e318e0c894af';
+
+@ProviderFor(isMasterKeyPresent)
+final isMasterKeyPresentProvider = IsMasterKeyPresentProvider._();
+
+final class IsMasterKeyPresentProvider
+    extends $FunctionalProvider<bool, bool, bool>
+    with $Provider<bool> {
+  IsMasterKeyPresentProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'isMasterKeyPresentProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$isMasterKeyPresentHash();
+
+  @$internal
+  @override
+  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  bool create(Ref ref) {
+    return isMasterKeyPresent(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+}
+
+String _$isMasterKeyPresentHash() =>
+    r'a7acb74929e7ad336091c9bf9dc0c59ae8dac7a3';

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/ui/widgets/back_app_bar.dart';
 import 'package:frontend/core/utils/app_assets.dart';
 import 'package:frontend/i18n/strings.g.dart';
 import 'package:pattern_lock/pattern_lock.dart';
@@ -65,15 +66,7 @@ class _PatternLockScreenState extends State<PatternLockScreen>
 
     return Scaffold(
       backgroundColor: colors.surface,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
-          color: AppColors.primary,              // статичний
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      appBar: const BackAppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -81,9 +74,7 @@ class _PatternLockScreenState extends State<PatternLockScreen>
             children: [
               const SizedBox(height: 20),
               Text(
-                widget.isSetup
-                    ? t.setup.pattern_create
-                    : t.setup.pattern_enter,
+                widget.isSetup ? t.setup.pattern_create : t.setup.pattern_enter,
                 style: textTheme.displayLarge?.copyWith(fontSize: 28),
                 textAlign: TextAlign.center,
               ),
@@ -114,8 +105,9 @@ class _PatternLockScreenState extends State<PatternLockScreen>
                   height: 300,
                   child: PatternLock(
                     selectedColor: isError
-                        ? AppColors.error                  // статичний
-                        : AppColors.primary,               // статичний
+                        ? AppColors
+                              .error // статичний
+                        : AppColors.primary, // статичний
                     notSelectedColor: colors.textSecondary.withOpacity(0.3),
                     onInputComplete: (input) async {
                       if (input.length < 4) {
@@ -131,7 +123,12 @@ class _PatternLockScreenState extends State<PatternLockScreen>
                 ),
               ),
               const Spacer(),
-              Image.asset(AppAssets.logo, height: 160, width: 160, fit: BoxFit.contain),
+              Image.asset(
+                AppAssets.logo,
+                height: 160,
+                width: 160,
+                fit: BoxFit.contain,
+              ),
               const Spacer(flex: 3),
               FilledButton(
                 onPressed: (pattern != null && pattern!.length >= 4 && !isError)
@@ -139,7 +136,7 @@ class _PatternLockScreenState extends State<PatternLockScreen>
                     : null,
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(double.infinity, 56),
-                  backgroundColor: AppColors.primary,      // статичний
+                  backgroundColor: AppColors.primary, // статичний
                 ),
                 child: Text(
                   widget.isSetup ? t.common.register : t.common.login,
@@ -154,3 +151,4 @@ class _PatternLockScreenState extends State<PatternLockScreen>
     );
   }
 }
+
