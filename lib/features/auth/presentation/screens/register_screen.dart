@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/theme/app_colors.dart';
 import 'package:frontend/core/ui/widgets/back_app_bar.dart';
 import 'package:frontend/core/utils/navigation_helper.dart';
 import 'package:frontend/core/utils/validators.dart';
+import 'package:frontend/features/auth/presentation/notifiers/auth_notifier.dart';
 import 'package:frontend/features/auth/presentation/widgets/email_form_field.dart';
 import 'package:frontend/features/auth/presentation/widgets/password_form_field.dart';
+import 'package:frontend/features/auth/presentation/widgets/primary_button.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -33,14 +36,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> _onRegister() async {
     if (!_formKey.currentState!.validate()) return;
+
     setState(() => _isLoading = true);
-    await Future.delayed(const Duration(seconds: 2));
+
+    await ref
+        .read(authProvider.notifier)
+        .register(
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
+        );
+
     setState(() => _isLoading = false);
-    if (!mounted) return;
-    await Navigator.of(context).pushNamed(
-      '/verify-email',
-      arguments: _emailController.text.trim(),
-    );
   }
 
   @override
@@ -93,11 +99,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 const SizedBox(height: 32),
 
-                _PrimaryButton(
+                PrimaryButton(
                   label: t.common.register,
                   isLoading: _isLoading,
                   onPressed: _onRegister,
                 ),
+
                 const SizedBox(height: 24),
 
                 Column(
@@ -112,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     GestureDetector(
                       onTap: () => context.safePop(),
                       child: Text(
-                        t.common.login, // "Увійти"
+                        t.common.login,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.bold,
@@ -123,110 +130,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 32),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-// --- Оновлений текстовий віджет ---
-class _AuthTextField extends StatelessWidget {
-  const _AuthTextField({
-    required this.controller,
-    required this.hint,
-    required this.colors, // Додали обов'язковий параметр кольорів
-    this.obscureText = false,
-    this.suffixIcon,
-    this.keyboardType,
-    this.validator,
-  });
-
-  final TextEditingController controller;
-  final String hint;
-  final AppColorScheme colors;
-  final bool obscureText;
-  final Widget? suffixIcon;
-  final TextInputType? keyboardType;
-  final String? Function(String?)? validator;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      validator: validator,
-      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-        color: colors.textPrimary,
-      ),
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-          color: colors.textSecondary,
-        ),
-        suffixIcon: suffixIcon,
-        filled: true,
-        fillColor: colors.surface, // Адаптивна поверхня
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(color: colors.cardBorder),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: AppColors.error),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(color: AppColors.error, width: 2),
-        ),
-      ),
-    );
-  }
-}
-
-class _PrimaryButton extends StatelessWidget {
-  const _PrimaryButton({
-    required this.label,
-    required this.onPressed,
-    this.isLoading = false,
-  });
-  final String label;
-  final bool isLoading;
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return FilledButton(
-      onPressed: isLoading ? null : onPressed,
-      style: FilledButton.styleFrom(
-        minimumSize: const Size(double.infinity, 56),
-        backgroundColor: AppColors.primary,
-      ),
-      child: isLoading
-          ? const SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.white,
-              ),
-            )
-          : Text(
-              label,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
     );
   }
 }
