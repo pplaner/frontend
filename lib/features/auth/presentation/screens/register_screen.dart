@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/core/theme/app_colors.dart';
-import 'package:frontend/core/ui/widgets/back_app_bar.dart';
+import 'package:frontend/core/theme/theme_extensions.dart';
+import 'package:frontend/core/ui/widgets/flow_scaffold.dart';
 import 'package:frontend/core/utils/navigation_helper.dart';
 import 'package:frontend/core/utils/validators.dart';
 import 'package:frontend/features/auth/presentation/notifiers/auth_notifier.dart';
@@ -54,87 +55,75 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final theme = Theme.of(context);
     final colors = AppColors.of(context);
 
-    return Scaffold(
-      backgroundColor: colors.background,
-      appBar: const BackAppBar(),
-      body: SafeArea(
-        top: false,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+    return FlowScaffold(
+      body: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              t.widgets.register_title,
+              style: theme.textTheme.displayLarge?.copyWith(
+                color: colors.textPrimary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+
+            const SizedBox(height: 40),
+
+            EmailFormField(controller: _emailController),
+
+            const SizedBox(height: 16),
+
+            PasswordFormField(controller: _passwordController),
+
+            const SizedBox(height: 16),
+
+            PasswordFormField(
+              controller: _confirmPasswordController,
+              hintText: t.widgets.confirm_password,
+              validator: (v) => passwordConfirmValidator(
+                v,
+                password: _passwordController.text,
+                emptyError: context.t.widgets.confirm_password,
+                noMatchError: context.t.widgets.passwords_not_match,
+              ),
+            ),
+
+            const SizedBox(height: 32),
+
+            PrimaryButton(
+              label: t.common.register,
+              isLoading: _isLoading,
+              onPressed: _onRegister,
+            ),
+
+            const SizedBox(height: 24),
+
+            Column(
               children: [
-                const SizedBox(height: 24),
-
                 Text(
-                  t.widgets.register_title,
-                  style: theme.textTheme.displayLarge?.copyWith(
-                    color: colors.textPrimary,
-                  ),
-                  textAlign: TextAlign.center,
+                  t.widgets.have_account,
+                  style: theme.textTheme.bodyMedium,
                 ),
 
-                const SizedBox(height: 40),
+                const SizedBox(height: 4),
 
-                EmailFormField(controller: _emailController),
-
-                const SizedBox(height: 16),
-
-                PasswordFormField(controller: _passwordController),
-
-                const SizedBox(height: 16),
-
-                PasswordFormField(
-                  controller: _confirmPasswordController,
-                  hintText: t.widgets.confirm_password,
-                  validator: (v) => passwordConfirmValidator(
-                    v,
-                    password: _passwordController.text,
-                    emptyError: context.t.widgets.confirm_password,
-                    noMatchError: context.t.widgets.passwords_not_match,
+                GestureDetector(
+                  onTap: () => context.safePop(),
+                  child: Text(
+                    context.t.common.login,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: context.colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                      decorationColor: context.colorScheme.primary,
+                    ),
                   ),
                 ),
-
-                const SizedBox(height: 32),
-
-                PrimaryButton(
-                  label: t.common.register,
-                  isLoading: _isLoading,
-                  onPressed: _onRegister,
-                ),
-
-                const SizedBox(height: 24),
-
-                Column(
-                  children: [
-                    Text(
-                      t.widgets.have_account,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: colors.textSecondary,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    GestureDetector(
-                      onTap: () => context.safePop(),
-                      child: Text(
-                        t.common.login,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                          decorationColor: AppColors.primary,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 32),
               ],
             ),
-          ),
+          ],
         ),
       ),
     );

@@ -21,6 +21,8 @@ class AuthNotifier extends _$AuthNotifier {
 
     final result = await ref.read(authServiceProvider).login(email, password);
 
+    if (!ref.mounted) return;
+
     state = state.copyWith(isProcessing: false);
 
     result.fold(
@@ -36,6 +38,8 @@ class AuthNotifier extends _$AuthNotifier {
     final result = await ref
         .read(authServiceProvider)
         .register(email, password);
+
+    if (!ref.mounted) return;
 
     state = state.copyWith(isProcessing: false);
 
