@@ -1,79 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/theme/theme_extensions.dart';
+import 'package:frontend/features/vault/domain/constants.dart';
 
-class PinPadView extends StatefulWidget {
+class PinPadView extends StatelessWidget {
   const PinPadView({
-    required this.buttonTitle,
-    required this.onPinCompleted,
+    required this.pin,
+    required this.onPinChanged,
     super.key,
   });
 
-  final String buttonTitle;
-  final ValueChanged<String> onPinCompleted;
-
-  @override
-  State<PinPadView> createState() => _PinPadViewState();
-}
-
-class _PinPadViewState extends State<PinPadView> {
-  String _pinCode = '';
-  static const int _pinLength = 4;
+  final String pin;
+  final ValueChanged<String> onPinChanged;
 
   void _addDigit(String digit) {
-    if (_pinCode.length < _pinLength) {
-      setState(() => _pinCode += digit);
+    if (pin.length < maxPinLength) {
+      onPinChanged(pin + digit);
     }
   }
 
   void _removeDigit() {
-    if (_pinCode.isNotEmpty) {
-      setState(() => _pinCode = _pinCode.substring(0, _pinCode.length - 1));
-    }
-  }
-
-  void _onSubmit() {
-    if (_pinCode.length == _pinLength) {
-      widget.onPinCompleted(_pinCode);
+    if (pin.isNotEmpty) {
+      onPinChanged(pin.substring(0, pin.length - 1));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final colors = AppColors.of(context);
-
     return Column(
       children: [
-        const Spacer(),
+        _PinDots(pin.length),
 
-        _buildPinDots(_pinCode.length),
+        const SizedBox(height: 32),
 
-        const SizedBox(height: 30),
-
-        _buildKeypad(colors),
-
-        const Spacer(),
-
-        FilledButton(
-          onPressed: _pinCode.length == _pinLength ? _onSubmit : null,
-          style: FilledButton.styleFrom(
-            minimumSize: const Size(double.infinity, 56),
-            backgroundColor: AppColors.primary,
-          ),
-          child: Text(
-            widget.buttonTitle,
-            style: textTheme.labelLarge?.copyWith(color: Colors.white),
-          ),
+        _Keypad(
+          onDigitTap: _addDigit,
+          onBackspaceTap: _removeDigit,
         ),
       ],
     );
   }
+}
 
-  Widget _buildPinDots(int filledLength) {
+class _PinDots extends StatelessWidget {
+  const _PinDots(this.filledLength);
+
+  final int filledLength;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(_pinLength, (index) {
-        final isFilled = index < filledLength;
+      children: List.generate(maxPinLength, (index) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: AnimatedContainer(
@@ -81,10 +58,12 @@ class _PinPadViewState extends State<PinPadView> {
             width: 24,
             height: 24,
             decoration: BoxDecoration(
-              color: isFilled ? AppColors.primary : Colors.transparent,
+              color: index < filledLength
+                  ? context.colorScheme.primary
+                  : Colors.transparent,
               shape: BoxShape.circle,
               border: Border.all(
-                color: AppColors.primary.withValues(alpha: 0.5),
+                color: context.colorScheme.primary.withValues(alpha: 0.5),
                 width: 2,
               ),
             ),
@@ -93,45 +72,73 @@ class _PinPadViewState extends State<PinPadView> {
       }),
     );
   }
+}
 
-  Widget _buildKeypad(AppColorScheme colors) {
+class _Keypad extends StatelessWidget {
+  const _Keypad({required this.onDigitTap, required this.onBackspaceTap});
+
+  final ValueChanged<String> onDigitTap;
+  final VoidCallback onBackspaceTap;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
-        _buildKeypadRow(['1', '2', '3'], colors),
+        _KeypadRow(digits: const ['1', '2', '3'], onTap: onDigitTap),
         const SizedBox(height: 16),
-        _buildKeypadRow(['4', '5', '6'], colors),
+        _KeypadRow(digits: const ['4', '5', '6'], onTap: onDigitTap),
         const SizedBox(height: 16),
-        _buildKeypadRow(['7', '8', '9'], colors),
+        _KeypadRow(digits: const ['7', '8', '9'], onTap: onDigitTap),
         const SizedBox(height: 16),
+
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(width: 94),
-            _buildDigitKey('0', colors),
+
+            _DigitKey(digit: '0', onTap: onDigitTap),
+
             const SizedBox(width: 24),
-            _buildBackspaceKey(),
+
+            _BackspaceKey(onTap: onBackspaceTap),
           ],
         ),
       ],
     );
   }
+}
 
-  Widget _buildKeypadRow(List<String> digits, AppColorScheme colors) {
+class _KeypadRow extends StatelessWidget {
+  const _KeypadRow({required this.digits, required this.onTap});
+
+  final List<String> digits;
+  final ValueChanged<String> onTap;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildDigitKey(digits[0], colors),
+        _DigitKey(digit: digits[0], onTap: onTap),
         const SizedBox(width: 24),
-        _buildDigitKey(digits[1], colors),
+        _DigitKey(digit: digits[1], onTap: onTap),
         const SizedBox(width: 24),
-        _buildDigitKey(digits[2], colors),
+        _DigitKey(digit: digits[2], onTap: onTap),
       ],
     );
   }
+}
 
-  Widget _buildDigitKey(String digit, AppColorScheme colors) {
+class _DigitKey extends StatelessWidget {
+  const _DigitKey({required this.digit, required this.onTap});
+
+  final String digit;
+  final ValueChanged<String> onTap;
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => _addDigit(digit),
+      onTap: () => onTap(digit),
       borderRadius: BorderRadius.circular(40),
       child: SizedBox(
         width: 70,
@@ -139,26 +146,31 @@ class _PinPadViewState extends State<PinPadView> {
         child: Center(
           child: Text(
             digit,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: colors.textPrimary, // адаптивний
-            ),
+            style: context.textTheme.headlineMedium,
           ),
         ),
       ),
     );
   }
+}
 
-  Widget _buildBackspaceKey() {
+class _BackspaceKey extends StatelessWidget {
+  const _BackspaceKey({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
-      onTap: _removeDigit,
+      onTap: onTap,
       borderRadius: BorderRadius.circular(40),
-      child: const SizedBox(
+      child: SizedBox(
         width: 70,
         height: 70,
         child: Center(
           child: Icon(
             Icons.backspace_outlined,
-            color: AppColors.primary, // статичний
+            color: context.colorScheme.primary,
             size: 26,
           ),
         ),

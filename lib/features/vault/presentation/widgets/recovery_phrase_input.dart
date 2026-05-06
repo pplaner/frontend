@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/theme/theme_extensions.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
 class RecoveryPhraseInput extends StatefulWidget {
@@ -50,41 +50,54 @@ class _RecoveryPhraseInputState extends State<RecoveryPhraseInput> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      itemCount: 12,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 12,
-        childAspectRatio: 1.8,
-      ),
-      itemBuilder: (context, index) => _buildInputCard(
-        context,
-        index + 1,
-        _controllers[index],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (int rowIndex = 0; rowIndex < 4; rowIndex++) ...[
+          Row(
+            children: [
+              for (int colIndex = 0; colIndex < 3; colIndex++) ...[
+                Expanded(
+                  child: AspectRatio(
+                    aspectRatio: 1.8,
+                    child: _InputCard(
+                      number: (rowIndex * 3) + colIndex + 1,
+                      controller: _controllers[(rowIndex * 3) + colIndex],
+                    ),
+                  ),
+                ),
+
+                if (colIndex < 2) const SizedBox(width: 10),
+              ],
+            ],
+          ),
+
+          if (rowIndex < 3) const SizedBox(height: 20),
+        ],
+      ],
     );
   }
+}
 
-  Widget _buildInputCard(
-    BuildContext context,
-    int number,
-    TextEditingController controller,
-  ) {
-    final textTheme = Theme.of(context).textTheme;
-    final colors = AppColors.of(context);
+class _InputCard extends StatelessWidget {
+  const _InputCard({required this.number, required this.controller});
 
+  final int number;
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: colors.surface,
+        color: context.containerColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.3), // статичний
+          color: context.colorScheme.primary.withValues(alpha: 0.5),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: context.colorScheme.shadow.withValues(alpha: 0.05),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
@@ -97,10 +110,8 @@ class _RecoveryPhraseInputState extends State<RecoveryPhraseInput> {
             left: 6,
             child: Text(
               '$number',
-              style: textTheme.bodySmall?.copyWith(
-                fontSize: 10,
-                color: AppColors.primary.withValues(alpha: 0.7),
-                fontWeight: FontWeight.bold,
+              style: context.textTheme.labelSmall?.copyWith(
+                color: context.colorScheme.primary.withValues(alpha: 0.7),
               ),
             ),
           ),
@@ -109,16 +120,12 @@ class _RecoveryPhraseInputState extends State<RecoveryPhraseInput> {
             child: TextField(
               controller: controller,
               textAlign: TextAlign.center,
-              style: textTheme.bodySmall?.copyWith(fontSize: 12),
+              style: context.textTheme.bodySmall,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.zero,
                 border: InputBorder.none,
                 filled: false,
                 hintText: context.t.seed.word_hint,
-                hintStyle: TextStyle(
-                  color: colors.textSecondary, // адаптивний
-                  fontSize: 12,
-                ),
               ),
             ),
           ),

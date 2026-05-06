@@ -1,50 +1,46 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/theme/theme_extensions.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
 class RecoveryVerifyForm extends StatefulWidget {
   const RecoveryVerifyForm({
-    required this.originalPhrase,
-    required this.onSuccess,
+    required this.indices,
+    required this.isError,
+    required this.onChanged,
     super.key,
   });
 
-  final List<String> originalPhrase;
-  final VoidCallback onSuccess;
+  final List<int> indices;
+  final bool isError;
+  final VoidCallback onChanged;
 
   @override
-  State<RecoveryVerifyForm> createState() => _RecoveryVerifyFormState();
+  State<RecoveryVerifyForm> createState() => RecoveryVerifyFormState();
 }
 
-class _RecoveryVerifyFormState extends State<RecoveryVerifyForm>
+class RecoveryVerifyFormState extends State<RecoveryVerifyForm>
     with SingleTickerProviderStateMixin {
-  final List<TextEditingController> _controllers = List.generate(
-    3,
-    (_) => TextEditingController(),
-  );
-
-  late final List<int> _randomIndices;
+  late final List<TextEditingController> _controllers;
   late final AnimationController _shakeController;
 
-  bool _isError = false;
-  bool _isButtonEnabled = false;
+  Future<void> shake() => _shakeController.forward(from: 0);
+
+  List<String> get values => _controllers.map((c) => c.text).toList();
 
   @override
   void initState() {
     super.initState();
 
+    _controllers = List<TextEditingController>.generate(
+      3,
+      (_) => TextEditingController()..addListener(widget.onChanged),
+    );
+
     _shakeController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-
-    for (final controller in _controllers) {
-      controller.addListener(_validateInputs);
-    }
-
-    final list = List<int>.generate(12, (i) => i)..shuffle();
-    _randomIndices = list.take(3).toList()..sort();
   }
 
   @override
@@ -58,47 +54,17 @@ class _RecoveryVerifyFormState extends State<RecoveryVerifyForm>
     super.dispose();
   }
 
-  void _validateInputs() {
-    setState(() {
-      _isButtonEnabled = _controllers.every((c) => c.text.trim().isNotEmpty);
-      if (_isError) _isError = false;
-    });
-  }
-
-  Future<void> _verifyAndSubmit() async {
-    var allCorrect = true;
-    for (var i = 0; i < 3; i++) {
-      final userInput = _controllers[i].text.trim().toLowerCase();
-      final correctWord = widget.originalPhrase[_randomIndices[i]]
-          .trim()
-          .toLowerCase();
-
-      if (userInput != correctWord) {
-        allCorrect = false;
-        break;
-      }
-    }
-
-    if (allCorrect) {
-      widget.onSuccess();
-    } else {
-      setState(() => _isError = true);
-      await _shakeController.forward(from: 0);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
     return Column(
       children: [
-        if (_isError) ...[
+        if (widget.isError) ...[
           Text(
-            t.seed.verify_error,
+            context.t.seed.verify_error,
             style: textTheme.bodyMedium?.copyWith(
-              color: AppColors.error,
-              fontWeight: FontWeight.bold,
+              color: context.colorScheme.error,
             ),
             textAlign: TextAlign.center,
           ),
@@ -112,7 +78,7 @@ class _RecoveryVerifyFormState extends State<RecoveryVerifyForm>
             final offset = sin(_shakeController.value * pi * 4) * 8;
 
             return Transform.translate(
-              offset: Offset(_isError ? offset : 0, 0),
+              offset: Offset(widget.isError ? offset : 0, 0),
               child: child,
             );
           },
@@ -120,90 +86,81 @@ class _RecoveryVerifyFormState extends State<RecoveryVerifyForm>
             children: List.generate(3, (index) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 16),
-                child: _buildNumberedField(
-                  context,
-                  _randomIndices[index] + 1,
-                  _controllers[index],
+                child: _NumberedField(
+                  number: widget.indices[index] + 1,
+                  isError: widget.isError,
+                  controller: _controllers[index],
                 ),
               );
             }),
           ),
         ),
-
-        const SizedBox(height: 24),
-
-        FilledButton(
-          onPressed: _isButtonEnabled ? _verifyAndSubmit : null,
-          style: FilledButton.styleFrom(
-            minimumSize: const Size(double.infinity, 56),
-            backgroundColor: AppColors.primary,
-          ),
-          child: Text(
-            t.common.register,
-            style: textTheme.labelLarge?.copyWith(color: Colors.white),
-          ),
-        ),
       ],
     );
   }
+}
 
-  Widget _buildNumberedField(
-    BuildContext context,
-    int number,
-    TextEditingController controller,
-  ) {
-    final textTheme = Theme.of(context).textTheme;
-    final colors = AppColors.of(context);
+class _NumberedField extends StatelessWidget {
+  const _NumberedField({
+    required this.number,
+    required this.isError,
+    required this.controller,
+  });
 
+  final int number;
+  final bool isError;
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         SizedBox(
           width: 35,
           child: Text(
             '$number.',
-            style: textTheme.titleMedium?.copyWith(
-              color: AppColors.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
+            style: context.textTheme.titleLarge?.copyWith(
+              color: context.colorScheme.primary,
             ),
           ),
         ),
-
-        const SizedBox(width: 8),
 
         Expanded(
           child: Container(
             height: 60,
             decoration: BoxDecoration(
-              color: colors.surface,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: _isError
-                    ? AppColors.error.withValues(alpha: 0.5)
-                    : AppColors.primary.withValues(alpha: 0.15),
-                width: 1.5,
-              ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
+                  color: context.colorScheme.shadow.withValues(alpha: 0.04),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
               ],
             ),
-            child: Center(
-              child: TextField(
-                controller: controller,
-                textAlign: TextAlign.center,
-                style: textTheme.bodyLarge,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.zero,
-                  border: InputBorder.none,
-                  filled: false,
-                  hintText: t.seed.verify_input_hint,
-                  hintStyle: TextStyle(
-                    color: colors.textSecondary,
-                    fontSize: 14,
+            child: TextField(
+              controller: controller,
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: context.containerColor,
+                hintText: context.t.seed.verify_input_hint,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(
+                    color: isError
+                        ? context.colorScheme.error.withValues(alpha: 0.5)
+                        : context.colorScheme.primary.withValues(alpha: 0.5),
+                    width: 1.5,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(
+                    color: isError
+                        ? context.colorScheme.error
+                        : context.colorScheme.primary,
+                    width: 2,
                   ),
                 ),
               ),

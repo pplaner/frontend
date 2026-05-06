@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/theme/theme_extensions.dart';
 
-class RecoveryPhraseDisplay extends StatefulWidget {
+class RecoveryPhraseDisplay extends StatelessWidget {
   const RecoveryPhraseDisplay({
     required this.phrase,
     super.key,
@@ -10,47 +10,55 @@ class RecoveryPhraseDisplay extends StatefulWidget {
   final List<String> phrase;
 
   @override
-  State<RecoveryPhraseDisplay> createState() => _RecoveryPhraseDisplayState();
-}
-
-class _RecoveryPhraseDisplayState extends State<RecoveryPhraseDisplay> {
-  @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      itemCount: 12,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 20,
-        childAspectRatio: 1.8,
-      ),
-      itemBuilder: (context, index) => _buildWordCard(
-        context,
-        index + 1,
-        widget.phrase[index],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (int rowIndex = 0; rowIndex < 4; rowIndex++) ...[
+          Row(
+            children: [
+              for (int colIndex = 0; colIndex < 3; colIndex++) ...[
+                Expanded(
+                  child: AspectRatio(
+                    aspectRatio: 1.8,
+                    child: _WordCard(
+                      number: (rowIndex * 3) + colIndex + 1,
+                      word: phrase[(rowIndex * 3) + colIndex],
+                    ),
+                  ),
+                ),
+
+                if (colIndex < 2) const SizedBox(width: 10),
+              ],
+            ],
+          ),
+
+          if (rowIndex < 3) const SizedBox(height: 20),
+        ],
+      ],
     );
   }
+}
 
-  Widget _buildWordCard(
-    BuildContext context,
-    int number,
-    String word,
-  ) {
-    final textTheme = Theme.of(context).textTheme;
-    final colors = AppColors.of(context);
+class _WordCard extends StatelessWidget {
+  const _WordCard({required this.number, required this.word});
 
+  final int number;
+  final String word;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: colors.surface, // адаптивний
+        color: context.containerColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.5), // статичний
+          color: context.colorScheme.primary.withValues(alpha: 0.5),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: context.colorScheme.shadow.withValues(alpha: 0.05),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
@@ -63,25 +71,17 @@ class _RecoveryPhraseDisplayState extends State<RecoveryPhraseDisplay> {
             left: 6,
             child: Text(
               '$number',
-              style: textTheme.bodySmall?.copyWith(
-                fontSize: 10,
-                color: AppColors.primary.withValues(alpha: 0.7), // статичний
-                fontWeight: FontWeight.bold,
+              style: context.textTheme.labelSmall?.copyWith(
+                color: context.colorScheme.primary.withValues(alpha: 0.7),
               ),
             ),
           ),
 
           Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Text(
-                word,
-                style: textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
+            child: Text(
+              word,
+              style: context.textTheme.labelMedium,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
