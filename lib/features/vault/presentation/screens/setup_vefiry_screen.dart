@@ -1,11 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/core/theme/app_colors.dart';
-import 'package:frontend/core/ui/widgets/back_app_bar.dart';
+import 'package:frontend/core/constants/app_sizes.dart' as sizes;
+import 'package:frontend/core/theme/theme_extensions.dart';
+import 'package:frontend/core/ui/widgets/flow_scaffold.dart';
+import 'package:frontend/core/ui/widgets/wide_filled_button.dart';
 import 'package:frontend/core/utils/app_assets.dart';
 import 'package:frontend/features/vault/presentation/notifiers/vault_setup_notifier.dart';
 import 'package:frontend/features/vault/presentation/widgets/recovery_verify_form.dart';
-import 'package:frontend/features/vault/presentation/widgets/safe_child_scroll.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
 class SetupVerifyScreen extends ConsumerStatefulWidget {
@@ -16,54 +19,78 @@ class SetupVerifyScreen extends ConsumerStatefulWidget {
 }
 
 class _SetupVerifyScreenState extends ConsumerState<SetupVerifyScreen> {
+  final _formKey = GlobalKey<RecoveryVerifyFormState>();
+  bool _isError = false;
+  bool _isButtonEnabled = false;
+
+  void _handleVerify() {
+    final userWords = _formKey.currentState?.values ?? [];
+    final success = ref
+        .read(vaultSetupProvider.notifier)
+        .verifyPhrase(userWords);
+
+    if (success) {
+      unawaited(ref.read(vaultSetupProvider.notifier).commitSetup());
+    } else {
+      setState(() => _isError = true);
+      unawaited(_formKey.currentState?.shake());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final phrase = ref.read(vaultSetupProvider).generatedRecoveryPhrase;
+    final state = ref.watch(vaultSetupProvider);
 
-    final textTheme = Theme.of(context).textTheme;
-    final colors = AppColors.of(context);
+    return FlowScaffold(
+      body: Column(
+        children: [
+          Text(
+            context.t.seed.verify_title,
+            style: context.textTheme.displayLarge,
+            textAlign: TextAlign.center,
+          ),
 
-    return Scaffold(
-      backgroundColor: colors.surface,
-      appBar: const BackAppBar(),
-      body: SafeChildScroll(
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
+          const SizedBox(height: sizes.betweenTitleAndSub),
 
-            Text(
-              context.t.seed.verify_title,
-              style: textTheme.displayLarge?.copyWith(fontSize: 28),
-              textAlign: TextAlign.center,
-            ),
+          Text(
+            context.t.seed.verify_desc,
+            style: context.textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
 
-            const SizedBox(height: 12),
+          const SizedBox(height: 24),
+          const Spacer(),
 
-            Text(
-              context.t.seed.verify_desc,
-              style: textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-            ),
+          RecoveryVerifyForm(
+            key: _formKey,
+            indices: state.verifyIndecies,
+            isError: _isError,
+            onChanged: () => setState(() {
+              _isError = false;
+              _isButtonEnabled =
+                  _formKey.currentState?.values.every((v) => v.isNotEmpty) ??
+                  false;
+            }),
+          ),
 
-            const SizedBox(height: 40),
+          const SizedBox(height: 24),
+          const Spacer(),
 
-            RecoveryVerifyForm(
-              originalPhrase: phrase,
-              onSuccess: ref.read(vaultSetupProvider.notifier).commitSetup,
-            ),
+          Image.asset(
+            AppAssets.logo,
+            height: sizes.largeImageHeight,
+            width: sizes.largeImageWidth,
+            fit: BoxFit.contain,
+          ),
 
-            const SizedBox(height: 40),
+          const SizedBox(height: 24),
+          const Spacer(),
 
-            Image.asset(
-              AppAssets.logo,
-              height: 170,
-              width: 170,
-              fit: BoxFit.contain,
-            ),
-
-            const SizedBox(height: 24),
-          ],
-        ),
+          WideFilledButton(
+            onPressed: _isButtonEnabled ? _handleVerify : null,
+            child: Text(context.t.common.register),
+          ),
+        ],
       ),
     );
   }

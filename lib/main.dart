@@ -4,7 +4,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/app/init.dart';
 import 'package:frontend/app/navigation/app_router.dart';
-import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/core/theme/generated_app_theme.dart';
 import 'package:frontend/core/theme/theme_provider.dart';
 import 'package:frontend/i18n/strings.g.dart';
 

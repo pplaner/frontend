@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/theme/theme_extensions.dart';
 
 class UnlockMethod extends StatelessWidget {
   const UnlockMethod({
@@ -17,55 +17,52 @@ class UnlockMethod extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final colors = AppColors.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: InkWell(
-        onTap: onTap,
+    return AnimatedContainer(
+      margin: const EdgeInsets.only(bottom: 12),
+      duration: const Duration(milliseconds: 200),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: context.containerColor,
         borderRadius: BorderRadius.circular(20),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-          decoration: BoxDecoration(
-            color: colors.surface, // адаптивний
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: isSelected
-                  ? AppColors.primary
-                  : AppColors.primary.withValues(alpha: 0.1), // статичний
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
+        border: Border.all(
+          color: isSelected
+              ? context.colorScheme.primary
+              : context.colorScheme.primary.withValues(alpha: 0.1),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: context.colorScheme.shadow.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
-          child: Column(
-            children: [
-              Text(
-                title,
-                style: textTheme.titleLarge?.copyWith(
-                  color: AppColors.primary, // статичний
-                  fontWeight: FontWeight.bold,
+        ],
+      ),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: context.textTheme.titleLarge?.copyWith(
+                    color: context.colorScheme.primary,
+                  ),
                 ),
-              ),
-
-              const SizedBox(height: 4),
-
-              Text(
-                subtitle,
-                textAlign: TextAlign.center,
-                style: textTheme.bodySmall?.copyWith(
-                  color: colors.textSecondary, // адаптивний
+                const SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  textAlign: TextAlign.center,
+                  style: context.textTheme.bodySmall,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

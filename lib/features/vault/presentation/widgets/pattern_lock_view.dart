@@ -2,17 +2,20 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/app_colors.dart';
+import 'package:frontend/core/theme/theme_extensions.dart';
 import 'package:pattern_lock/pattern_lock.dart';
 
 class PatternLockView extends StatefulWidget {
   const PatternLockView({
     required this.onPatternChanged,
     this.onPatternTooShort,
+    this.height = 300,
     super.key,
   });
 
   final ValueChanged<List<int>?> onPatternChanged;
   final VoidCallback? onPatternTooShort;
+  final int height;
 
   @override
   State<PatternLockView> createState() => _PatternLockViewState();
@@ -67,7 +70,9 @@ class _PatternLockViewState extends State<PatternLockView>
       child: SizedBox(
         height: 300,
         child: PatternLock(
-          selectedColor: _isError ? AppColors.error : AppColors.primary,
+          selectedColor: _isError
+              ? context.colorScheme.error
+              : context.colorScheme.primary,
           notSelectedColor: colors.textSecondary.withValues(alpha: 0.3),
           onInputComplete: (input) async {
             if (input.length < 4) {
