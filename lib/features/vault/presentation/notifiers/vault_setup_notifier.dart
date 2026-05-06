@@ -11,6 +11,7 @@ part 'vault_setup_notifier.freezed.dart';
 sealed class VaultSetupData with _$VaultSetupData {
   const factory VaultSetupData({
     required List<String> generatedRecoveryPhrase,
+    required List<int> verifyIndecies,
 
     KeyType? selectedType,
     String? temporarySecret,
@@ -25,7 +26,15 @@ class VaultSetup extends _$VaultSetup {
   @override
   VaultSetupData build() => VaultSetupData(
     generatedRecoveryPhrase: List<String>.filled(12, 'a'),
+    verifyIndecies: _generateIndices(),
   );
+
+  List<int> _generateIndices() {
+    final list = List<int>.generate(12, (i) => i)..shuffle();
+    final indices = list.take(3).toList()..sort();
+
+    return indices;
+  }
 
   void setupPin(String secret) => state = state.copyWith(
     selectedType: KeyType.pin,
@@ -38,6 +47,18 @@ class VaultSetup extends _$VaultSetup {
     temporarySecret: secret.join(),
     failure: null,
   );
+
+  bool verifyPhrase(List<String> userInputs) {
+    for (var i = 0; i < state.verifyIndecies.length; i++) {
+      final index = state.verifyIndecies[i];
+      if (userInputs[i].trim().toLowerCase() !=
+          state.generatedRecoveryPhrase[index].toLowerCase()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 
   Future<void> commitSetup() async {
     final type = state.selectedType;

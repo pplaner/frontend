@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$VaultSetupData {
 
- List<String> get generatedRecoveryPhrase; KeyType? get selectedType; String? get temporarySecret; bool get isSubmitting; VaultFailure? get failure;
+ List<String> get generatedRecoveryPhrase; List<int> get verifyIndecies; KeyType? get selectedType; String? get temporarySecret; bool get isSubmitting; VaultFailure? get failure;
 /// Create a copy of VaultSetupData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $VaultSetupDataCopyWith<VaultSetupData> get copyWith => _$VaultSetupDataCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is VaultSetupData&&const DeepCollectionEquality().equals(other.generatedRecoveryPhrase, generatedRecoveryPhrase)&&(identical(other.selectedType, selectedType) || other.selectedType == selectedType)&&(identical(other.temporarySecret, temporarySecret) || other.temporarySecret == temporarySecret)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.failure, failure) || other.failure == failure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VaultSetupData&&const DeepCollectionEquality().equals(other.generatedRecoveryPhrase, generatedRecoveryPhrase)&&const DeepCollectionEquality().equals(other.verifyIndecies, verifyIndecies)&&(identical(other.selectedType, selectedType) || other.selectedType == selectedType)&&(identical(other.temporarySecret, temporarySecret) || other.temporarySecret == temporarySecret)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(generatedRecoveryPhrase),selectedType,temporarySecret,isSubmitting,failure);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(generatedRecoveryPhrase),const DeepCollectionEquality().hash(verifyIndecies),selectedType,temporarySecret,isSubmitting,failure);
 
 @override
 String toString() {
-  return 'VaultSetupData(generatedRecoveryPhrase: $generatedRecoveryPhrase, selectedType: $selectedType, temporarySecret: $temporarySecret, isSubmitting: $isSubmitting, failure: $failure)';
+  return 'VaultSetupData(generatedRecoveryPhrase: $generatedRecoveryPhrase, verifyIndecies: $verifyIndecies, selectedType: $selectedType, temporarySecret: $temporarySecret, isSubmitting: $isSubmitting, failure: $failure)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $VaultSetupDataCopyWith<$Res>  {
   factory $VaultSetupDataCopyWith(VaultSetupData value, $Res Function(VaultSetupData) _then) = _$VaultSetupDataCopyWithImpl;
 @useResult
 $Res call({
- List<String> generatedRecoveryPhrase, KeyType? selectedType, String? temporarySecret, bool isSubmitting, VaultFailure? failure
+ List<String> generatedRecoveryPhrase, List<int> verifyIndecies, KeyType? selectedType, String? temporarySecret, bool isSubmitting, VaultFailure? failure
 });
 
 
@@ -62,10 +62,11 @@ class _$VaultSetupDataCopyWithImpl<$Res>
 
 /// Create a copy of VaultSetupData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? generatedRecoveryPhrase = null,Object? selectedType = freezed,Object? temporarySecret = freezed,Object? isSubmitting = null,Object? failure = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? generatedRecoveryPhrase = null,Object? verifyIndecies = null,Object? selectedType = freezed,Object? temporarySecret = freezed,Object? isSubmitting = null,Object? failure = freezed,}) {
   return _then(_self.copyWith(
 generatedRecoveryPhrase: null == generatedRecoveryPhrase ? _self.generatedRecoveryPhrase : generatedRecoveryPhrase // ignore: cast_nullable_to_non_nullable
-as List<String>,selectedType: freezed == selectedType ? _self.selectedType : selectedType // ignore: cast_nullable_to_non_nullable
+as List<String>,verifyIndecies: null == verifyIndecies ? _self.verifyIndecies : verifyIndecies // ignore: cast_nullable_to_non_nullable
+as List<int>,selectedType: freezed == selectedType ? _self.selectedType : selectedType // ignore: cast_nullable_to_non_nullable
 as KeyType?,temporarySecret: freezed == temporarySecret ? _self.temporarySecret : temporarySecret // ignore: cast_nullable_to_non_nullable
 as String?,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
 as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
@@ -163,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<String> generatedRecoveryPhrase,  KeyType? selectedType,  String? temporarySecret,  bool isSubmitting,  VaultFailure? failure)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<String> generatedRecoveryPhrase,  List<int> verifyIndecies,  KeyType? selectedType,  String? temporarySecret,  bool isSubmitting,  VaultFailure? failure)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _VaultSetupData() when $default != null:
-return $default(_that.generatedRecoveryPhrase,_that.selectedType,_that.temporarySecret,_that.isSubmitting,_that.failure);case _:
+return $default(_that.generatedRecoveryPhrase,_that.verifyIndecies,_that.selectedType,_that.temporarySecret,_that.isSubmitting,_that.failure);case _:
   return orElse();
 
 }
@@ -184,10 +185,10 @@ return $default(_that.generatedRecoveryPhrase,_that.selectedType,_that.temporary
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<String> generatedRecoveryPhrase,  KeyType? selectedType,  String? temporarySecret,  bool isSubmitting,  VaultFailure? failure)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<String> generatedRecoveryPhrase,  List<int> verifyIndecies,  KeyType? selectedType,  String? temporarySecret,  bool isSubmitting,  VaultFailure? failure)  $default,) {final _that = this;
 switch (_that) {
 case _VaultSetupData():
-return $default(_that.generatedRecoveryPhrase,_that.selectedType,_that.temporarySecret,_that.isSubmitting,_that.failure);}
+return $default(_that.generatedRecoveryPhrase,_that.verifyIndecies,_that.selectedType,_that.temporarySecret,_that.isSubmitting,_that.failure);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -201,10 +202,10 @@ return $default(_that.generatedRecoveryPhrase,_that.selectedType,_that.temporary
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<String> generatedRecoveryPhrase,  KeyType? selectedType,  String? temporarySecret,  bool isSubmitting,  VaultFailure? failure)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<String> generatedRecoveryPhrase,  List<int> verifyIndecies,  KeyType? selectedType,  String? temporarySecret,  bool isSubmitting,  VaultFailure? failure)?  $default,) {final _that = this;
 switch (_that) {
 case _VaultSetupData() when $default != null:
-return $default(_that.generatedRecoveryPhrase,_that.selectedType,_that.temporarySecret,_that.isSubmitting,_that.failure);case _:
+return $default(_that.generatedRecoveryPhrase,_that.verifyIndecies,_that.selectedType,_that.temporarySecret,_that.isSubmitting,_that.failure);case _:
   return null;
 
 }
@@ -216,7 +217,7 @@ return $default(_that.generatedRecoveryPhrase,_that.selectedType,_that.temporary
 
 
 class _VaultSetupData implements VaultSetupData {
-  const _VaultSetupData({required final  List<String> generatedRecoveryPhrase, this.selectedType, this.temporarySecret, this.isSubmitting = false, this.failure}): _generatedRecoveryPhrase = generatedRecoveryPhrase;
+  const _VaultSetupData({required final  List<String> generatedRecoveryPhrase, required final  List<int> verifyIndecies, this.selectedType, this.temporarySecret, this.isSubmitting = false, this.failure}): _generatedRecoveryPhrase = generatedRecoveryPhrase,_verifyIndecies = verifyIndecies;
   
 
  final  List<String> _generatedRecoveryPhrase;
@@ -224,6 +225,13 @@ class _VaultSetupData implements VaultSetupData {
   if (_generatedRecoveryPhrase is EqualUnmodifiableListView) return _generatedRecoveryPhrase;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_generatedRecoveryPhrase);
+}
+
+ final  List<int> _verifyIndecies;
+@override List<int> get verifyIndecies {
+  if (_verifyIndecies is EqualUnmodifiableListView) return _verifyIndecies;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_verifyIndecies);
 }
 
 @override final  KeyType? selectedType;
@@ -241,16 +249,16 @@ _$VaultSetupDataCopyWith<_VaultSetupData> get copyWith => __$VaultSetupDataCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _VaultSetupData&&const DeepCollectionEquality().equals(other._generatedRecoveryPhrase, _generatedRecoveryPhrase)&&(identical(other.selectedType, selectedType) || other.selectedType == selectedType)&&(identical(other.temporarySecret, temporarySecret) || other.temporarySecret == temporarySecret)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.failure, failure) || other.failure == failure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _VaultSetupData&&const DeepCollectionEquality().equals(other._generatedRecoveryPhrase, _generatedRecoveryPhrase)&&const DeepCollectionEquality().equals(other._verifyIndecies, _verifyIndecies)&&(identical(other.selectedType, selectedType) || other.selectedType == selectedType)&&(identical(other.temporarySecret, temporarySecret) || other.temporarySecret == temporarySecret)&&(identical(other.isSubmitting, isSubmitting) || other.isSubmitting == isSubmitting)&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_generatedRecoveryPhrase),selectedType,temporarySecret,isSubmitting,failure);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_generatedRecoveryPhrase),const DeepCollectionEquality().hash(_verifyIndecies),selectedType,temporarySecret,isSubmitting,failure);
 
 @override
 String toString() {
-  return 'VaultSetupData(generatedRecoveryPhrase: $generatedRecoveryPhrase, selectedType: $selectedType, temporarySecret: $temporarySecret, isSubmitting: $isSubmitting, failure: $failure)';
+  return 'VaultSetupData(generatedRecoveryPhrase: $generatedRecoveryPhrase, verifyIndecies: $verifyIndecies, selectedType: $selectedType, temporarySecret: $temporarySecret, isSubmitting: $isSubmitting, failure: $failure)';
 }
 
 
@@ -261,7 +269,7 @@ abstract mixin class _$VaultSetupDataCopyWith<$Res> implements $VaultSetupDataCo
   factory _$VaultSetupDataCopyWith(_VaultSetupData value, $Res Function(_VaultSetupData) _then) = __$VaultSetupDataCopyWithImpl;
 @override @useResult
 $Res call({
- List<String> generatedRecoveryPhrase, KeyType? selectedType, String? temporarySecret, bool isSubmitting, VaultFailure? failure
+ List<String> generatedRecoveryPhrase, List<int> verifyIndecies, KeyType? selectedType, String? temporarySecret, bool isSubmitting, VaultFailure? failure
 });
 
 
@@ -278,10 +286,11 @@ class __$VaultSetupDataCopyWithImpl<$Res>
 
 /// Create a copy of VaultSetupData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? generatedRecoveryPhrase = null,Object? selectedType = freezed,Object? temporarySecret = freezed,Object? isSubmitting = null,Object? failure = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? generatedRecoveryPhrase = null,Object? verifyIndecies = null,Object? selectedType = freezed,Object? temporarySecret = freezed,Object? isSubmitting = null,Object? failure = freezed,}) {
   return _then(_VaultSetupData(
 generatedRecoveryPhrase: null == generatedRecoveryPhrase ? _self._generatedRecoveryPhrase : generatedRecoveryPhrase // ignore: cast_nullable_to_non_nullable
-as List<String>,selectedType: freezed == selectedType ? _self.selectedType : selectedType // ignore: cast_nullable_to_non_nullable
+as List<String>,verifyIndecies: null == verifyIndecies ? _self._verifyIndecies : verifyIndecies // ignore: cast_nullable_to_non_nullable
+as List<int>,selectedType: freezed == selectedType ? _self.selectedType : selectedType // ignore: cast_nullable_to_non_nullable
 as KeyType?,temporarySecret: freezed == temporarySecret ? _self.temporarySecret : temporarySecret // ignore: cast_nullable_to_non_nullable
 as String?,isSubmitting: null == isSubmitting ? _self.isSubmitting : isSubmitting // ignore: cast_nullable_to_non_nullable
 as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable

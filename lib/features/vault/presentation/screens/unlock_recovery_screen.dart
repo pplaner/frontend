@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/core/theme/app_colors.dart';
-import 'package:frontend/core/ui/widgets/back_app_bar.dart';
+import 'package:frontend/core/constants/app_sizes.dart' as sizes;
+import 'package:frontend/core/theme/theme_extensions.dart';
+import 'package:frontend/core/ui/widgets/flow_scaffold.dart';
+import 'package:frontend/core/ui/widgets/wide_filled_button.dart';
 import 'package:frontend/core/utils/app_assets.dart';
+import 'package:frontend/core/utils/app_snackbar.dart';
 import 'package:frontend/features/vault/presentation/notifiers/vault_unlock_notifier.dart';
 import 'package:frontend/features/vault/presentation/widgets/recovery_phrase_input.dart';
-import 'package:frontend/features/vault/presentation/widgets/safe_padding.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
 class UnlockRecoveryScreen extends ConsumerStatefulWidget {
@@ -19,82 +21,62 @@ class UnlockRecoveryScreen extends ConsumerStatefulWidget {
 class _UnlockRecoveryScreenState extends ConsumerState<UnlockRecoveryScreen> {
   List<String>? _enteredPhrase;
 
+  void _onSubmit() =>
+      ref.read(vaultUnlockProvider.notifier).unlockWithPhrase(_enteredPhrase!);
+
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final colors = AppColors.of(context);
-
     ref.listen(vaultUnlockProvider.select((state) => state.failure), (
       previous,
       next,
     ) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('err: $next')));
+      context.showSnackbarError('err: $next');
     });
 
-    return Scaffold(
-      backgroundColor: colors.surface,
-      appBar: const BackAppBar(),
-      body: SafePadding(
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
+    return FlowScaffold(
+      body: Column(
+        children: [
+          Text(
+            context.t.seed.login_title,
+            style: context.textTheme.headlineMedium,
+            textAlign: TextAlign.center,
+          ),
 
-            Text(
-              context.t.seed.login_title,
-              style: textTheme.displayLarge?.copyWith(fontSize: 28),
-              textAlign: TextAlign.center,
-            ),
+          const SizedBox(height: sizes.betweenTitleAndSub),
 
-            const SizedBox(height: 12),
+          Text(
+            t.seed.login_subtitle,
+            style: context.textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
 
-            Text(
-              t.seed.login_subtitle,
-              style: textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-            ),
+          const SizedBox(height: 24),
+          const Spacer(),
 
-            const SizedBox(height: 24),
+          RecoveryPhraseInput(
+            onPhraseCompleted: (words) =>
+                setState(() => _enteredPhrase = words),
+            onPhraseIncomplete: () => setState(() => _enteredPhrase = null),
+          ),
 
-            Expanded(
-              child: RecoveryPhraseInput(
-                onPhraseCompleted: (words) =>
-                    setState(() => _enteredPhrase = words),
-                onPhraseIncomplete: () => setState(() => _enteredPhrase = null),
-              ),
-            ),
+          const SizedBox(height: 24),
+          const Spacer(),
 
-            const SizedBox(height: 16),
+          Image.asset(
+            AppAssets.logo,
+            height: sizes.smallImageHeight,
+            width: sizes.smallImageWidth,
+            fit: BoxFit.contain,
+          ),
 
-            Image.asset(
-              AppAssets.logo,
-              height: 80,
-              width: 80,
-              fit: BoxFit.contain,
-            ),
+          const SizedBox(height: 24),
+          const Spacer(),
 
-            const SizedBox(height: 16),
-
-            FilledButton(
-              onPressed: _enteredPhrase != null
-                  ? () => ref
-                        .read(vaultUnlockProvider.notifier)
-                        .unlockWithPhrase(_enteredPhrase!)
-                  : null,
-              style: FilledButton.styleFrom(
-                minimumSize: const Size(double.infinity, 56),
-                backgroundColor: AppColors.primary,
-              ),
-              child: Text(
-                context.t.common.login,
-                style: textTheme.labelLarge?.copyWith(color: Colors.white),
-              ),
-            ),
-
-            const SizedBox(height: 24),
-          ],
-        ),
+          WideFilledButton(
+            onPressed: _enteredPhrase != null ? _onSubmit : null,
+            child: Text(context.t.common.login),
+          ),
+        ],
       ),
     );
   }
