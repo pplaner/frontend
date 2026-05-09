@@ -1,6 +1,6 @@
+import 'package:frontend/core/sync/sync_status.dart';
 import 'package:frontend/features/notes/data/dto/project_dto.dart';
 import 'package:frontend/features/notes/domain/entities/encrypted_project.dart';
-import 'package:frontend/core/sync/sync_status.dart';
 
 extension ProjectDtoToEncrypted on ProjectDto {
   EncryptedProject toDomain() => EncryptedProject(
