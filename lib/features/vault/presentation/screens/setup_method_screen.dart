@@ -1,0 +1,82 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/core/constants/app_sizes.dart' as sizes;
+import 'package:frontend/core/theme/theme_extensions.dart';
+import 'package:frontend/core/ui/widgets/flow_scaffold.dart';
+import 'package:frontend/core/ui/widgets/wide_filled_button.dart';
+import 'package:frontend/features/vault/presentation/navigation/vault_setup_routes.dart';
+import 'package:frontend/features/vault/presentation/widgets/unlock_method.dart';
+import 'package:frontend/i18n/strings.g.dart';
+
+class SetupMethodScreen extends ConsumerStatefulWidget {
+  const SetupMethodScreen({super.key});
+
+  @override
+  ConsumerState<SetupMethodScreen> createState() => _SetupMethodScreenState();
+}
+
+class _SetupMethodScreenState extends ConsumerState<SetupMethodScreen> {
+  String? _selectedMethodId;
+
+  Future<void> _onSubmit() async {
+    switch (_selectedMethodId) {
+      case 'pin':
+        unawaited(const SetupPinRoute().push<void>(context));
+      case 'pattern':
+        unawaited(const SetupPatternRoute().push<void>(context));
+      default:
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FlowScaffold(
+      body: Column(
+        children: [
+          Text(
+            context.t.security_methods.title,
+            style: context.textTheme.displayLarge?.copyWith(fontSize: 28),
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: sizes.betweenTitleAndSub),
+
+          Text(
+            context.t.security_methods.subtitle,
+            style: context.textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 48),
+
+          UnlockMethod(
+            title: context.t.security_methods.pin_title,
+            subtitle: context.t.security_methods.pin_sub,
+            isSelected: _selectedMethodId == 'pin',
+            onTap: () => setState(
+              () => _selectedMethodId = 'pin',
+            ),
+          ),
+
+          UnlockMethod(
+            title: context.t.security_methods.pattern_title,
+            subtitle: context.t.security_methods.pattern_sub,
+            isSelected: _selectedMethodId == 'pattern',
+            onTap: () => setState(
+              () => _selectedMethodId = 'pattern',
+            ),
+          ),
+
+          const Spacer(),
+
+          WideFilledButton(
+            onPressed: _selectedMethodId != null ? _onSubmit : null,
+            child: Text(context.t.common.next),
+          ),
+        ],
+      ),
+    );
+  }
+}

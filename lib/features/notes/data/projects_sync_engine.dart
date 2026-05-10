@@ -1,6 +1,6 @@
 import 'package:frontend/core/domain/result.dart';
+import 'package:frontend/core/sync/sync_types.dart';
 import 'package:frontend/features/notes/data/dto/project_dto.dart';
-import 'package:frontend/features/notes/data/sync_types.dart';
 import 'package:frontend/features/notes/domain/failures/notes_failure.dart';
 
 abstract interface class ProjectsSyncEngine {

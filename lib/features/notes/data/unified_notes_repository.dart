@@ -1,4 +1,6 @@
 import 'package:frontend/core/domain/result.dart';
+import 'package:frontend/core/sync/sync_status.dart';
+import 'package:frontend/core/sync/sync_types.dart';
 import 'package:frontend/core/utils/data_source_runner.dart';
 import 'package:frontend/features/notes/data/dto/note_dto.dart';
 import 'package:frontend/features/notes/data/dto/project_dto.dart';
@@ -10,9 +12,7 @@ import 'package:frontend/features/notes/data/notes_sync_engine.dart';
 import 'package:frontend/features/notes/data/projects_sync_engine.dart';
 import 'package:frontend/features/notes/data/sources/notes_local_data_source.dart';
 import 'package:frontend/features/notes/data/sources/projects_local_data_source.dart';
-import 'package:frontend/features/notes/data/sync_types.dart';
 import 'package:frontend/features/notes/domain/entities/encrypted_note.dart';
-import 'package:frontend/core/sync/sync_status.dart';
 import 'package:frontend/features/notes/domain/failures/notes_failure.dart';
 import 'package:frontend/features/notes/domain/notes_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

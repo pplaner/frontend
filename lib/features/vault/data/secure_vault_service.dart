@@ -12,6 +12,8 @@ import 'package:frontend/features/vault/domain/vault_repository.dart';
 import 'package:frontend/features/vault/domain/vault_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'secure_vault_service.g.dart';
+
 class SecureVaultService implements VaultService {
   SecureVaultService({
     required RandomService random,
@@ -30,6 +32,13 @@ class SecureVaultService implements VaultService {
   final EncryptionService _encryption;
   final SessionController _sessionController;
   final VaultRepository _repository;
+
+  @override
+  Future<Result<bool, VaultFailure>> isInitialized() async {
+    final result = await _repository.getAll();
+
+    return result.map((slots) => slots.isNotEmpty);
+  }
 
   @override
   Future<Result<void, VaultFailure>> intializeNewVault(
@@ -106,7 +115,7 @@ class SecureVaultService implements VaultService {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 VaultService vaultService(Ref ref) => SecureVaultService(
   random: ref.watch(randomServiceProvider),
   derivation: ref.watch(derivationServiceProvider),

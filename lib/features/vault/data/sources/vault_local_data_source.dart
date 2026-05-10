@@ -20,12 +20,16 @@ class VaultLocalDataSource {
     await _keySlotsDao.saveKeySlots(slots);
   }
 
+  Future<List<KeySlotModel>> getAll() {
+    return _keySlotsDao.getAllKeySlots();
+  }
+
   Future<KeySlotModel?> getKeySlotByType(KeyType type) {
     return _keySlotsDao.getKeySlotByType(type);
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 VaultLocalDataSource vaultLocalDataSource(Ref ref) => VaultLocalDataSource(
   keySlotsDao: ref.watch(appDatabaseProvider).keySlotsDao,
 );

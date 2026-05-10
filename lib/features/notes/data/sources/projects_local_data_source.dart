@@ -1,7 +1,7 @@
 import 'package:frontend/app/database/database.dart';
 import 'package:frontend/app/database/database_provider.dart';
+import 'package:frontend/core/sync/sync_types.dart';
 import 'package:frontend/features/notes/data/daos/projects_dao.dart';
-import 'package:frontend/features/notes/data/sync_types.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'projects_local_data_source.g.dart';

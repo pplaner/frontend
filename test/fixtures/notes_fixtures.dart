@@ -1,11 +1,9 @@
-import 'dart:typed_data';
-
 import 'package:drift/drift.dart';
 import 'package:frontend/app/database/database.dart';
+import 'package:frontend/core/sync/sync_status.dart';
+import 'package:frontend/core/sync/sync_types.dart';
 import 'package:frontend/features/notes/data/dto/note_dto.dart';
 import 'package:frontend/features/notes/data/dto/project_dto.dart';
-import 'package:frontend/features/notes/data/sync_types.dart';
-import 'package:frontend/core/sync/sync_status.dart';
 
 class NotesFixtures {
   static Uint8List generateBytes(int length, int fill) =>

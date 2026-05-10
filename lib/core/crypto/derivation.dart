@@ -30,8 +30,8 @@ class Argon2Service implements DerivationService {
     final salt = args.$2;
 
     final algoritm = Argon2id(
-      memory: 65536,
-      iterations: 3,
+      memory: kDebugMode ? 1024 : 65536,
+      iterations: kDebugMode ? 1 : 3,
       parallelism: 1,
       hashLength: 32,
     );

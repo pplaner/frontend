@@ -1,9 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:frontend/app/database/database.dart';
-import 'package:frontend/features/notes/data/sync_types.dart';
+import 'package:frontend/core/sync/sync_status.dart';
+import 'package:frontend/core/sync/sync_types.dart';
 import 'package:frontend/features/notes/data/tables/note_conflicts.dart';
 import 'package:frontend/features/notes/data/tables/notes.dart';
-import 'package:frontend/core/sync/sync_status.dart';
 
 part 'notes_dao.g.dart';
 

@@ -3,6 +3,7 @@ import 'package:frontend/features/vault/domain/entities/key_type.dart';
 import 'package:frontend/features/vault/domain/failures/vault_failure.dart';
 
 abstract class VaultService {
+  Future<Result<bool, VaultFailure>> isInitialized();
   Future<Result<void, VaultFailure>> intializeNewVault(
     Map<KeyType, String> initialSecrets,
   );

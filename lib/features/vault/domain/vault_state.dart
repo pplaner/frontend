@@ -1,12 +1,15 @@
-import 'package:flutter/services.dart';
+import 'package:frontend/features/vault/domain/failures/vault_failure.dart';
 
 sealed class VaultState {
   const VaultState();
+}
 
-  const factory VaultState.locked() = VaultLocked;
-  const factory VaultState.unlocked({required Uint8List masterKey}) =
-      VaultUnlocked;
-  const factory VaultState.error(String message) = VaultError;
+class VaultInitializing extends VaultState {
+  const VaultInitializing();
+}
+
+class VaultNotInitialized extends VaultState {
+  const VaultNotInitialized();
 }
 
 class VaultLocked extends VaultState {
@@ -14,13 +17,11 @@ class VaultLocked extends VaultState {
 }
 
 class VaultUnlocked extends VaultState {
-  const VaultUnlocked({required this.masterKey});
-
-  final Uint8List masterKey;
+  const VaultUnlocked();
 }
 
 class VaultError extends VaultState {
-  const VaultError(this.message);
+  const VaultError(this.failure);
 
-  final String message;
+  final VaultFailure failure;
 }

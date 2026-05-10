@@ -6,5 +6,6 @@ import 'package:frontend/features/vault/domain/failures/vault_failure.dart';
 abstract class VaultRepository {
   Future<Result<void, VaultFailure>> saveKeySlot(KeySlot slot);
   Future<Result<void, VaultFailure>> saveKeySlots(List<KeySlot> slots);
+  Future<Result<List<KeySlot>, VaultFailure>> getAll();
   Future<Result<KeySlot?, VaultFailure>> getKeySlotByType(KeyType type);
 }

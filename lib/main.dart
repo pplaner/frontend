@@ -3,9 +3,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/app/init.dart';
-import 'package:frontend/core/theme/app_theme.dart';
+import 'package:frontend/app/navigation/app_router.dart';
+import 'package:frontend/core/theme/generated_app_theme.dart';
 import 'package:frontend/core/theme/theme_provider.dart';
-import 'package:frontend/features/profile/presentation/screens/profile_screen.dart';
 import 'package:frontend/i18n/strings.g.dart';
 
 void main() async {
@@ -26,10 +26,11 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
+    final router = ref.watch(appRouterProvider);
     final t = context.t;
 
-    return MaterialApp(
-      title: t.appName,
+    return MaterialApp.router(
+      title: t.common.app_name,
       debugShowCheckedModeBanner: false,
 
       locale: TranslationProvider.of(context).flutterLocale,
@@ -45,7 +46,7 @@ class MyApp extends ConsumerWidget {
       darkTheme: AppTheme.dark,
       themeMode: themeMode,
 
-      home: const ProfileScreen(),
+      routerConfig: router,
     );
   }
 }
