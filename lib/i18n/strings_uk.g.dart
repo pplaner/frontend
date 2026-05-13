@@ -368,8 +368,6 @@ extension on TranslationsUk {
 			'home.addDetails' => 'Додати деталі...',
 			'home.deleteTask' => 'Видалити завдання?',
 			'home.deleteTaskMessage' => 'Це завдання буде видалено назавжди.',
-			'home.cancel' => 'Скасувати',
-			'home.delete' => 'Видалити',
 			'calendar.title' => 'Календар',
 			'calendar.noTasks' => 'Немає завдань на цей день',
 			'calendar.viewMonth' => 'Місяць',

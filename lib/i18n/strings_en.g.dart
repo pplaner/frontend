@@ -700,8 +700,6 @@ extension on Translations {
 			'home.addDetails' => 'Add details...',
 			'home.deleteTask' => 'Delete task?',
 			'home.deleteTaskMessage' => 'This task will be permanently deleted.',
-			'home.cancel' => 'Cancel',
-			'home.delete' => 'Delete',
 			'calendar.title' => 'Calendar',
 			'calendar.noTasks' => 'No tasks for this day',
 			'calendar.viewMonth' => 'Month',
