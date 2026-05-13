@@ -170,6 +170,36 @@ class TranslationsHomeEn {
 
 	/// en: 'This task will be permanently deleted.'
 	String get deleteTaskMessage => 'This task will be permanently deleted.';
+
+	/// en: 'My lists'
+	String get myLists => 'My lists';
+
+	/// en: 'Add a list'
+	String get addList => 'Add a list';
+
+	/// en: 'Edit list'
+	String get editList => 'Edit list';
+
+	/// en: 'Delete list'
+	String get deleteList => 'Delete list';
+
+	/// en: 'Delete list?'
+	String get deleteListTitle => 'Delete list?';
+
+	/// en: 'The list and all its tasks will be permanently deleted.'
+	String get deleteListMessage => 'The list and all its tasks will be permanently deleted.';
+
+	/// en: 'Name'
+	String get listName => 'Name';
+
+	/// en: 'List colour'
+	String get listColor => 'List colour';
+
+	/// en: 'Icon'
+	String get listIcon => 'Icon';
+
+	/// en: 'Inbox'
+	String get inbox => 'Inbox';
 }
 
 // Path: calendar
@@ -630,6 +660,16 @@ extension on Translations {
 			'home.addDetails' => 'Add details...',
 			'home.deleteTask' => 'Delete task?',
 			'home.deleteTaskMessage' => 'This task will be permanently deleted.',
+			'home.myLists' => 'My lists',
+			'home.addList' => 'Add a list',
+			'home.editList' => 'Edit list',
+			'home.deleteList' => 'Delete list',
+			'home.deleteListTitle' => 'Delete list?',
+			'home.deleteListMessage' => 'The list and all its tasks will be permanently deleted.',
+			'home.listName' => 'Name',
+			'home.listColor' => 'List colour',
+			'home.listIcon' => 'Icon',
+			'home.inbox' => 'Inbox',
 			'calendar.title' => 'Calendar',
 			'calendar.noTasks' => 'No tasks for this day',
 			'calendar.viewMonth' => 'Month',
