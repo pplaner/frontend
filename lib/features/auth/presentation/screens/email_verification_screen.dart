@@ -4,7 +4,6 @@ import 'package:frontend/core/config/user_config.dart';
 import 'package:frontend/core/theme/theme_extensions.dart';
 import 'package:frontend/core/ui/widgets/flow_scaffold.dart';
 import 'package:frontend/core/utils/app_snackbar.dart';
-import 'package:frontend/core/utils/navigation_helper.dart';
 import 'package:frontend/features/auth/presentation/navigation/auth_navigator.dart';
 import 'package:frontend/features/auth/presentation/notifiers/auth_notifier.dart';
 import 'package:frontend/features/auth/presentation/widgets/code_form_field.dart';
@@ -56,10 +55,18 @@ class _EmailVerificationScreenState
   }
 
   Future<void> _onResend() async {
-    // TODO: повторне відправлення коду
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(t.email_verify.resend_success)),
-    );
+    final success = await ref.read(authProvider.notifier).resendCode();
+
+    if (!mounted) return;
+
+    if (success) {
+      context.showSnackBarInfo(
+        context.t.auth.codeSent(email: ref.read(authProvider).email!),
+      );
+    } else {
+      final failure = ref.read(authProvider).failure;
+      if (failure != null) context.showSnackbarError('$failure');
+    }
   }
 
   @override

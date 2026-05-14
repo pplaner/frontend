@@ -30,13 +30,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _confirmPasswordController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    _passwordController.text = '11111111';
-    _confirmPasswordController.text = '11111111';
-  }
-
-  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();

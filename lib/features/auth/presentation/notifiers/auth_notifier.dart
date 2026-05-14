@@ -80,6 +80,36 @@ class AuthNotifier extends _$AuthNotifier {
     );
   }
 
+  Future<bool> resendCode() async {
+    final email = state.email;
+    final password = state.password;
+
+    if (email == null || password == null || state.isProcessing) {
+      return false;
+    }
+
+    state = state.copyWith(isProcessing: true);
+
+    final result = await ref
+        .read(authServiceProvider)
+        .requestVerification(email);
+
+    if (!ref.mounted) return false;
+
+    state = state.copyWith(isProcessing: false);
+
+    return result.fold(
+      (success) {
+        state = state.copyWith(isProcessing: false);
+        return true;
+      },
+      (failure) {
+        state = state.copyWith(isProcessing: false, failure: failure);
+        return false;
+      },
+    );
+  }
+
   Future<bool> confirmRegister(String code) async {
     final email = state.email;
     final password = state.password;
@@ -99,7 +129,6 @@ class AuthNotifier extends _$AuthNotifier {
     return result.fold(
       (success) {
         state = state.copyWith(isProcessing: false);
-
         _link?.close();
         return true;
       },
