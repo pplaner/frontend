@@ -9,6 +9,11 @@
         "register": "Register",
         "error_title": "Error",
         "loading": "Loading...",
+        "logout": "Log Out",
+        "createLocalStorage": "Create local storage",
+        "haveAccount": "I already have an account",
+        "tagline": "Your plans under reliable protection",
+        "chooseMethod": "Choose how to use",
         "save": "Save",
         "cancel": "Cancel",
         "delete": "Delete"
@@ -19,7 +24,20 @@
         "createLocalStorage": "Create local storage",
         "haveAccount": "I already have an account",
         "tagline": "Your plans under reliable protection",
-        "chooseMethod": "Choose how to use"
+        "chooseMethod": "Choose how to use",
+        "codeSent": "Confirmation code sent to $email",
+        "registerSuccess": "Successfully registered",
+        "loginSuccess": "Successfully logged in"
+    },
+    "vault": {
+        "fatal": {
+            "title": "App crashed fatally",
+            "subtitle": "Failed to load keys both locally and remotely"
+        },
+        "setup": {
+        },
+        "unlock": {
+        }
     },
     "home": {
         "today": "Today",
@@ -29,8 +47,16 @@
         "addDetails": "Add details...",
         "deleteTask": "Delete task?",
         "deleteTaskMessage": "This task will be permanently deleted.",
-        "cancel": "Cancel",
-        "delete": "Delete"
+        "myLists": "My lists",
+        "addList": "Add a list",
+        "editList": "Edit list",
+        "deleteList": "Delete list",
+        "deleteListTitle": "Delete list?",
+        "deleteListMessage": "The list and all its tasks will be permanently deleted.",
+        "listName": "Name",
+        "listColor": "List colour",
+        "listIcon": "Icon",
+        "inbox": "Inbox"
     },
     "calendar": {
         "title": "Calendar",
@@ -41,22 +67,11 @@
         "viewDay": "Day",
         "calendarView": "Calendar view",
         "taskCategory": "Task category",
-        "save": "Save",
         "chooseTimezone": "Choose timezone",
         "filter": "Filter",
         "months": [
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
         ]
     },
     "profile": {
@@ -70,7 +85,6 @@
         "appearance": "Appearance",
         "dateTime": "Date and time",
         "widgets": "Widgets",
-        "logout": "Log Out",
         "deleteAccount": "Delete account",
         "deleteAccountSubtitle": "Data will be lost",
         "changeName": "Change name",
@@ -82,10 +96,7 @@
         "appearanceSystem": "System",
         "chooseLanguage": "Choose language",
         "chooseAppearance": "Appearance",
-        "addWidget": "Add widget",
-        "widgetTasks": "Today's tasks",
-        "widgetCalendar": "Calendar",
-        "widgetProgress": "Progress"
+        "addWidget": "Add widget"
     },
     "category": {
         "all": "All",
@@ -111,12 +122,6 @@
         "tasks": "Today's tasks",
         "calendar": "Calendar",
         "progress": "Progress",
-        "welcome_title": "Your plans under reliable protection",
-        "welcome_subtitle": "Choose how to use",
-        "create_local": "Create local vault",
-        "already_have_account": "I already have an account",
-        "login_title": "Authorization",
-        "register_title": "Create Account",
         "email": "Email address",
         "password": "Password",
         "confirm_password": "Repeat password",

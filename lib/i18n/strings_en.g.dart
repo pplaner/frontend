@@ -42,6 +42,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	// Translations
 	late final TranslationsCommonEn common = TranslationsCommonEn.internal(_root);
 	late final TranslationsAuthEn auth = TranslationsAuthEn.internal(_root);
+	late final TranslationsVaultEn vault = TranslationsVaultEn.internal(_root);
 	late final TranslationsHomeEn home = TranslationsHomeEn.internal(_root);
 	late final TranslationsCalendarEn calendar = TranslationsCalendarEn.internal(_root);
 	late final TranslationsProfileEn profile = TranslationsProfileEn.internal(_root);
@@ -90,6 +91,21 @@ class TranslationsCommonEn {
 	/// en: 'Loading...'
 	String get loading => 'Loading...';
 
+	/// en: 'Log Out'
+	String get logout => 'Log Out';
+
+	/// en: 'Create local storage'
+	String get createLocalStorage => 'Create local storage';
+
+	/// en: 'I already have an account'
+	String get haveAccount => 'I already have an account';
+
+	/// en: 'Your plans under reliable protection'
+	String get tagline => 'Your plans under reliable protection';
+
+	/// en: 'Choose how to use'
+	String get chooseMethod => 'Choose how to use';
+
 	/// en: 'Save'
 	String get save => 'Save';
 
@@ -125,6 +141,25 @@ class TranslationsAuthEn {
 
 	/// en: 'Choose how to use'
 	String get chooseMethod => 'Choose how to use';
+
+	/// en: 'Confirmation code sent to $email'
+	String codeSent({required Object email}) => 'Confirmation code sent to ${email}';
+
+	/// en: 'Successfully registered'
+	String get registerSuccess => 'Successfully registered';
+
+	/// en: 'Successfully logged in'
+	String get loginSuccess => 'Successfully logged in';
+}
+
+// Path: vault
+class TranslationsVaultEn {
+	TranslationsVaultEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final TranslationsVaultFatalEn fatal = TranslationsVaultFatalEn.internal(_root);
 }
 
 // Path: home
@@ -156,11 +191,35 @@ class TranslationsHomeEn {
 	/// en: 'This task will be permanently deleted.'
 	String get deleteTaskMessage => 'This task will be permanently deleted.';
 
-	/// en: 'Cancel'
-	String get cancel => 'Cancel';
+	/// en: 'My lists'
+	String get myLists => 'My lists';
 
-	/// en: 'Delete'
-	String get delete => 'Delete';
+	/// en: 'Add a list'
+	String get addList => 'Add a list';
+
+	/// en: 'Edit list'
+	String get editList => 'Edit list';
+
+	/// en: 'Delete list'
+	String get deleteList => 'Delete list';
+
+	/// en: 'Delete list?'
+	String get deleteListTitle => 'Delete list?';
+
+	/// en: 'The list and all its tasks will be permanently deleted.'
+	String get deleteListMessage => 'The list and all its tasks will be permanently deleted.';
+
+	/// en: 'Name'
+	String get listName => 'Name';
+
+	/// en: 'List colour'
+	String get listColor => 'List colour';
+
+	/// en: 'Icon'
+	String get listIcon => 'Icon';
+
+	/// en: 'Inbox'
+	String get inbox => 'Inbox';
 }
 
 // Path: calendar
@@ -194,9 +253,6 @@ class TranslationsCalendarEn {
 
 	/// en: 'Task category'
 	String get taskCategory => 'Task category';
-
-	/// en: 'Save'
-	String get save => 'Save';
 
 	/// en: 'Choose timezone'
 	String get chooseTimezone => 'Choose timezone';
@@ -258,9 +314,6 @@ class TranslationsProfileEn {
 	/// en: 'Widgets'
 	String get widgets => 'Widgets';
 
-	/// en: 'Log Out'
-	String get logout => 'Log Out';
-
 	/// en: 'Delete account'
 	String get deleteAccount => 'Delete account';
 
@@ -296,15 +349,6 @@ class TranslationsProfileEn {
 
 	/// en: 'Add widget'
 	String get addWidget => 'Add widget';
-
-	/// en: 'Today's tasks'
-	String get widgetTasks => 'Today\'s tasks';
-
-	/// en: 'Calendar'
-	String get widgetCalendar => 'Calendar';
-
-	/// en: 'Progress'
-	String get widgetProgress => 'Progress';
 }
 
 // Path: category
@@ -392,24 +436,6 @@ class TranslationsWidgetsEn {
 
 	/// en: 'Progress'
 	String get progress => 'Progress';
-
-	/// en: 'Your plans under reliable protection'
-	String get welcome_title => 'Your plans under reliable protection';
-
-	/// en: 'Choose how to use'
-	String get welcome_subtitle => 'Choose how to use';
-
-	/// en: 'Create local vault'
-	String get create_local => 'Create local vault';
-
-	/// en: 'I already have an account'
-	String get already_have_account => 'I already have an account';
-
-	/// en: 'Authorization'
-	String get login_title => 'Authorization';
-
-	/// en: 'Create Account'
-	String get register_title => 'Create Account';
 
 	/// en: 'Email address'
 	String get email => 'Email address';
@@ -616,6 +642,21 @@ class TranslationsSeedEn {
 	String get verify_input_hint => 'Enter word...';
 }
 
+// Path: vault.fatal
+class TranslationsVaultFatalEn {
+	TranslationsVaultFatalEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'App crashed fatally'
+	String get title => 'App crashed fatally';
+
+	/// en: 'Failed to load keys both locally and remotely'
+	String get subtitle => 'Failed to load keys both locally and remotely';
+}
+
 /// The flat map containing all translations for locale <en>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
@@ -633,6 +674,11 @@ extension on Translations {
 			'common.register' => 'Register',
 			'common.error_title' => 'Error',
 			'common.loading' => 'Loading...',
+			'common.logout' => 'Log Out',
+			'common.createLocalStorage' => 'Create local storage',
+			'common.haveAccount' => 'I already have an account',
+			'common.tagline' => 'Your plans under reliable protection',
+			'common.chooseMethod' => 'Choose how to use',
 			'common.save' => 'Save',
 			'common.cancel' => 'Cancel',
 			'common.delete' => 'Delete',
@@ -642,6 +688,11 @@ extension on Translations {
 			'auth.haveAccount' => 'I already have an account',
 			'auth.tagline' => 'Your plans under reliable protection',
 			'auth.chooseMethod' => 'Choose how to use',
+			'auth.codeSent' => ({required Object email}) => 'Confirmation code sent to ${email}',
+			'auth.registerSuccess' => 'Successfully registered',
+			'auth.loginSuccess' => 'Successfully logged in',
+			'vault.fatal.title' => 'App crashed fatally',
+			'vault.fatal.subtitle' => 'Failed to load keys both locally and remotely',
 			'home.today' => 'Today',
 			'home.completed' => 'Completed',
 			'home.newTask' => 'New task',
@@ -649,8 +700,16 @@ extension on Translations {
 			'home.addDetails' => 'Add details...',
 			'home.deleteTask' => 'Delete task?',
 			'home.deleteTaskMessage' => 'This task will be permanently deleted.',
-			'home.cancel' => 'Cancel',
-			'home.delete' => 'Delete',
+			'home.myLists' => 'My lists',
+			'home.addList' => 'Add a list',
+			'home.editList' => 'Edit list',
+			'home.deleteList' => 'Delete list',
+			'home.deleteListTitle' => 'Delete list?',
+			'home.deleteListMessage' => 'The list and all its tasks will be permanently deleted.',
+			'home.listName' => 'Name',
+			'home.listColor' => 'List colour',
+			'home.listIcon' => 'Icon',
+			'home.inbox' => 'Inbox',
 			'calendar.title' => 'Calendar',
 			'calendar.noTasks' => 'No tasks for this day',
 			'calendar.viewMonth' => 'Month',
@@ -659,7 +718,6 @@ extension on Translations {
 			'calendar.viewDay' => 'Day',
 			'calendar.calendarView' => 'Calendar view',
 			'calendar.taskCategory' => 'Task category',
-			'calendar.save' => 'Save',
 			'calendar.chooseTimezone' => 'Choose timezone',
 			'calendar.filter' => 'Filter',
 			'calendar.months.0' => 'January',
@@ -684,7 +742,6 @@ extension on Translations {
 			'profile.appearance' => 'Appearance',
 			'profile.dateTime' => 'Date and time',
 			'profile.widgets' => 'Widgets',
-			'profile.logout' => 'Log Out',
 			'profile.deleteAccount' => 'Delete account',
 			'profile.deleteAccountSubtitle' => 'Data will be lost',
 			'profile.changeName' => 'Change name',
@@ -697,9 +754,6 @@ extension on Translations {
 			'profile.chooseLanguage' => 'Choose language',
 			'profile.chooseAppearance' => 'Appearance',
 			'profile.addWidget' => 'Add widget',
-			'profile.widgetTasks' => 'Today\'s tasks',
-			'profile.widgetCalendar' => 'Calendar',
-			'profile.widgetProgress' => 'Progress',
 			'category.all' => 'All',
 			'category.work' => 'Work',
 			'category.personal' => 'Personal',
@@ -717,12 +771,6 @@ extension on Translations {
 			'widgets.tasks' => 'Today\'s tasks',
 			'widgets.calendar' => 'Calendar',
 			'widgets.progress' => 'Progress',
-			'widgets.welcome_title' => 'Your plans under reliable protection',
-			'widgets.welcome_subtitle' => 'Choose how to use',
-			'widgets.create_local' => 'Create local vault',
-			'widgets.already_have_account' => 'I already have an account',
-			'widgets.login_title' => 'Authorization',
-			'widgets.register_title' => 'Create Account',
 			'widgets.email' => 'Email address',
 			'widgets.password' => 'Password',
 			'widgets.confirm_password' => 'Repeat password',
